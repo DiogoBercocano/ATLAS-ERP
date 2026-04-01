@@ -1,0 +1,1187 @@
+﻿@model List<ATLAS_ERP.Models.Cliente>
+@{
+    ViewBag.Title = "Clientes - Atlas ERP";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atlas ERP – Clientes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #050d1a;
+            --panel: #0b1525;
+            --card: #0f1e35;
+            --card-hover: #132540;
+            --expand-bg: #0d1a2e;
+            --border: rgba(100,160,255,0.10);
+            --border-md: rgba(100,160,255,0.18);
+            --accent: #3b82f6;
+            --accent-soft: rgba(59,130,246,0.12);
+            --accent-glow: rgba(59,130,246,0.20);
+            --accent-light: #60a5fa;
+            --gold: #c9a84c;
+            --gold-soft: rgba(201,168,76,0.12);
+            --green: #34d399;
+            --green-soft: rgba(52,211,153,0.10);
+            --red: #f87171;
+            --red-soft: rgba(248,113,113,0.10);
+            --text: #e8f0fe;
+            --muted: #7a9cc8;
+            --faint: #3d5270;
+            --sidebar-w: 240px;
+            --radius: 14px;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .bg-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-dots {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(59,130,246,0.10) 1px, transparent 1px);
+            background-size: 36px 36px;
+            mask-image: radial-gradient(ellipse 70% 70% at 60% 40%, black, transparent);
+        }
+
+        .bg-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+        }
+
+        .sidebar {
+            width: var(--sidebar-w);
+            height: 100vh;
+            background: var(--panel);
+            border-right: 1px solid var(--border);
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            padding: 28px 16px;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            padding: 0 8px;
+            margin-bottom: 36px;
+        }
+
+            .sidebar-logo a {
+                display: flex;
+                align-items: center;
+            }
+
+            .sidebar-logo img {
+                width: 110px;
+                filter: brightness(0) invert(1);
+            }
+
+        .sidebar-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 8px 0 16px;
+        }
+
+        .menu-label {
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--faint);
+            text-transform: uppercase;
+            letter-spacing: 0.10em;
+            padding: 0 12px;
+            margin-bottom: 6px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            margin-bottom: 2px;
+            transition: background 0.18s, color 0.18s;
+            position: relative;
+        }
+
+            .menu-item svg {
+                width: 16px;
+                height: 16px;
+                flex-shrink: 0;
+                opacity: 0.7;
+            }
+
+            .menu-item:hover {
+                background: var(--card);
+                color: var(--text);
+            }
+
+                .menu-item:hover svg {
+                    opacity: 1;
+                }
+
+            .menu-item.active {
+                background: var(--accent-soft);
+                color: var(--accent-light);
+                font-weight: 500;
+            }
+
+                .menu-item.active svg {
+                    opacity: 1;
+                }
+
+                .menu-item.active::before {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 20%;
+                    bottom: 20%;
+                    width: 3px;
+                    background: var(--accent);
+                    border-radius: 0 3px 3px 0;
+                }
+
+            .menu-item.danger {
+                color: var(--red);
+            }
+
+                .menu-item.danger:hover {
+                    background: var(--red-soft);
+                }
+
+        .sidebar-spacer {
+            flex: 1;
+        }
+
+        .sidebar-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--card);
+        }
+
+        .user-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--accent-soft);
+            border: 1px solid var(--border-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Syne', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent-light);
+            flex-shrink: 0;
+        }
+
+        .user-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .user-role {
+            font-size: 11px;
+            color: var(--faint);
+        }
+
+        .main {
+            margin-left: var(--sidebar-w);
+            flex: 1;
+            padding: 32px 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+        }
+
+        .page-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 10px;
+            transition: background 0.18s, transform 0.15s;
+            box-shadow: 0 4px 16px rgba(59,130,246,0.25);
+            border: none;
+            cursor: pointer;
+        }
+
+            .btn-primary:hover {
+                background: #2563eb;
+                transform: translateY(-1px);
+            }
+
+            .btn-primary svg {
+                width: 15px;
+                height: 15px;
+            }
+
+        .table-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            animation: fadeUp 0.5s ease both;
+        }
+
+        .table-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 24px 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .badge-count {
+            font-size: 11px;
+            background: var(--accent-soft);
+            color: var(--accent-light);
+            border: 1px solid rgba(59,130,246,0.2);
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        .search-bar {
+            padding: 12px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .search-wrap {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            height: 36px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0 12px 0 36px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+            .search-input::placeholder {
+                color: var(--faint);
+            }
+
+            .search-input:focus {
+                border-color: var(--accent);
+            }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--faint);
+            pointer-events: none;
+        }
+
+            .search-icon svg {
+                width: 14px;
+                height: 14px;
+            }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            font-size: 11px;
+            color: var(--faint);
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            font-weight: 500;
+            padding: 10px 20px;
+            text-align: left;
+            background: rgba(0,0,0,0.15);
+        }
+
+        .tr-main {
+            border-top: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+            .tr-main:hover {
+                background: var(--card-hover);
+            }
+
+            .tr-main.expanded {
+                background: var(--card-hover);
+            }
+
+            .tr-main td {
+                padding: 14px 20px;
+                font-size: 14px;
+            }
+
+        .expand-chevron {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: var(--accent-soft);
+            color: var(--accent-light);
+            transition: transform 0.22s, background 0.15s;
+            flex-shrink: 0;
+        }
+
+            .expand-chevron svg {
+                width: 13px;
+                height: 13px;
+            }
+
+        .tr-main.expanded .expand-chevron {
+            transform: rotate(180deg);
+            background: rgba(59,130,246,0.2);
+        }
+
+        .tr-expand {
+            display: none;
+            background: var(--expand-bg);
+            border-top: 1px solid var(--border);
+        }
+
+            .tr-expand.open {
+                display: table-row;
+            }
+
+        .expand-panel {
+            padding: 20px 24px 20px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .expand-details {
+            display: flex;
+            gap: 28px;
+            flex-wrap: wrap;
+        }
+
+        .expand-field {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .expand-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--faint);
+            font-weight: 500;
+        }
+
+        .expand-value {
+            font-size: 13px;
+            color: var(--text);
+        }
+
+        .expand-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .btn-act {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.15s, transform 0.12s;
+            background: none;
+        }
+
+            .btn-act:hover {
+                transform: translateY(-1px);
+            }
+
+            .btn-act svg {
+                width: 13px;
+                height: 13px;
+            }
+
+        .btn-act-edit {
+            border-color: rgba(201,168,76,0.25);
+            color: var(--gold);
+            background: var(--gold-soft);
+        }
+
+            .btn-act-edit:hover {
+                background: rgba(201,168,76,0.2);
+            }
+
+        .btn-act-delete {
+            border-color: rgba(248,113,113,0.25);
+            color: var(--red);
+            background: var(--red-soft);
+        }
+
+            .btn-act-delete:hover {
+                background: rgba(248,113,113,0.2);
+            }
+
+        .td-muted {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+            .status-badge.ativo {
+                background: var(--green-soft);
+                color: var(--green);
+            }
+
+            .status-badge.inativo {
+                background: var(--red-soft);
+                color: var(--red);
+            }
+
+        .status-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .row-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent-soft);
+            border: 1px solid var(--border-md);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Syne', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--accent-light);
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .empty-state {
+            padding: 48px;
+            text-align: center;
+            color: var(--faint);
+            font-size: 13px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+            .modal-overlay.open {
+                display: flex;
+            }
+
+        .modal {
+            background: var(--card);
+            border: 1px solid var(--border-md);
+            border-radius: 18px;
+            padding: 32px 36px;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            animation: fadeUp 0.25s ease both;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--muted);
+            transition: background 0.15s, color 0.15s;
+        }
+
+            .modal-close:hover {
+                background: var(--red-soft);
+                color: var(--red);
+            }
+
+            .modal-close svg {
+                width: 14px;
+                height: 14px;
+            }
+
+        .modal-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .modal-sub {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 22px;
+        }
+
+        .modal-divider {
+            height: 1px;
+            background: var(--border);
+            margin-bottom: 22px;
+        }
+
+        .modal-form-group {
+            margin-bottom: 16px;
+        }
+
+        .modal-form-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--muted);
+            margin-bottom: 7px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .modal-input {
+            width: 100%;
+            height: 42px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 0 14px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            -webkit-appearance: none;
+        }
+
+            .modal-input::placeholder {
+                color: var(--faint);
+            }
+
+            .modal-input:hover {
+                border-color: var(--border-md);
+            }
+
+            .modal-input:focus {
+                border-color: var(--accent);
+                box-shadow: 0 0 0 3px var(--accent-glow);
+            }
+
+        select.modal-input {
+            cursor: pointer;
+        }
+
+        .modal-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .modal-btn-submit {
+            flex: 1;
+            height: 44px;
+            background: var(--accent);
+            border: none;
+            border-radius: 9px;
+            font-family: 'Syne', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+            .modal-btn-submit:hover {
+                background: #2563eb;
+                transform: translateY(-1px);
+            }
+
+        .modal-btn-cancel {
+            height: 44px;
+            padding: 0 20px;
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            color: var(--muted);
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+        }
+
+            .modal-btn-cancel:hover {
+                background: var(--card-hover);
+                color: var(--text);
+            }
+
+        .modal-danger-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--red-soft);
+            border: 2px solid rgba(248,113,113,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            color: var(--red);
+        }
+
+            .modal-danger-icon svg {
+                width: 20px;
+                height: 20px;
+            }
+
+        .modal-btn-delete {
+            flex: 1;
+            height: 44px;
+            background: var(--red);
+            border: none;
+            border-radius: 9px;
+            font-family: 'Syne', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+            .modal-btn-delete:hover {
+                background: #ef4444;
+                transform: translateY(-1px);
+            }
+
+        @@keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@media (max-width: 700px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .expand-panel {
+                flex-direction: column;
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-layer">
+        <div class="bg-dots"></div>
+        <div class="bg-glow" style="width:400px;height:400px;top:-100px;right:5%;background:rgba(30,60,130,0.18);"></div>
+    </div>
+
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <a href="/Admin/Dashboard">
+                <img src="~/Content/images/Logo_atlas.png" alt="Atlas ERP" />
+            </a>
+        </div>
+
+        <span class="menu-label">Principal</span>
+
+        <a href="/Admin/Dashboard" class="menu-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
+            </svg>
+            Dashboard
+        </a>
+
+        <a href="/Produto" class="menu-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+            </svg>
+            Produtos
+        </a>
+
+        <a href="/Cliente" class="menu-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+            Clientes
+        </a>
+
+        <a href="/Usuario" class="menu-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+                <line x1="19" y1="8" x2="19" y2="14" />
+                <line x1="22" y1="11" x2="16" y2="11" />
+            </svg>
+            Funcionários
+        </a>
+
+        <a href="#" class="menu-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="1" x2="12" y2="23" />
+                <path d="M17 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6" />
+            </svg>
+            Financeiro
+        </a>
+
+        <div class="sidebar-divider"></div>
+        <span class="menu-label">Sistema</span>
+
+        <a href="/Auth/Logout" class="menu-item danger">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Sair
+        </a>
+
+        <div class="sidebar-spacer"></div>
+
+        <div class="sidebar-user">
+            @{
+                var nomeUsuario = Session["UsuarioLogado"]?.ToString() ?? "Usuário";
+                var inicial = nomeUsuario.Length > 0 ? nomeUsuario[0].ToString().ToUpper() : "U";
+            }
+            <div class="user-avatar">@inicial</div>
+            <div>
+                <div class="user-name">@nomeUsuario</div>
+                <div class="user-role">@(Session["Role"]?.ToString() ?? "Usuário")</div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main">
+
+        <div class="topbar">
+            <div>
+                <div class="page-title">Clientes</div>
+                <div class="page-subtitle">Gerencie os clientes da empresa</div>
+            </div>
+            <a href="/Cliente/Create" class="btn-primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="16" />
+                    <line x1="8" y1="12" x2="16" y2="12" />
+                </svg>
+                Novo Cliente
+            </a>
+        </div>
+
+        <div class="table-card">
+            <div class="table-header">
+                <span class="table-title">Todos os Clientes</span>
+                <span class="badge-count">@Model.Count registro(s)</span>
+            </div>
+
+            <div class="search-bar">
+                <div class="search-wrap">
+                    <input type="text" class="search-input" id="searchInput"
+                           placeholder="Buscar por nome, documento ou e-mail..."
+                           onkeyup="filtrarTabela()" />
+                    <span class="search-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        </svg>
+                    </span>
+                </div>
+            </div>
+
+            @if (Model != null && Model.Any())
+            {
+                <table id="tabelaClientes">
+                    <thead>
+                        <tr>
+                            <th style="width:36px;"></th>
+                            <th>Nome</th>
+                            <th>Documento</th>
+                            <th>Telefone</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var c in Model)
+                        {
+                            var rowId = "row-" + c.ClienteId;
+                            var expId = "exp-" + c.ClienteId;
+                            var cId = c.ClienteId.ToString();
+                            var cNome = (c.Nome ?? "").Replace("'", "\\'");
+                            var cDoc = (c.Documento ?? "").Replace("'", "\\'");
+                            var cEmail = (c.Email ?? "").Replace("'", "\\'");
+                            var cTel = (c.Telefone ?? "").Replace("'", "\\'");
+                            var cEnd = (c.Endereco ?? "").Replace("'", "\\'");
+                            var cLimite = c.LimiteCredito.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+                            var cAtivo = c.Ativo ? "true" : "false";
+
+                            <tr class="tr-main" id="@rowId" onclick="toggleRow('@rowId','@expId')">
+                                <td style="padding-left:20px;">
+                                    <div class="expand-chevron">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                            <polyline points="6 9 12 15 18 9" />
+                                        </svg>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="row-avatar">@(c.Nome?.Length > 0 ? c.Nome[0].ToString().ToUpper() : "?")</span>
+                                    @c.Nome
+                                </td>
+                                <td class="td-muted">@(c.Documento ?? "—")</td>
+                                <td class="td-muted">@(c.Telefone ?? "—")</td>
+                                <td>
+                                    <span class="status-badge @(c.Ativo ? "ativo" : "inativo")">
+                                        <span class="status-dot"></span>
+                                        @(c.Ativo ? "Ativo" : "Inativo")
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr class="tr-expand" id="@expId">
+                                <td colspan="5">
+                                    <div class="expand-panel">
+                                        <div class="expand-details">
+                                            <div class="expand-field">
+                                                <span class="expand-label">ID</span>
+                                                <span class="expand-value">#@c.ClienteId</span>
+                                            </div>
+                                            <div class="expand-field">
+                                                <span class="expand-label">Nome</span>
+                                                <span class="expand-value">@c.Nome</span>
+                                            </div>
+                                            <div class="expand-field">
+                                                <span class="expand-label">Documento</span>
+                                                <span class="expand-value">@(c.Documento ?? "—")</span>
+                                            </div>
+                                            <div class="expand-field">
+                                                <span class="expand-label">E-mail</span>
+                                                <span class="expand-value">@(c.Email ?? "—")</span>
+                                            </div>
+                                            <div class="expand-field">
+                                                <span class="expand-label">Telefone</span>
+                                                <span class="expand-value">@(c.Telefone ?? "—")</span>
+                                            </div>
+                                            <div class="expand-field">
+                                                <span class="expand-label">Endereço</span>
+                                                <span class="expand-value">@(c.Endereco ?? "—")</span>
+                                            </div>
+                                            <div class="expand-field">
+                                                <span class="expand-label">Limite de Crédito</span>
+                                                <span class="expand-value">R$ @c.LimiteCredito.ToString("N2")</span>
+                                            </div>
+                                            <div class="expand-field">
+                                                <span class="expand-label">Status</span>
+                                                <span class="expand-value">@(c.Ativo ? "Ativo" : "Inativo")</span>
+                                            </div>
+                                        </div>
+                                        <div class="expand-actions">
+                                            <button class="btn-act btn-act-edit"
+                                                    onclick="event.stopPropagation(); abrirEditar('@cId','@cNome','@cDoc','@cEmail','@cTel','@cEnd','@cLimite','@cAtivo')">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                                </svg>
+                                                Editar
+                                            </button>
+                                            <button class="btn-act btn-act-delete"
+                                                    onclick="event.stopPropagation(); abrirExcluir('@cId','@cNome')">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="3 6 5 6 21 6" />
+                                                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                                                    <path d="M9 6V4h6v2" />
+                                                </svg>
+                                                Excluir
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="empty-state">Nenhum cliente cadastrado ainda.</div>
+            }
+        </div>
+
+    </main>
+
+    <!-- MODAL EDITAR -->
+    <div class="modal-overlay" id="modalEditar" onclick="fecharFora(event,'modalEditar')">
+        <div class="modal">
+            <button class="modal-close" onclick="fechar('modalEditar')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+            <div class="modal-title">Editar Cliente</div>
+            <div class="modal-sub">Atualize os dados do cadastro</div>
+            <div class="modal-divider"></div>
+
+            <form method="POST" action="/Cliente/Edit">
+                <input type="hidden" id="editId" name="ClienteId" value="" />
+
+                <div class="modal-form-group">
+                    <label class="modal-form-label">Nome</label>
+                    <input type="text" id="editNome" name="Nome" class="modal-input" placeholder="Nome completo" required />
+                </div>
+
+                <div class="modal-row-2">
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Documento (CPF/CNPJ)</label>
+                        <input type="text" id="editDocumento" name="Documento" class="modal-input" placeholder="000.000.000-00" />
+                    </div>
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Telefone</label>
+                        <input type="text" id="editTelefone" name="Telefone" class="modal-input" placeholder="(00) 00000-0000" />
+                    </div>
+                </div>
+
+                <div class="modal-form-group">
+                    <label class="modal-form-label">E-mail</label>
+                    <input type="email" id="editEmail" name="Email" class="modal-input" placeholder="cliente@email.com" />
+                </div>
+
+                <div class="modal-form-group">
+                    <label class="modal-form-label">Endereço</label>
+                    <input type="text" id="editEndereco" name="Endereco" class="modal-input" placeholder="Rua, número, bairro, cidade" />
+                </div>
+
+                <div class="modal-row-2">
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Limite de Crédito</label>
+                        <input type="number" id="editLimite" name="LimiteCredito" class="modal-input" placeholder="0.00" step="0.01" min="0" />
+                    </div>
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Status</label>
+                        <select id="editAtivo" name="Ativo" class="modal-input">
+                            <option value="true">Ativo</option>
+                            <option value="false">Inativo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn-cancel" onclick="fechar('modalEditar')">Cancelar</button>
+                    <button type="submit" class="modal-btn-submit">Salvar alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL EXCLUIR -->
+    <div class="modal-overlay" id="modalExcluir" onclick="fecharFora(event,'modalExcluir')">
+        <div class="modal" style="max-width:380px;text-align:center;">
+            <button class="modal-close" onclick="fechar('modalExcluir')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+            <div class="modal-danger-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                    <path d="M9 6V4h6v2" />
+                </svg>
+            </div>
+            <div class="modal-title">Excluir cliente?</div>
+            <div class="modal-sub" id="excluirNome" style="margin-top:4px;"></div>
+            <p style="font-size:13px;color:var(--faint);margin:10px 0 22px;">Esta ação não pode ser desfeita.</p>
+            <form method="POST" action="/Cliente/Delete">
+                <input type="hidden" id="excluirId" name="clienteId" value="" />
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn-cancel" onclick="fechar('modalExcluir')">Cancelar</button>
+                    <button type="submit" class="modal-btn-delete">Sim, excluir</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleRow(rowId, expId) {
+            var row = document.getElementById(rowId);
+            var exp = document.getElementById(expId);
+            var isOpen = exp.classList.contains('open');
+            document.querySelectorAll('.tr-expand.open').forEach(function (el) { el.classList.remove('open'); });
+            document.querySelectorAll('.tr-main.expanded').forEach(function (el) { el.classList.remove('expanded'); });
+            if (!isOpen) { exp.classList.add('open'); row.classList.add('expanded'); }
+        }
+
+        function abrirEditar(id, nome, doc, email, tel, end, limite, ativo) {
+            document.getElementById('editId').value = id;
+            document.getElementById('editNome').value = nome;
+            document.getElementById('editDocumento').value = doc;
+            document.getElementById('editEmail').value = email;
+            document.getElementById('editTelefone').value = tel;
+            document.getElementById('editEndereco').value = end;
+            document.getElementById('editLimite').value = limite;
+            document.getElementById('editAtivo').value = ativo;
+            fechar('modalExcluir');
+            abrir('modalEditar');
+        }
+
+        function abrirExcluir(id, nome) {
+            document.getElementById('excluirId').value = id;
+            document.getElementById('excluirNome').textContent = nome;
+            fechar('modalEditar');
+            abrir('modalExcluir');
+        }
+
+        function abrir(id) { document.getElementById(id).classList.add('open'); }
+        function fechar(id) { document.getElementById(id).classList.remove('open'); }
+
+        function fecharFora(e, id) {
+            if (e.target === document.getElementById(id)) fechar(id);
+        }
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') ['modalEditar', 'modalExcluir'].forEach(fechar);
+        });
+
+        function filtrarTabela() {
+            var input = document.getElementById('searchInput').value.toLowerCase();
+            var rows = document.querySelectorAll('.tr-main');
+            rows.forEach(function (row) {
+                var text = row.textContent.toLowerCase();
+                var expId = row.id.replace('row-', 'exp-');
+                var exp = document.getElementById(expId);
+                var show = text.indexOf(input) > -1;
+                row.style.display = show ? '' : 'none';
+                if (exp) exp.style.display = show ? '' : 'none';
+            });
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,874 @@
+﻿@{
+    ViewBag.Title = "Cadastrar Empresa - Atlas ERP";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atlas ERP – Cadastro de Empresa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #050d1a;
+            --panel: #0b1525;
+            --card: #0f1e35;
+            --border: rgba(100,160,255,0.10);
+            --border-hover: rgba(100,160,255,0.28);
+            --accent: #3b82f6;
+            --accent-glow: rgba(59,130,246,0.18);
+            --accent-light: #60a5fa;
+            --gold: #c9a84c;
+            --green: #34d399;
+            --green-soft: rgba(52,211,153,0.10);
+            --red: #f87171;
+            --red-soft: rgba(248,113,113,0.08);
+            --text: #e8f0fe;
+            --muted: #7a9cc8;
+            --faint: #3d5270;
+            --radius: 14px;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            display: flex;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* LADO ESQUERDO */
+        .left-panel {
+            width: 420px;
+            flex-shrink: 0;
+            background: var(--panel);
+            border-right: 1px solid var(--border);
+            padding: 52px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .left-panel::before {
+                content: '';
+                position: absolute;
+                top: -80px;
+                right: -80px;
+                width: 280px;
+                height: 280px;
+                border-radius: 50%;
+                border: 1px solid rgba(59,130,246,0.08);
+            }
+
+            .left-panel::after {
+                content: '';
+                position: absolute;
+                bottom: -50px;
+                left: -50px;
+                width: 200px;
+                height: 200px;
+                border-radius: 50%;
+                border: 1px solid rgba(59,130,246,0.06);
+            }
+
+        .left-bg-dots {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle, rgba(59,130,246,0.08) 1px, transparent 1px);
+            background-size: 32px 32px;
+            mask-image: radial-gradient(ellipse 80% 80% at 30% 50%, black, transparent);
+        }
+
+        .left-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+        }
+
+        .brand {
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand-logo {
+            width: 130px;
+            filter: brightness(0) invert(1);
+            margin-bottom: 40px;
+        }
+
+        .brand-headline {
+            font-family: 'Syne', sans-serif;
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--text);
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+
+            .brand-headline em {
+                font-style: normal;
+                color: var(--accent-light);
+            }
+
+        .brand-desc {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 300px;
+        }
+
+        .brand-features {
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+            .feature-item:last-child {
+                border-bottom: none;
+            }
+
+        .feature-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--accent-soft, rgba(59,130,246,0.12));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--accent-light);
+        }
+
+            .feature-icon svg {
+                width: 15px;
+                height: 15px;
+            }
+
+        .feature-text {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+            .feature-text strong {
+                color: var(--text);
+                font-weight: 500;
+                display: block;
+                margin-bottom: 1px;
+            }
+
+        /* LADO DIREITO */
+        .right-panel {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 48px;
+            position: relative;
+        }
+
+        .right-bg-dots {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle, rgba(59,130,246,0.06) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(ellipse 60% 60% at 70% 50%, black, transparent);
+        }
+
+        .right-glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+        }
+
+        .form-wrapper {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 500px;
+            animation: fadeUp 0.6s ease both;
+        }
+
+        .form-header {
+            margin-bottom: 28px;
+        }
+
+        .form-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .form-sub {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        /* steps */
+        .steps {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin-bottom: 28px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--faint);
+            font-weight: 500;
+        }
+
+            .step.active {
+                color: var(--accent-light);
+            }
+
+            .step.done {
+                color: var(--green);
+            }
+
+        .step-num {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            border: 1px solid var(--faint);
+            color: var(--faint);
+            flex-shrink: 0;
+        }
+
+        .step.active .step-num {
+            border-color: var(--accent);
+            color: var(--accent-light);
+            background: rgba(59,130,246,0.12);
+        }
+
+        .step.done .step-num {
+            border-color: var(--green);
+            color: var(--green);
+            background: rgba(52,211,153,0.10);
+        }
+
+        .step-line {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+            margin: 0 8px;
+        }
+
+        /* secoes do form */
+        .form-section {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px 26px;
+            margin-bottom: 16px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .section-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+            .section-icon svg {
+                width: 14px;
+                height: 14px;
+            }
+
+            .section-icon.blue {
+                background: rgba(59,130,246,0.12);
+                color: var(--accent-light);
+            }
+
+            .section-icon.gold {
+                background: rgba(201,168,76,0.12);
+                color: var(--gold);
+            }
+
+        .section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .section-sub {
+            font-size: 11px;
+            color: var(--faint);
+            margin-top: 1px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+            .form-group:last-child {
+                margin-bottom: 0;
+            }
+
+        .form-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--muted);
+            margin-bottom: 7px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--faint);
+            pointer-events: none;
+            display: flex;
+            transition: color 0.2s;
+        }
+
+            .input-icon svg {
+                width: 14px;
+                height: 14px;
+            }
+
+        .form-control {
+            width: 100%;
+            height: 44px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0 14px 0 40px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            -webkit-appearance: none;
+        }
+
+            .form-control::placeholder {
+                color: var(--faint);
+            }
+
+            .form-control:hover {
+                border-color: var(--border-hover);
+            }
+
+            .form-control:focus {
+                border-color: var(--accent);
+                box-shadow: 0 0 0 3px var(--accent-glow);
+            }
+
+                .form-control:focus ~ .input-icon {
+                    color: var(--accent-light);
+                }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        /* toggle senha */
+        .toggle-pass {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--faint);
+            padding: 0;
+            display: flex;
+            transition: color 0.2s;
+        }
+
+            .toggle-pass:hover {
+                color: var(--muted);
+            }
+
+            .toggle-pass svg {
+                width: 14px;
+                height: 14px;
+            }
+
+        .pass-input {
+            padding-right: 40px;
+        }
+
+        /* alertas */
+        .alert {
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            font-size: 13px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            line-height: 1.5;
+        }
+
+            .alert svg {
+                width: 15px;
+                height: 15px;
+                flex-shrink: 0;
+                margin-top: 1px;
+            }
+
+        .alert-error {
+            background: var(--red-soft);
+            border: 1px solid rgba(248,113,113,0.2);
+            color: var(--red);
+        }
+
+        .alert-success {
+            background: var(--green-soft);
+            border: 1px solid rgba(52,211,153,0.2);
+            color: var(--green);
+        }
+
+        /* botao */
+        .btn-submit {
+            width: 100%;
+            height: 50px;
+            background: var(--accent);
+            border: none;
+            border-radius: 12px;
+            font-family: 'Syne', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            margin-top: 6px;
+            letter-spacing: 0.02em;
+            transition: background 0.2s, transform 0.15s;
+            box-shadow: 0 4px 24px rgba(59,130,246,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .btn-submit::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(135deg, rgba(255,255,255,0.10) 0%, transparent 60%);
+                pointer-events: none;
+            }
+
+            .btn-submit:hover {
+                background: #2563eb;
+                transform: translateY(-1px);
+                box-shadow: 0 6px 28px rgba(59,130,246,0.4);
+            }
+
+            .btn-submit:active {
+                transform: translateY(0);
+            }
+
+        .login-link {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+            .login-link a {
+                color: var(--accent-light);
+                text-decoration: none;
+            }
+
+                .login-link a:hover {
+                    text-decoration: underline;
+                }
+
+        .terms {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 11px;
+            color: var(--faint);
+            line-height: 1.6;
+        }
+
+        @@keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@media (max-width: 900px) {
+            .left-panel {
+                display: none;
+            }
+
+            .right-panel {
+                padding: 32px 24px;
+            }
+        }
+
+        @@media (max-width: 500px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-section {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LADO ESQUERDO -->
+    <div class="left-panel">
+        <div class="left-bg-dots"></div>
+        <div class="left-glow" style="width:300px;height:300px;top:-80px;right:-60px;background:rgba(30,60,130,0.22);"></div>
+        <div class="left-glow" style="width:200px;height:200px;bottom:-40px;left:-40px;background:rgba(15,40,100,0.18);"></div>
+
+        <div class="brand">
+            <a href="/">
+                <img src="~/Content/images/Logo_atlas.png" alt="Atlas ERP" class="brand-logo" />
+            </a>
+            <div class="brand-headline">
+                Seu negócio<br />na plataforma<br /><em>certa.</em>
+            </div>
+            <p class="brand-desc">
+                Cadastre sua empresa e tenha acesso completo ao sistema de gestão comercial Atlas ERP.
+            </p>
+        </div>
+
+        <div class="brand-features">
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                </div>
+                <div class="feature-text">
+                    <strong>Dados isolados por empresa</strong>
+                    Cada empresa acessa apenas seus próprios dados
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                    </svg>
+                </div>
+                <div class="feature-text">
+                    <strong>Controle em tempo real</strong>
+                    Vendas, estoque e financeiro integrados
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                </div>
+                <div class="feature-text">
+                    <strong>Multi-usuário</strong>
+                    Gerencie equipes com diferentes permissões
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LADO DIREITO -->
+    <div class="right-panel">
+        <div class="right-bg-dots"></div>
+        <div class="right-glow" style="width:400px;height:400px;top:-100px;right:-80px;background:rgba(20,50,120,0.15);"></div>
+
+        <div class="form-wrapper">
+
+            <div class="form-header">
+                <div class="form-title">Cadastro de Empresa</div>
+                <div class="form-sub">Preencha os dados abaixo para solicitar acesso à plataforma</div>
+            </div>
+
+            <!-- STEPS -->
+            <div class="steps">
+                <div class="step active">
+                    <div class="step-num">1</div>
+                    Empresa
+                </div>
+                <div class="step-line"></div>
+                <div class="step active">
+                    <div class="step-num">2</div>
+                    Responsável
+                </div>
+                <div class="step-line"></div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    Aprovação
+                </div>
+            </div>
+
+            @if (ViewBag.Erro != null)
+            {
+                <div class="alert alert-error">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    @ViewBag.Erro
+                </div>
+            }
+
+            @if (ViewBag.Sucesso != null)
+            {
+                <div class="alert alert-success">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    @ViewBag.Sucesso
+                </div>
+            }
+
+            <form method="POST" action="/Empresa/Cadastro">
+
+                <!-- SECAO 1: DADOS DA EMPRESA -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon blue">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                                <polyline points="9 22 9 12 15 12 15 22" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="section-title">Dados da Empresa</div>
+                            <div class="section-sub">Informações jurídicas do estabelecimento</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Razão Social</label>
+                        <div class="input-wrap">
+                            <input type="text" name="NomeEmpresa" class="form-control"
+                                   placeholder="Ex: Comércio e Serviços Silva Ltda" required />
+                            <span class="input-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="7" width="20" height="14" rx="2" />
+                                    <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">CNPJ</label>
+                            <div class="input-wrap">
+                                <input type="text" name="CNPJ" id="cnpjInput" class="form-control"
+                                       placeholder="00.000.000/0000-00" maxlength="18" required />
+                                <span class="input-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                        <polyline points="14 2 14 8 20 8" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Segmento</label>
+                            <div class="input-wrap">
+                                <select name="Segmento" class="form-control">
+                                    <option value="">Selecione...</option>
+                                    <option value="Varejo">Varejo</option>
+                                    <option value="Atacado">Atacado</option>
+                                    <option value="Servicos">Serviços</option>
+                                    <option value="Industria">Indústria</option>
+                                    <option value="Tecnologia">Tecnologia</option>
+                                    <option value="Outro">Outro</option>
+                                </select>
+                                <span class="input-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <path d="M12 8v4l3 3" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label class="form-label">E-mail Corporativo</label>
+                        <div class="input-wrap">
+                            <input type="email" name="EmailEmpresa" class="form-control"
+                                   placeholder="contato@suaempresa.com.br" />
+                            <span class="input-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                                    <path d="m2 7 10 7L22 7" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECAO 2: DADOS DO ADMINISTRADOR -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon gold">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="section-title">Responsável pelo Acesso</div>
+                            <div class="section-sub">Será o administrador principal da conta</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Nome Completo</label>
+                        <div class="input-wrap">
+                            <input type="text" name="NomeAdmin" class="form-control"
+                                   placeholder="Nome do responsável" required />
+                            <span class="input-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                    <circle cx="12" cy="7" r="4" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">E-mail de Acesso</label>
+                            <div class="input-wrap">
+                                <input type="email" name="EmailAdmin" class="form-control"
+                                       placeholder="admin@suaempresa.com" required />
+                                <span class="input-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="2" y="4" width="20" height="16" rx="2" />
+                                        <path d="m2 7 10 7L22 7" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">Senha</label>
+                            <div class="input-wrap">
+                                <input type="password" name="Senha" id="senhaInput" class="form-control pass-input"
+                                       placeholder="••••••••" required />
+                                <span class="input-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" />
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                    </svg>
+                                </span>
+                                <button type="button" class="toggle-pass" onclick="toggleSenha()">
+                                    <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                        <circle cx="12" cy="12" r="3" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">Enviar Solicitação de Cadastro</button>
+            </form>
+
+            <div class="terms">
+                Ao cadastrar, você concorda com os termos de uso da plataforma Atlas ERP.<br />
+                Seu cadastro passará por análise antes de ser ativado.
+            </div>
+
+            <div class="login-link">
+                Já tem acesso? <a href="/Auth/Login">Fazer login</a>
+            </div>
+
+        </div>
+    </div>
+
+    <script>// toggle senha
+        function toggleSenha() {
+            var input = document.getElementById('senhaInput');
+            var icon  = document.getElementById('eyeIcon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>';
+            } else {
+                input.type = 'password';
+                icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+            }
+        }
+
+        // mascara CNPJ
+        document.getElementById('cnpjInput').addEventListener('input', function(e) {
+            var v = e.target.value.replace(/\D/g, '');
+            v = v.replace(/^(\d{2})(\d)/, '$1.$2');
+            v = v.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+            v = v.replace(/\.(\d{3})(\d)/, '.$1/$2');
+            v = v.replace(/(\d{4})(\d)/, '$1-$2');
+            e.target.value = v;
+        });</script>
+
+</body>
+</html>

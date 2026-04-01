@@ -1,0 +1,584 @@
+﻿@{
+    ViewBag.Title = "Login - Atlas ERP";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atlas ERP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --navy: #050d1a;
+            --panel: #0b1525;
+            --card: #0f1e35;
+            --border: rgba(100,160,255,0.12);
+            --border-hover: rgba(100,160,255,0.28);
+            --accent: #3b82f6;
+            --accent-glow: rgba(59,130,246,0.18);
+            --accent-light: #60a5fa;
+            --text-primary: #e8f0fe;
+            --text-secondary: #7a9cc8;
+            --text-muted: #3d5270;
+            --danger: #f87171;
+            --danger-bg: rgba(248,113,113,0.08);
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--navy);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bg-canvas {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .geo-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, rgba(59,130,246,0.08), transparent);
+        }
+
+        .geo-line-h {
+            height: 1px;
+            width: 100%;
+        }
+
+        .geo-circle {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(59,130,246,0.06);
+        }
+
+        .grid-dot {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(59,130,246,0.12) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+        }
+
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+        }
+
+        .page-wrapper {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            width: 100%;
+            max-width: 960px;
+            min-height: 520px;
+            padding: 1rem;
+            animation: fadeUp 0.7s ease both;
+        }
+
+        @@keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Left brand panel */
+        .brand-panel {
+            flex: 1;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-right: none;
+            border-radius: 20px 0 0 20px;
+            padding: 48px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .brand-panel::before {
+                content: '';
+                position: absolute;
+                top: -60px;
+                right: -60px;
+                width: 220px;
+                height: 220px;
+                border-radius: 50%;
+                border: 1px solid rgba(59,130,246,0.1);
+            }
+
+            .brand-panel::after {
+                content: '';
+                position: absolute;
+                bottom: -40px;
+                left: -40px;
+                width: 160px;
+                height: 160px;
+                border-radius: 50%;
+                border: 1px solid rgba(59,130,246,0.07);
+            }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--accent);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 0 24px var(--accent-glow);
+        }
+
+            .logo-icon svg {
+                width: 24px;
+                height: 24px;
+                fill: white;
+            }
+
+        .logo-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: 0.04em;
+        }
+
+            .logo-name span {
+                color: var(--accent-light);
+            }
+
+        .brand-headline {
+            font-family: 'Syne', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+
+            .brand-headline em {
+                font-style: normal;
+                color: var(--accent-light);
+            }
+
+        .brand-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 260px;
+        }
+
+        .brand-stats {
+            display: flex;
+            gap: 24px;
+            margin-top: 36px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .stat-value {
+            font-family: 'Syne', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .stat-divider {
+            width: 1px;
+            background: var(--border);
+            align-self: stretch;
+        }
+
+        /* Right login panel */
+        .login-panel {
+            width: 360px;
+            flex-shrink: 0;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-left-color: rgba(59,130,246,0.06);
+            border-radius: 0 20px 20px 0;
+            padding: 48px 36px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .login-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .alert-error {
+            background: var(--danger-bg);
+            border: 1px solid rgba(248,113,113,0.2);
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: var(--danger);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .alert-error svg {
+                width: 14px;
+                height: 14px;
+                flex-shrink: 0;
+            }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+            display: flex;
+        }
+
+            .input-icon svg {
+                width: 16px;
+                height: 16px;
+            }
+
+        .form-control {
+            width: 100%;
+            height: 46px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0 14px 0 42px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            -webkit-appearance: none;
+        }
+
+            .form-control::placeholder {
+                color: var(--text-muted);
+            }
+
+            .form-control:hover {
+                border-color: var(--border-hover);
+            }
+
+            .form-control:focus {
+                border-color: var(--accent);
+                box-shadow: 0 0 0 3px var(--accent-glow);
+            }
+
+        .toggle-pass {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 0;
+            display: flex;
+            transition: color 0.2s;
+        }
+
+            .toggle-pass:hover {
+                color: var(--text-secondary);
+            }
+
+            .toggle-pass svg {
+                width: 16px;
+                height: 16px;
+            }
+
+        .password-input {
+            padding-right: 42px;
+        }
+
+        .form-footer-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: -8px;
+            margin-bottom: 8px;
+        }
+
+        .link-muted {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+            .link-muted:hover {
+                color: var(--accent-light);
+            }
+
+        .btn-submit {
+            width: 100%;
+            height: 48px;
+            background: var(--accent);
+            border: none;
+            border-radius: 10px;
+            font-family: 'Syne', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            margin-top: 8px;
+            letter-spacing: 0.02em;
+            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(59,130,246,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .btn-submit::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%);
+                pointer-events: none;
+            }
+
+            .btn-submit:hover {
+                background: #2563eb;
+                transform: translateY(-1px);
+                box-shadow: 0 6px 28px rgba(59,130,246,0.4);
+            }
+
+            .btn-submit:active {
+                transform: translateY(0);
+            }
+
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 24px 0;
+        }
+
+        .version-tag {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 0.04em;
+        }
+
+        @@media (max-width: 700px) {
+            .brand-panel {
+                display: none;
+            }
+
+            .login-panel {
+                width: 100%;
+                border-radius: 20px;
+                border-left-color: var(--border);
+                max-width: 380px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-canvas">
+        <div class="grid-dot"></div>
+        <div class="glow-orb" style="width:500px;height:500px;top:-100px;left:-100px;background:rgba(30,60,120,0.25);"></div>
+        <div class="glow-orb" style="width:400px;height:400px;bottom:-80px;right:-80px;background:rgba(20,40,100,0.2);"></div>
+        <div class="geo-line geo-line-h" style="top:30%;"></div>
+        <div class="geo-line geo-line-h" style="top:70%;"></div>
+        <div class="geo-circle" style="width:600px;height:600px;top:-100px;right:-200px;"></div>
+        <div class="geo-circle" style="width:300px;height:300px;bottom:-50px;left:15%;"></div>
+    </div>
+
+    <div class="page-wrapper">
+
+        <div class="brand-panel">
+            <div class="brand-logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24"><path d="M13 3L4 14h8l-1 7 9-11h-8l1-10z" /></svg>
+                </div>
+                <span class="logo-name">ATL<span>AS</span></span>
+            </div>
+
+            <div>
+                <div class="brand-headline">
+                    Gestão comercial<br /><em>inteligente</em> e<br />integrada.
+                </div>
+                <p class="brand-desc">
+                    Controle total do seu negócio em uma plataforma única. Vendas, estoque, financeiro e muito mais.
+                </p>
+                <div class="brand-stats">
+                    <div class="stat-item">
+                        <span class="stat-value">100%</span>
+                        <span class="stat-label">Integrado</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-value">24/7</span>
+                        <span class="stat-label">Disponível</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-value">v1.0</span>
+                        <span class="stat-label">Release</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="login-panel">
+            <h1 class="login-title">Bem-vindo</h1>
+            <p class="login-subtitle">Acesse sua conta para continuar</p>
+
+            @if (ViewBag.Erro != null)
+            {
+                <div class="alert-error">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    @ViewBag.Erro
+                </div>
+            }
+
+            @using (Html.BeginForm("Login", "Auth", FormMethod.Post))
+            {
+                <div class="form-group">
+                    <label class="form-label">E-mail</label>
+                    <div class="input-wrapper">
+                        <input type="email" name="email" class="form-control" placeholder="seu@email.com" required autocomplete="email" />
+                        <span class="input-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="4" width="20" height="16" rx="2" />
+                                <path d="m2 7 10 7L22 7" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Senha</label>
+                    <div class="input-wrapper">
+                        <input type="password" name="senha" id="senhaInput" class="form-control password-input" placeholder="••••••••" required autocomplete="current-password" />
+                        <span class="input-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                            </svg>
+                        </span>
+                        <button type="button" class="toggle-pass" onclick="toggleSenha()">
+                            <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-footer-row">
+                    <a href="#" class="link-muted">Esqueci minha senha</a>
+                </div>
+
+                <button type="submit" class="btn-submit">Entrar no sistema</button>
+
+                <div class="divider"></div>
+
+                <div style="text-align:center; font-size:13px; color:var(--text-secondary);">
+                    Não tem acesso?
+                    <a href="/Empresa/Cadastro" style="color:var(--accent-light); text-decoration:none; font-weight:500;">
+                        Cadastrar minha empresa
+                    </a>
+                </div>
+            }
+
+            <div class="divider"></div>
+            <div class="version-tag">ATLAS ERP &nbsp;·&nbsp; Sistema Comercial</div>
+        </div>
+
+    </div>
+
+    <script>
+        function toggleSenha() {
+            var input = document.getElementById('senhaInput');
+            var icon = document.getElementById('eyeIcon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>';
+            } else {
+                input.type = 'password';
+                icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+            }
+        }
+    </script>
+</body>
+</html>
