@@ -1,14 +1,17 @@
-# Ignora completamente arquivos front-end da detecção de linguagem
-*.html linguist-vendored=true
-*.css linguist-vendored=true
-*.js linguist-vendored=true
-*.jsx linguist-vendored=true
-*.ts linguist-vendored=true
-*.tsx linguist-vendored=true
-*.scss linguist-vendored=true
-*.sass linguist-vendored=true
-*.less linguist-vendored=true
+# Ignora arquivos de View (cshtml) e front-end da detecção de linguagem
+*.cshtml linguist-detectable=false
+*.html linguist-detectable=false
+*.css linguist-detectable=false
+*.js linguist-detectable=false
+*.scss linguist-detectable=false
+ 
+# Ignora pastas específicas do projeto
+ATLAS ERP/Views/** linguist-detectable=false
+ATLAS ERP/Content/** linguist-detectable=false
+ATLAS ERP/Scripts/** linguist-detectable=false
+packages/** linguist-vendored=true
  
 # Garante que C# seja reconhecido como linguagem principal
 *.cs linguist-detectable=true
 *.cs linguist-language=C#
+*.csproj linguist-detectable=false
