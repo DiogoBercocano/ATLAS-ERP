@@ -1,8 +1,11 @@
-# Auto detect text files and perform LF normalization
-* text=auto
-
+# Força o GitHub Linguist a ignorar arquivos HTML e JS na detecção de linguagem
 *.html linguist-detectable=false
+*.js linguist-detectable=false
+*.jsx linguist-detectable=false
+*.ts linguist-detectable=false
+*.tsx linguist-detectable=false
+*.css linguist-detectable=false
  
+# Garante que C# seja reconhecido como linguagem principal
 *.cs linguist-detectable=true
 *.cs linguist-language=C#
- 
