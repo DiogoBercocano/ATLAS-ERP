@@ -1,0 +1,331 @@
+﻿@{
+    ViewBag.Title = "Atlas ERP";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atlas ERP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #050d1a;
+            --panel: #0b1525;
+            --card: #0f1e35;
+            --border: rgba(100,160,255,0.10);
+            --accent: #3b82f6;
+            --accent-glow: rgba(59,130,246,0.20);
+            --accent-light: #60a5fa;
+            --text: #e8f0fe;
+            --muted: #7a9cc8;
+            --faint: #3d5270;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bg-dots {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle, rgba(59,130,246,0.10) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+        }
+
+        .bg-glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+        }
+
+        .geo-circle {
+            position: fixed;
+            border-radius: 50%;
+            border: 1px solid rgba(59,130,246,0.06);
+            pointer-events: none;
+        }
+
+        /* CONTEUDO */
+        .content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 40px 24px;
+            animation: fadeUp 0.7s ease both;
+        }
+
+        .logo {
+            width: 160px;
+            filter: brightness(0) invert(1);
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+
+        .headline {
+            font-family: 'Syne', sans-serif;
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--text);
+            line-height: 1.1;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+            .headline em {
+                font-style: normal;
+                color: var(--accent-light);
+            }
+
+        .subline {
+            font-size: 16px;
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 420px;
+            margin-bottom: 44px;
+        }
+
+        /* BOTOES */
+        .buttons {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 48px;
+        }
+
+        .btn-main {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            font-family: 'Syne', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 14px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
+            border: none;
+            letter-spacing: 0.01em;
+        }
+
+            .btn-main svg {
+                width: 17px;
+                height: 17px;
+                flex-shrink: 0;
+            }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 4px 24px rgba(59,130,246,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .btn-primary::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%);
+                pointer-events: none;
+            }
+
+            .btn-primary:hover {
+                background: #2563eb;
+                transform: translateY(-2px);
+                box-shadow: 0 8px 32px rgba(59,130,246,0.45);
+            }
+
+        .btn-secondary {
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+            .btn-secondary:hover {
+                background: #132540;
+                border-color: rgba(100,160,255,0.22);
+                transform: translateY(-2px);
+            }
+
+        /* DIVISOR */
+        .divider-line {
+            width: 1px;
+            height: 40px;
+            background: var(--border);
+            margin: 0 4px;
+        }
+
+        /* STATS */
+        .stats {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            padding: 20px 36px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .stat-value {
+            font-family: 'Syne', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--faint);
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+        }
+
+        .stat-divider {
+            width: 1px;
+            height: 36px;
+            background: var(--border);
+        }
+
+        /* RODAPE */
+        .footer {
+            position: fixed;
+            bottom: 24px;
+            font-size: 12px;
+            color: var(--faint);
+            z-index: 1;
+        }
+
+        @@keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@media (max-width: 500px) {
+            .headline {
+                font-size: 34px;
+            }
+
+            .buttons {
+                flex-direction: column;
+                width: 100%;
+                max-width: 320px;
+            }
+
+            .btn-main {
+                justify-content: center;
+            }
+
+            .stats {
+                gap: 20px;
+                padding: 16px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-dots"></div>
+    <div class="bg-glow" style="width:600px;height:600px;top:-200px;left:-100px;background:rgba(25,55,130,0.18);"></div>
+    <div class="bg-glow" style="width:400px;height:400px;bottom:-100px;right:-80px;background:rgba(15,40,100,0.15);"></div>
+    <div class="geo-circle" style="width:700px;height:700px;top:-200px;right:-300px;"></div>
+    <div class="geo-circle" style="width:400px;height:400px;bottom:-100px;left:-150px;"></div>
+
+    <div class="content">
+        <a href="/">
+            <img src="~/Content/images/Logo_atlas.png" alt="Atlas ERP" class="logo" />
+        </a>
+        <div class="headline">
+            Gestão comercial<br />
+            <em>simples e eficiente.</em>
+        </div>
+
+        <p class="subline">
+            Controle vendas, estoque, clientes e financeiro em uma única plataforma. Multiempresa, seguro e pronto para crescer.
+        </p>
+
+        <div class="buttons">
+            <a href="/Auth/Login" class="btn-main btn-primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                    <polyline points="10 17 15 12 10 7" />
+                    <line x1="15" y1="12" x2="3" y2="12" />
+                </svg>
+                Acessar o sistema
+            </a>
+
+            <a href="/Empresa/Cadastro" class="btn-main btn-secondary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+                Cadastrar minha empresa
+            </a>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-value">100%</span>
+                <span class="stat-label">Web</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-value">Multi</span>
+                <span class="stat-label">Empresa</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-value">24/7</span>
+                <span class="stat-label">Disponível</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-value">v1.0</span>
+                <span class="stat-label">Versão</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">Atlas ERP &nbsp;·&nbsp; Sistema Comercial</div>
+
+</body>
+</html>
