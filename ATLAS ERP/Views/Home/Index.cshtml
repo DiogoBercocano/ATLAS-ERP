@@ -75,14 +75,10 @@
             text-align: center;
             padding: 40px 24px;
             animation: fadeUp 0.7s ease both;
+            width: 100%;
         }
 
-        .logo {
-            width: 160px;
-            filter: brightness(0) invert(1);
-            margin-bottom: 40px;
-            opacity: 0.95;
-        }
+        
 
         .headline {
             font-family: 'Syne', sans-serif;
@@ -172,19 +168,13 @@
                 transform: translateY(-2px);
             }
 
-        /* DIVISOR */
-        .divider-line {
-            width: 1px;
-            height: 40px;
-            background: var(--border);
-            margin: 0 4px;
-        }
-
         /* STATS */
         .stats {
             display: flex;
             align-items: center;
             gap: 32px;
+            flex-wrap: wrap;
+            justify-content: center;
             padding: 20px 36px;
             background: var(--panel);
             border: 1px solid var(--border);
@@ -221,7 +211,7 @@
         /* RODAPE */
         .footer {
             position: fixed;
-            bottom: 24px;
+            bottom: 4px;
             font-size: 12px;
             color: var(--faint);
             z-index: 1;
@@ -239,9 +229,34 @@
             }
         }
 
-        @@media (max-width: 500px) {
+        @@media (max-width: 768px) {
             .headline {
-                font-size: 34px;
+                font-size: 36px;
+            }
+
+            .subline {
+                font-size: 15px;
+                margin-bottom: 32px;
+            }
+
+            .stats {
+                gap: 20px;
+                padding: 16px 24px;
+            }
+        }
+
+        @@media (max-width: 500px) {
+            .brand-logo {
+                width: 200px;
+            }
+
+            .headline {
+                font-size: 28px;
+            }
+
+            .subline {
+                font-size: 14px;
+                margin-bottom: 28px;
             }
 
             .buttons {
@@ -255,8 +270,19 @@
             }
 
             .stats {
-                gap: 20px;
-                padding: 16px 24px;
+                gap: 14px;
+                padding: 14px 18px;
+                width: 100%;
+                max-width: 320px;
+            }
+
+            .stat-divider {
+                display: none;
+            }
+
+            .footer {
+                font-size: 11px;
+                bottom: 16px;
             }
         }
     </style>
@@ -270,16 +296,22 @@
     <div class="geo-circle" style="width:400px;height:400px;bottom:-100px;left:-150px;"></div>
 
     <div class="content">
-        <a href="/">
-            <img src="~/Content/images/Logo_atlas.png" alt="Atlas ERP" class="logo" />
-        </a>
+
+        <div style="display:flex; justify-content:center; margin-bottom:10px;">
+            <a href="/">
+                <img src="~/Content/images/logos/atlas_erp_diamante.svg" alt="Atlas ERP"
+                     style="width:300px; max-width:100%;" />
+            </a>
+        </div>
+
         <div class="headline">
             Gestão comercial<br />
             <em>simples e eficiente.</em>
         </div>
 
         <p class="subline">
-            Controle vendas, estoque, clientes e financeiro em uma única plataforma. Multiempresa, seguro e pronto para crescer.
+            Controle vendas, estoque, clientes e financeiro em uma única plataforma.
+            Multiempresa, seguro e pronto para crescer.
         </p>
 
         <div class="buttons">

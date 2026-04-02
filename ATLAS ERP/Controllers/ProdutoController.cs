@@ -9,18 +9,23 @@ namespace ATLAS_ERP.Controllers
     public class ProdutoController : Controller
     {
         private readonly AtlasContext db = new AtlasContext();
-
         private int EmpresaId => (int)Session["EmpresaId"];
 
         public ActionResult Index()
         {
-            if (Session["UsuarioLogado"] == null)
-                return RedirectToAction("Login", "Auth");
+            try
+            {
+                if (Session["UsuarioLogado"] == null)
+                    return RedirectToAction("Login", "Auth");
 
-            var produtos = db.Produtos
-                             .Where(p => p.EmpresaId == EmpresaId)
-                             .ToList();
-            return View(produtos);
+                var produtos = db.Produtos.Where(p => p.EmpresaId == EmpresaId).ToList();
+                return View(produtos);
+            }
+            catch
+            {
+                ViewBag.Erro = "Erro ao carregar produtos.";
+                return View(new System.Collections.Generic.List<Produto>());
+            }
         }
 
         [RoleFilter("Admin", "Gerente")]
@@ -33,47 +38,67 @@ namespace ATLAS_ERP.Controllers
         [RoleFilter("Admin", "Gerente")]
         public ActionResult Create(Produto produto)
         {
-            if (ModelState.IsValid)
+            try
             {
-                produto.EmpresaId = EmpresaId;
-                db.Produtos.Add(produto);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    produto.EmpresaId = EmpresaId;
+                    db.Produtos.Add(produto);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                return View(produto);
             }
-            return View(produto);
+            catch
+            {
+                ViewBag.Erro = "Erro ao cadastrar produto. Tente novamente.";
+                return View(produto);
+            }
         }
 
         [HttpPost]
         [RoleFilter("Admin", "Gerente")]
         public ActionResult Edit(int ProdutoId, string Nome, string Categoria, decimal PrecoVenda, int EstoqueMinimo, bool Ativo)
         {
-            var p = db.Produtos
-                      .FirstOrDefault(x => x.ProdutoId == ProdutoId && x.EmpresaId == EmpresaId);
-            if (p != null)
+            try
             {
-                p.Nome = Nome;
-                p.Categoria = Categoria;
-                p.PrecoVenda = PrecoVenda;
-                p.EstoqueMinimo = EstoqueMinimo;
-                p.Ativo = Ativo;
-                db.Entry(p).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
+                var p = db.Produtos.FirstOrDefault(x => x.ProdutoId == ProdutoId && x.EmpresaId == EmpresaId);
+                if (p != null)
+                {
+                    p.Nome = Nome;
+                    p.Categoria = Categoria;
+                    p.PrecoVenda = PrecoVenda;
+                    p.EstoqueMinimo = EstoqueMinimo;
+                    p.Ativo = Ativo;
+                    db.Entry(p).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            catch
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         [HttpPost]
         [RoleFilter("Admin")]
         public ActionResult Delete(int produtoId)
         {
-            var p = db.Produtos
-                      .FirstOrDefault(x => x.ProdutoId == produtoId && x.EmpresaId == EmpresaId);
-            if (p != null)
+            try
             {
-                db.Produtos.Remove(p);
-                db.SaveChanges();
+                var p = db.Produtos.FirstOrDefault(x => x.ProdutoId == produtoId && x.EmpresaId == EmpresaId);
+                if (p != null)
+                {
+                    db.Produtos.Remove(p);
+                    db.SaveChanges();
+                }
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            catch
+            {
+                return RedirectToAction("Index");
+            }
         }
     }
 }

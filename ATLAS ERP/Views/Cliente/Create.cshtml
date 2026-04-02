@@ -29,7 +29,7 @@
             --text: #e8f0fe;
             --muted: #7a9cc8;
             --faint: #3d5270;
-            --sidebar-w: 240px;
+            --sidebar-w: 320px;
             --radius: 14px;
         }
 
@@ -89,18 +89,23 @@
         }
 
         .sidebar-logo {
-            padding: 0 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
             margin-bottom: 36px;
         }
 
             .sidebar-logo a {
                 display: flex;
                 align-items: center;
+                justify-content: center;
+                width: 100%;
             }
 
             .sidebar-logo img {
-                width: 110px;
-                filter: brightness(0) invert(1);
+                width: 300px;
+                max-width: 100%;
             }
 
         .sidebar-divider {
@@ -464,7 +469,7 @@
     <aside class="sidebar">
         <div class="sidebar-logo">
             <a href="/Admin/Dashboard">
-                <img src="~/Content/images/Logo_atlas.png" alt="Atlas ERP" />
+                <img src="~/Content/images/logos/atlas_erp_diamante.svg" alt="Atlas ERP" />
             </a>
         </div>
 

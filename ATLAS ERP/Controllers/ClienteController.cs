@@ -9,18 +9,23 @@ namespace ATLAS_ERP.Controllers
     public class ClienteController : Controller
     {
         private readonly AtlasContext db = new AtlasContext();
-
         private int EmpresaId => (int)Session["EmpresaId"];
 
         public ActionResult Index()
         {
-            if (Session["UsuarioLogado"] == null)
-                return RedirectToAction("Login", "Auth");
+            try
+            {
+                if (Session["UsuarioLogado"] == null)
+                    return RedirectToAction("Login", "Auth");
 
-            var clientes = db.Clientes
-                             .Where(c => c.EmpresaId == EmpresaId)
-                             .ToList();
-            return View(clientes);
+                var clientes = db.Clientes.Where(c => c.EmpresaId == EmpresaId).ToList();
+                return View(clientes);
+            }
+            catch
+            {
+                ViewBag.Erro = "Erro ao carregar clientes.";
+                return View(new System.Collections.Generic.List<Cliente>());
+            }
         }
 
         [RoleFilter("Admin", "Gerente")]
@@ -33,51 +38,71 @@ namespace ATLAS_ERP.Controllers
         [RoleFilter("Admin", "Gerente")]
         public ActionResult Create(Cliente cliente)
         {
-            if (ModelState.IsValid)
+            try
             {
-                cliente.EmpresaId = EmpresaId;
-                db.Clientes.Add(cliente);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    cliente.EmpresaId = EmpresaId;
+                    db.Clientes.Add(cliente);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                return View(cliente);
             }
-            return View(cliente);
+            catch
+            {
+                ViewBag.Erro = "Erro ao cadastrar cliente. Tente novamente.";
+                return View(cliente);
+            }
         }
 
         [HttpPost]
         [RoleFilter("Admin", "Gerente")]
         public ActionResult Edit(int ClienteId, string Nome, string Documento,
-                         string Email, string Telefone, string Endereco,
-                         decimal? LimiteCredito, string Ativo)
+                                 string Email, string Telefone, string Endereco,
+                                 decimal? LimiteCredito, string Ativo)
         {
-            var c = db.Clientes
-                      .FirstOrDefault(x => x.ClienteId == ClienteId && x.EmpresaId == EmpresaId);
-            if (c != null)
+            try
             {
-                c.Nome = Nome;
-                c.Documento = Documento;
-                c.Email = Email;
-                c.Telefone = Telefone;
-                c.Endereco = Endereco;
-                c.LimiteCredito = LimiteCredito ?? 0;
-                c.Ativo = Ativo == "true";
-                db.Entry(c).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
+                var c = db.Clientes.FirstOrDefault(x => x.ClienteId == ClienteId && x.EmpresaId == EmpresaId);
+                if (c != null)
+                {
+                    c.Nome = Nome;
+                    c.Documento = Documento;
+                    c.Email = Email;
+                    c.Telefone = Telefone;
+                    c.Endereco = Endereco;
+                    c.LimiteCredito = LimiteCredito ?? 0;
+                    c.Ativo = Ativo == "true";
+                    db.Entry(c).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            catch
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         [HttpPost]
         [RoleFilter("Admin")]
         public ActionResult Delete(int clienteId)
         {
-            var c = db.Clientes
-                      .FirstOrDefault(x => x.ClienteId == clienteId && x.EmpresaId == EmpresaId);
-            if (c != null)
+            try
             {
-                db.Clientes.Remove(c);
-                db.SaveChanges();
+                var c = db.Clientes.FirstOrDefault(x => x.ClienteId == clienteId && x.EmpresaId == EmpresaId);
+                if (c != null)
+                {
+                    db.Clientes.Remove(c);
+                    db.SaveChanges();
+                }
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            catch
+            {
+                return RedirectToAction("Index");
+            }
         }
     }
 }

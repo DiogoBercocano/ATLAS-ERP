@@ -1,0 +1,16 @@
+<svg width="400" height="280" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+
+  <g transform="translate(200,110)">
+    <polygon points="0,-72 62,0 0,72 -62,0" fill="#0f1e35" stroke="#3b82f6" stroke-width="2.5"/>
+    <polygon points="0,-50 40,0 0,50 -40,0" fill="none" stroke="#1e3a5f" stroke-width="1.5"/>
+    <polygon points="0,-34 26,0 0,20" fill="#3b82f6"/>
+    <polygon points="0,34 26,0 0,20 -26,0" fill="#1e3a5f"/>
+    <circle cx="0" cy="0" r="6" fill="#c9a84c"/>
+    <circle cx="0" cy="0" r="2.5" fill="#0f1e35"/>
+  </g>
+
+  <text x="200" y="210" text-anchor="middle" font-family="Georgia,serif" font-size="28" font-weight="700" fill="#e8f0fe" letter-spacing="6">ATLAS</text>
+  <line x1="120" y1="220" x2="280" y2="220" stroke="#c9a84c" stroke-width="1"/>
+  <text x="200" y="244" text-anchor="middle" font-family="Arial" font-size="13" fill="#3b82f6" letter-spacing="10">ERP</text>
+
+</svg>
