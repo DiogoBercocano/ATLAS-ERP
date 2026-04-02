@@ -1,26 +1,58 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\dgber\\Documents\\GitHub\\WorkSpace\\ATLAS ERP\\",
+  "WorkspaceRootPath": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|c:\\users\\dgber\\documents\\github\\workspace\\atlas erp\\atlas erp\\controllers\\clientecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|c:\\users\\dgber\\documents\\github\\atlas erp\\atlas erp\\controllers\\usuariocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\controllers\\usuariocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|c:\\users\\dgber\\documents\\github\\atlas erp\\atlas erp\\controllers\\superadmincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\controllers\\superadmincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|c:\\users\\dgber\\documents\\github\\atlas erp\\atlas erp\\controllers\\produtocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\controllers\\produtocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|c:\\users\\dgber\\documents\\github\\atlas erp\\atlas erp\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|c:\\users\\dgber\\documents\\github\\atlas erp\\atlas erp\\controllers\\empresacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\controllers\\empresacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|c:\\users\\dgber\\documents\\github\\atlas erp\\atlas erp\\controllers\\clientecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\controllers\\clientecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|c:\\users\\dgber\\documents\\github\\workspace\\atlas erp\\atlas erp\\views\\cliente\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\views\\cliente\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|c:\\users\\dgber\\documents\\github\\atlas erp\\atlas erp\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|c:\\users\\dgber\\documents\\github\\workspace\\atlas erp\\atlas erp\\views\\cliente\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\views\\cliente\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|c:\\users\\dgber\\documents\\github\\atlas erp\\atlas erp\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|c:\\users\\dgber\\documents\\github\\workspace\\atlas erp\\atlas erp\\models\\cliente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\models\\cliente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|c:\\users\\dgber\\documents\\github\\atlas erp\\atlas erp\\views\\shared\\error.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\views\\shared\\error.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|c:\\users\\dgber\\documents\\github\\workspace\\atlas erp\\atlas erp\\migrations\\202604011414241_addtelefoneenderecocliente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\migrations\\202604011414241_addtelefoneenderecocliente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|c:\\users\\dgber\\documents\\github\\atlas erp\\atlas erp\\app_start\\filterconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\app_start\\filterconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|c:\\users\\dgber\\documents\\github\\atlas erp\\atlas erp\\filters\\globalexceptionfilter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\filters\\globalexceptionfilter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|c:\\users\\dgber\\documents\\github\\atlas erp\\atlas erp\\views\\auth\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\views\\auth\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|c:\\users\\dgber\\documents\\github\\atlas erp\\atlas erp\\views\\admin\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\views\\admin\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,8 +62,138 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 0,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UsuarioController.cs",
+              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Controllers\\UsuarioController.cs",
+              "RelativeDocumentMoniker": "ATLAS ERP\\Controllers\\UsuarioController.cs",
+              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Controllers\\UsuarioController.cs",
+              "RelativeToolTip": "ATLAS ERP\\Controllers\\UsuarioController.cs",
+              "ViewState": "AgIAADwAAAAAAAAAAAAgwGYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-01T23:54:00.929Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "SuperAdminController.cs",
+              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Controllers\\SuperAdminController.cs",
+              "RelativeDocumentMoniker": "ATLAS ERP\\Controllers\\SuperAdminController.cs",
+              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Controllers\\SuperAdminController.cs",
+              "RelativeToolTip": "ATLAS ERP\\Controllers\\SuperAdminController.cs",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAgwGwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-01T23:53:44.804Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ProdutoController.cs",
+              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Controllers\\ProdutoController.cs",
+              "RelativeDocumentMoniker": "ATLAS ERP\\Controllers\\ProdutoController.cs",
+              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Controllers\\ProdutoController.cs",
+              "RelativeToolTip": "ATLAS ERP\\Controllers\\ProdutoController.cs",
+              "ViewState": "AgIAAD0AAAAAAAAAAAAgwFEAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-01T23:53:31.169Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "ATLAS ERP\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "ATLAS ERP\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-01T23:53:23.084Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "EmpresaController.cs",
+              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Controllers\\EmpresaController.cs",
+              "RelativeDocumentMoniker": "ATLAS ERP\\Controllers\\EmpresaController.cs",
+              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Controllers\\EmpresaController.cs",
+              "RelativeToolTip": "ATLAS ERP\\Controllers\\EmpresaController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAG8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-01T23:53:10.551Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ClienteController.cs",
+              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Controllers\\ClienteController.cs",
+              "RelativeDocumentMoniker": "ATLAS ERP\\Controllers\\ClienteController.cs",
+              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Controllers\\ClienteController.cs",
+              "RelativeToolTip": "ATLAS ERP\\Controllers\\ClienteController.cs",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAgwGsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-01T23:52:59.618Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "ATLAS ERP\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "ATLAS ERP\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAgwE0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-01T23:52:49.464Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "ATLAS ERP\\Controllers\\AdminController.cs",
+              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "ATLAS ERP\\Controllers\\AdminController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAQwCQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-01T23:52:40.115Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Error.cshtml",
+              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Views\\Shared\\Error.cshtml",
+              "RelativeDocumentMoniker": "ATLAS ERP\\Views\\Shared\\Error.cshtml",
+              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Views\\Shared\\Error.cshtml",
+              "RelativeToolTip": "ATLAS ERP\\Views\\Shared\\Error.cshtml",
+              "ViewState": "AgIAAJUAAAAAAAAAAADwv8AAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-04-01T23:48:58.281Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "FilterConfig.cs",
+              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\App_Start\\FilterConfig.cs",
+              "RelativeDocumentMoniker": "ATLAS ERP\\App_Start\\FilterConfig.cs",
+              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\App_Start\\FilterConfig.cs",
+              "RelativeToolTip": "ATLAS ERP\\App_Start\\FilterConfig.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-01T23:48:33.869Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
@@ -42,67 +204,41 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\WorkSpace\\ATLAS ERP\\ATLAS ERP\\Views\\Cliente\\Create.cshtml",
-              "RelativeDocumentMoniker": "ATLAS ERP\\Views\\Cliente\\Create.cshtml",
-              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\WorkSpace\\ATLAS ERP\\ATLAS ERP\\Views\\Cliente\\Create.cshtml",
-              "RelativeToolTip": "ATLAS ERP\\Views\\Cliente\\Create.cshtml",
-              "ViewState": "AgIAAKICAAAAAAAAAAAcwL0CAAAHAAAAAAAAAA==",
+              "DocumentIndex": 10,
+              "Title": "GlobalExceptionFilter.cs",
+              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Filters\\GlobalExceptionFilter.cs",
+              "RelativeDocumentMoniker": "ATLAS ERP\\Filters\\GlobalExceptionFilter.cs",
+              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Filters\\GlobalExceptionFilter.cs",
+              "RelativeToolTip": "ATLAS ERP\\Filters\\GlobalExceptionFilter.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-01T23:47:54.646Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Views\\Auth\\Login.cshtml",
+              "RelativeDocumentMoniker": "ATLAS ERP\\Views\\Auth\\Login.cshtml",
+              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Views\\Auth\\Login.cshtml",
+              "RelativeToolTip": "ATLAS ERP\\Views\\Auth\\Login.cshtml",
+              "ViewState": "AgIAAIACAAAAAAAAAAAwwJkCAAAHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-01T14:34:38.02Z",
+              "WhenOpened": "2026-04-01T23:31:44.665Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\WorkSpace\\ATLAS ERP\\ATLAS ERP\\Views\\Cliente\\Index.cshtml",
-              "RelativeDocumentMoniker": "ATLAS ERP\\Views\\Cliente\\Index.cshtml",
-              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\WorkSpace\\ATLAS ERP\\ATLAS ERP\\Views\\Cliente\\Index.cshtml",
-              "RelativeToolTip": "ATLAS ERP\\Views\\Cliente\\Index.cshtml",
-              "ViewState": "AgIAAIcEAAAAAAAAAAAcwI0EAAAJAAAAAAAAAA==",
+              "DocumentIndex": 12,
+              "Title": "Dashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Views\\Admin\\Dashboard.cshtml",
+              "RelativeDocumentMoniker": "ATLAS ERP\\Views\\Admin\\Dashboard.cshtml",
+              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Views\\Admin\\Dashboard.cshtml",
+              "RelativeToolTip": "ATLAS ERP\\Views\\Admin\\Dashboard.cshtml",
+              "ViewState": "AgIAACcFAAAAAAAAAAAwwEAFAAAHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-01T14:16:15.503Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ClienteController.cs",
-              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\WorkSpace\\ATLAS ERP\\ATLAS ERP\\Controllers\\ClienteController.cs",
-              "RelativeDocumentMoniker": "ATLAS ERP\\Controllers\\ClienteController.cs",
-              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\WorkSpace\\ATLAS ERP\\ATLAS ERP\\Controllers\\ClienteController.cs",
-              "RelativeToolTip": "ATLAS ERP\\Controllers\\ClienteController.cs",
-              "ViewState": "AgIAADkAAAAAAAAAAAAuwE8AAAAtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-01T14:15:26.51Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "202604011414241_AddTelefoneEnderecoCliente.cs",
-              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\WorkSpace\\ATLAS ERP\\ATLAS ERP\\Migrations\\202604011414241_AddTelefoneEnderecoCliente.cs",
-              "RelativeDocumentMoniker": "ATLAS ERP\\Migrations\\202604011414241_AddTelefoneEnderecoCliente.cs",
-              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\WorkSpace\\ATLAS ERP\\ATLAS ERP\\Migrations\\202604011414241_AddTelefoneEnderecoCliente.cs",
-              "RelativeToolTip": "ATLAS ERP\\Migrations\\202604011414241_AddTelefoneEnderecoCliente.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-01T14:14:29.986Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Cliente.cs",
-              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\WorkSpace\\ATLAS ERP\\ATLAS ERP\\Models\\Cliente.cs",
-              "RelativeDocumentMoniker": "ATLAS ERP\\Models\\Cliente.cs",
-              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\WorkSpace\\ATLAS ERP\\ATLAS ERP\\Models\\Cliente.cs",
-              "RelativeToolTip": "ATLAS ERP\\Models\\Cliente.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAYwB4AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-01T14:10:43.339Z",
+              "WhenOpened": "2026-04-01T23:04:41.557Z",
               "EditorCaption": ""
             }
           ]

@@ -14,35 +14,24 @@ namespace ATLAS_ERP.Controllers
         [RoleFilter("Admin", "Gerente")]
         public ActionResult Dashboard()
         {
-            int empresaId = (int)Session["EmpresaId"];
-            var hoje = DateTime.Today;
+            try
+            {
+                int empresaId = (int)Session["EmpresaId"];
+                var hoje = DateTime.Today;
 
-            ViewBag.VendasHoje = db.Vendas
-                                       .Where(v => v.EmpresaId == empresaId && v.DataVenda >= hoje)
-                                       .Sum(v => (decimal?)v.Total) ?? 0;
+                ViewBag.VendasHoje = db.Vendas.Where(v => v.EmpresaId == empresaId && v.DataVenda >= hoje).Sum(v => (decimal?)v.Total) ?? 0;
+                ViewBag.TotalVendasDia = db.Vendas.Where(v => v.EmpresaId == empresaId && v.DataVenda >= hoje).Count();
+                ViewBag.TotalProdutos = db.Produtos.Where(p => p.EmpresaId == empresaId).Count();
+                ViewBag.TotalClientes = db.Clientes.Where(c => c.EmpresaId == empresaId).Count();
+                ViewBag.UltimasVendas = db.Vendas.Include(v => v.Cliente).Where(v => v.EmpresaId == empresaId).OrderByDescending(v => v.DataVenda).Take(10).ToList();
+                ViewBag.Empresa = db.Empresas.Find(empresaId);
 
-            ViewBag.TotalVendasDia = db.Vendas
-                                       .Where(v => v.EmpresaId == empresaId && v.DataVenda >= hoje)
-                                       .Count();
-
-            ViewBag.TotalProdutos = db.Produtos
-                                       .Where(p => p.EmpresaId == empresaId)
-                                       .Count();
-
-            ViewBag.TotalClientes = db.Clientes
-                                       .Where(c => c.EmpresaId == empresaId)
-                                       .Count();
-
-            ViewBag.UltimasVendas = db.Vendas
-                                       .Include(v => v.Cliente)
-                                       .Where(v => v.EmpresaId == empresaId)
-                                       .OrderByDescending(v => v.DataVenda)
-                                       .Take(10)
-                                       .ToList();
-
-            ViewBag.Empresa = db.Empresas.Find(empresaId);
-
-            return View();
+                return View();
+            }
+            catch
+            {
+                return RedirectToAction("Error", "Home");
+            }
         }
     }
 }

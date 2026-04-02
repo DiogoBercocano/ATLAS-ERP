@@ -1,5 +1,5 @@
-﻿using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using ATLAS_ERP.Filters;
 
 namespace ATLAS_ERP
 {
@@ -7,7 +7,7 @@ namespace ATLAS_ERP
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            filters.Add(new GlobalExceptionFilter());
         }
     }
 }

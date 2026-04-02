@@ -25,6 +25,7 @@
             --accent: #3b82f6;
             --accent-glow: rgba(59,130,246,0.18);
             --accent-light: #60a5fa;
+            --gold: #c9a84c;
             --text-primary: #e8f0fe;
             --text-secondary: #7a9cc8;
             --text-muted: #3d5270;
@@ -50,26 +51,10 @@
             z-index: 0;
         }
 
-        .geo-line {
-            position: absolute;
-            background: linear-gradient(90deg, transparent, rgba(59,130,246,0.08), transparent);
-        }
-
-        .geo-line-h {
-            height: 1px;
-            width: 100%;
-        }
-
-        .geo-circle {
-            position: absolute;
-            border-radius: 50%;
-            border: 1px solid rgba(59,130,246,0.06);
-        }
-
         .grid-dot {
             position: absolute;
             inset: 0;
-            background-image: radial-gradient(circle, rgba(59,130,246,0.12) 1px, transparent 1px);
+            background-image: radial-gradient(circle, rgba(59,130,246,0.10) 1px, transparent 1px);
             background-size: 40px 40px;
             mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
         }
@@ -81,14 +66,21 @@
             pointer-events: none;
         }
 
+        .geo-circle {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(59,130,246,0.05);
+        }
+
         .page-wrapper {
             position: relative;
             z-index: 1;
             display: flex;
             width: 100%;
-            max-width: 960px;
+            max-width: 1020px;
             min-height: 520px;
             padding: 1rem;
+            gap: 0;
             animation: fadeUp 0.7s ease both;
         }
 
@@ -104,16 +96,17 @@
             }
         }
 
-        /* Left brand panel */
+        /* PAINEL ESQUERDO */
         .brand-panel {
             flex: 1;
             background: var(--panel);
             border: 1px solid var(--border);
             border-right: none;
-            border-radius: 20px 0 0 20px;
-            padding: 48px 40px;
+            border-radius: 24px 0 0 24px;
+            padding: 36px 40px;
             display: flex;
             flex-direction: column;
+            align-items: center;
             justify-content: space-between;
             position: relative;
             overflow: hidden;
@@ -122,148 +115,177 @@
             .brand-panel::before {
                 content: '';
                 position: absolute;
-                top: -60px;
-                right: -60px;
-                width: 220px;
-                height: 220px;
+                top: -80px;
+                right: -80px;
+                width: 300px;
+                height: 300px;
                 border-radius: 50%;
-                border: 1px solid rgba(59,130,246,0.1);
+                border: 1px solid rgba(59,130,246,0.08);
             }
 
             .brand-panel::after {
                 content: '';
                 position: absolute;
-                bottom: -40px;
-                left: -40px;
-                width: 160px;
-                height: 160px;
+                bottom: -60px;
+                left: -60px;
+                width: 220px;
+                height: 220px;
                 border-radius: 50%;
-                border: 1px solid rgba(59,130,246,0.07);
+                border: 1px solid rgba(59,130,246,0.06);
             }
 
-        .brand-logo {
+        .brand-accent-line {
+            position: absolute;
+            left: 0;
+            top: 15%;
+            bottom: 15%;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+            opacity: 0.4;
+        }
+
+        .brand-logo-wrap {
+            position: relative;
+            z-index: 1;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 12px;
         }
 
-        .logo-icon {
-            width: 44px;
-            height: 44px;
-            background: var(--accent);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            box-shadow: 0 0 24px var(--accent-glow);
-        }
-
-            .logo-icon svg {
-                width: 24px;
-                height: 24px;
-                fill: white;
+            .brand-logo-wrap img {
+                width: 260px;
+                max-width: 100%;
+                filter: drop-shadow(0 0 30px rgba(59,130,246,0.18));
             }
 
-        .logo-name {
-            font-family: 'Syne', sans-serif;
-            font-size: 22px;
-            font-weight: 800;
-            color: var(--text-primary);
-            letter-spacing: 0.04em;
+        .brand-bottom {
+            position: relative;
+            z-index: 1;
+            width: 100%;
         }
 
-            .logo-name span {
-                color: var(--accent-light);
-            }
-
-        .brand-headline {
+        .brand-tagline {
             font-family: 'Syne', sans-serif;
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--text-primary);
-            line-height: 1.2;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            text-align: center;
             margin-bottom: 16px;
         }
 
-            .brand-headline em {
-                font-style: normal;
-                color: var(--accent-light);
-            }
-
-        .brand-desc {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.7;
-            max-width: 260px;
-        }
-
-        .brand-stats {
-            display: flex;
-            gap: 24px;
-            margin-top: 36px;
-        }
-
-        .stat-item {
+        .brand-features {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 8px;
         }
 
-        .stat-value {
-            font-family: 'Syne', sans-serif;
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text-primary);
+        .brand-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            background: rgba(59,130,246,0.04);
+            border: 1px solid rgba(59,130,246,0.08);
+            border-radius: 10px;
         }
 
-        .stat-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
+        .feature-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
+            background: rgba(59,130,246,0.10);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--accent-light);
         }
 
-        .stat-divider {
+            .feature-icon svg {
+                width: 13px;
+                height: 13px;
+            }
+
+        .feature-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+            .feature-text strong {
+                display: block;
+                font-size: 12px;
+                font-weight: 500;
+                color: var(--text-primary);
+                margin-bottom: 1px;
+            }
+
+        .panel-divider {
             width: 1px;
-            background: var(--border);
-            align-self: stretch;
+            background: linear-gradient(to bottom, transparent, var(--border), var(--border), transparent);
+            flex-shrink: 0;
         }
 
-        /* Right login panel */
+        /* PAINEL DIREITO */
         .login-panel {
-            width: 360px;
+            width: 380px;
             flex-shrink: 0;
             background: var(--card);
             border: 1px solid var(--border);
-            border-left-color: rgba(59,130,246,0.06);
-            border-radius: 0 20px 20px 0;
-            padding: 48px 36px;
+            border-left: none;
+            border-radius: 0 24px 24px 0;
+            padding: 36px 38px;
             display: flex;
             flex-direction: column;
             justify-content: center;
+        }
+
+        .login-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(59,130,246,0.08);
+            border: 1px solid rgba(59,130,246,0.15);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 10px;
+            color: var(--accent-light);
+            letter-spacing: 0.06em;
+            margin-bottom: 20px;
+            align-self: flex-start;
+        }
+
+        .login-badge-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent-light);
         }
 
         .login-title {
             font-family: 'Syne', sans-serif;
-            font-size: 22px;
-            font-weight: 700;
+            font-size: 24px;
+            font-weight: 800;
             color: var(--text-primary);
             margin-bottom: 6px;
+            line-height: 1.1;
         }
 
         .login-subtitle {
             font-size: 13px;
             color: var(--text-secondary);
-            margin-bottom: 32px;
+            margin-bottom: 24px;
+            line-height: 1.5;
         }
 
         .alert-error {
             background: var(--danger-bg);
             border: 1px solid rgba(248,113,113,0.2);
             border-radius: 10px;
-            padding: 12px 14px;
-            margin-bottom: 20px;
+            padding: 10px 14px;
+            margin-bottom: 16px;
             font-size: 13px;
             color: var(--danger);
             display: flex;
@@ -278,17 +300,17 @@
             }
 
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
 
         .form-label {
             display: block;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 7px;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
         }
 
         .input-wrapper {
@@ -306,17 +328,17 @@
         }
 
             .input-icon svg {
-                width: 16px;
-                height: 16px;
+                width: 15px;
+                height: 15px;
             }
 
         .form-control {
             width: 100%;
-            height: 46px;
+            height: 44px;
             background: var(--panel);
             border: 1px solid var(--border);
             border-radius: 10px;
-            padding: 0 14px 0 42px;
+            padding: 0 14px 0 44px;
             font-family: 'DM Sans', sans-serif;
             font-size: 14px;
             color: var(--text-primary);
@@ -353,16 +375,16 @@
         }
 
             .toggle-pass:hover {
-                color: var(--text-secondary);
+                color: var(--accent-light);
             }
 
             .toggle-pass svg {
-                width: 16px;
-                height: 16px;
+                width: 15px;
+                height: 15px;
             }
 
         .password-input {
-            padding-right: 42px;
+            padding-right: 44px;
         }
 
         .form-footer-row {
@@ -385,19 +407,19 @@
 
         .btn-submit {
             width: 100%;
-            height: 48px;
+            height: 46px;
             background: var(--accent);
             border: none;
             border-radius: 10px;
             font-family: 'Syne', sans-serif;
             font-size: 15px;
-            font-weight: 600;
+            font-weight: 700;
             color: white;
             cursor: pointer;
-            margin-top: 8px;
-            letter-spacing: 0.02em;
+            margin-top: 4px;
+            letter-spacing: 0.04em;
             transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-            box-shadow: 0 4px 20px rgba(59,130,246,0.3);
+            box-shadow: 0 4px 20px rgba(59,130,246,0.30);
             position: relative;
             overflow: hidden;
         }
@@ -413,7 +435,7 @@
             .btn-submit:hover {
                 background: #2563eb;
                 transform: translateY(-1px);
-                box-shadow: 0 6px 28px rgba(59,130,246,0.4);
+                box-shadow: 0 6px 28px rgba(59,130,246,0.40);
             }
 
             .btn-submit:active {
@@ -421,28 +443,63 @@
             }
 
         .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .divider-line {
+            flex: 1;
             height: 1px;
             background: var(--border);
-            margin: 24px 0;
         }
+
+        .divider-text {
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 0.06em;
+        }
+
+        .cadastro-link {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+            .cadastro-link a {
+                color: var(--accent-light);
+                text-decoration: none;
+                font-weight: 600;
+                transition: opacity 0.2s;
+            }
+
+                .cadastro-link a:hover {
+                    opacity: 0.8;
+                }
 
         .version-tag {
             text-align: center;
             font-size: 11px;
             color: var(--text-muted);
             letter-spacing: 0.04em;
+            margin-top: 20px;
         }
 
-        @@media (max-width: 700px) {
+        @@media (max-width: 800px) {
             .brand-panel {
+                display: none;
+            }
+
+            .panel-divider {
                 display: none;
             }
 
             .login-panel {
                 width: 100%;
-                border-radius: 20px;
-                border-left-color: var(--border);
-                max-width: 380px;
+                border-radius: 24px;
+                border-left: 1px solid var(--border);
+                max-width: 400px;
             }
         }
     </style>
@@ -451,53 +508,74 @@
 
     <div class="bg-canvas">
         <div class="grid-dot"></div>
-        <div class="glow-orb" style="width:500px;height:500px;top:-100px;left:-100px;background:rgba(30,60,120,0.25);"></div>
-        <div class="glow-orb" style="width:400px;height:400px;bottom:-80px;right:-80px;background:rgba(20,40,100,0.2);"></div>
-        <div class="geo-line geo-line-h" style="top:30%;"></div>
-        <div class="geo-line geo-line-h" style="top:70%;"></div>
-        <div class="geo-circle" style="width:600px;height:600px;top:-100px;right:-200px;"></div>
-        <div class="geo-circle" style="width:300px;height:300px;bottom:-50px;left:15%;"></div>
+        <div class="glow-orb" style="width:600px;height:600px;top:-150px;left:-100px;background:rgba(25,55,130,0.20);"></div>
+        <div class="glow-orb" style="width:400px;height:400px;bottom:-80px;right:-60px;background:rgba(15,40,100,0.18);"></div>
+        <div class="geo-circle" style="width:700px;height:700px;top:-200px;right:-250px;"></div>
+        <div class="geo-circle" style="width:400px;height:400px;bottom:-100px;left:-150px;"></div>
     </div>
 
     <div class="page-wrapper">
 
         <div class="brand-panel">
-            <div class="brand-logo">
-                <div class="logo-icon">
-                    <svg viewBox="0 0 24 24"><path d="M13 3L4 14h8l-1 7 9-11h-8l1-10z" /></svg>
-                </div>
-                <span class="logo-name">ATL<span>AS</span></span>
+            <div class="brand-accent-line"></div>
+
+            <div class="brand-logo-wrap">
+                <img src="~/Content/images/logos/atlas_erp_diamante.svg" alt="Atlas ERP" />
             </div>
 
-            <div>
-                <div class="brand-headline">
-                    Gestão comercial<br /><em>inteligente</em> e<br />integrada.
-                </div>
-                <p class="brand-desc">
-                    Controle total do seu negócio em uma plataforma única. Vendas, estoque, financeiro e muito mais.
-                </p>
-                <div class="brand-stats">
-                    <div class="stat-item">
-                        <span class="stat-value">100%</span>
-                        <span class="stat-label">Integrado</span>
+            <div class="brand-bottom">
+                <div class="brand-tagline">Gestão comercial inteligente</div>
+                <div class="brand-features">
+                    <div class="brand-feature">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
+                        </div>
+                        <div class="feature-text">
+                            <strong>Multiempresa seguro</strong>
+                            Dados isolados por empresa
+                        </div>
                     </div>
-                    <div class="stat-divider"></div>
-                    <div class="stat-item">
-                        <span class="stat-value">24/7</span>
-                        <span class="stat-label">Disponível</span>
+                    <div class="brand-feature">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                            </svg>
+                        </div>
+                        <div class="feature-text">
+                            <strong>Tempo real</strong>
+                            Vendas e estoque integrados
+                        </div>
                     </div>
-                    <div class="stat-divider"></div>
-                    <div class="stat-item">
-                        <span class="stat-value">v1.0</span>
-                        <span class="stat-label">Release</span>
+                    <div class="brand-feature">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                            </svg>
+                        </div>
+                        <div class="feature-text">
+                            <strong>Multi-usuário</strong>
+                            Permissões por função
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <div class="panel-divider"></div>
+
         <div class="login-panel">
-            <h1 class="login-title">Bem-vindo</h1>
-            <p class="login-subtitle">Acesse sua conta para continuar</p>
+
+            <div class="login-badge">
+                <span class="login-badge-dot"></span>
+                SISTEMA ATIVO
+            </div>
+
+            <h1 class="login-title">Bem-vindo<br />de volta.</h1>
+            <p class="login-subtitle">Acesse sua conta para continuar gerenciando seu negócio.</p>
 
             @if (ViewBag.Erro != null)
             {
@@ -516,7 +594,8 @@
                 <div class="form-group">
                     <label class="form-label">E-mail</label>
                     <div class="input-wrapper">
-                        <input type="email" name="email" class="form-control" placeholder="seu@email.com" required autocomplete="email" />
+                        <input type="email" name="email" class="form-control"
+                               placeholder="seu@email.com" required autocomplete="email" />
                         <span class="input-icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <rect x="2" y="4" width="20" height="16" rx="2" />
@@ -529,7 +608,9 @@
                 <div class="form-group">
                     <label class="form-label">Senha</label>
                     <div class="input-wrapper">
-                        <input type="password" name="senha" id="senhaInput" class="form-control password-input" placeholder="••••••••" required autocomplete="current-password" />
+                        <input type="password" name="senha" id="senhaInput"
+                               class="form-control password-input"
+                               placeholder="••••••••" required autocomplete="current-password" />
                         <span class="input-icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <rect x="3" y="11" width="18" height="11" rx="2" />
@@ -550,19 +631,20 @@
                 </div>
 
                 <button type="submit" class="btn-submit">Entrar no sistema</button>
-
-                <div class="divider"></div>
-
-                <div style="text-align:center; font-size:13px; color:var(--text-secondary);">
-                    Não tem acesso?
-                    <a href="/Empresa/Cadastro" style="color:var(--accent-light); text-decoration:none; font-weight:500;">
-                        Cadastrar minha empresa
-                    </a>
-                </div>
             }
 
-            <div class="divider"></div>
-            <div class="version-tag">ATLAS ERP &nbsp;·&nbsp; Sistema Comercial</div>
+            <div class="divider">
+                <div class="divider-line"></div>
+                <span class="divider-text">OU</span>
+                <div class="divider-line"></div>
+            </div>
+
+            <div class="cadastro-link">
+                Não tem acesso?
+                <a href="/Empresa/Cadastro">Cadastrar minha empresa</a>
+            </div>
+
+            <div class="version-tag">ATLAS ERP &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; Sistema Comercial</div>
         </div>
 
     </div>

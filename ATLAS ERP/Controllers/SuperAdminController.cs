@@ -11,92 +11,99 @@ namespace ATLAS_ERP.Controllers
     {
         private readonly AtlasContext db = new AtlasContext();
 
-        // PAINEL GERAL
         public ActionResult Index()
         {
-            ViewBag.TotalEmpresas = db.Empresas.Count();
-            ViewBag.EmpresasAtivas = db.Empresas.Count(e => e.Status == "Ativa");
-            ViewBag.Pendentes = db.Empresas.Count(e => e.Status == "Pendente");
-            ViewBag.TotalUsuarios = db.Usuarios.Count();
+            try
+            {
+                ViewBag.TotalEmpresas = db.Empresas.Count();
+                ViewBag.EmpresasAtivas = db.Empresas.Count(e => e.Status == "Ativa");
+                ViewBag.Pendentes = db.Empresas.Count(e => e.Status == "Pendente");
+                ViewBag.TotalUsuarios = db.Usuarios.Count();
 
-            var empresas = db.Empresas
-                             .OrderByDescending(e => e.EmpresaId)
-                             .ToList();
-
-            return View(empresas);
+                var empresas = db.Empresas.OrderByDescending(e => e.EmpresaId).ToList();
+                return View(empresas);
+            }
+            catch
+            {
+                return View(new System.Collections.Generic.List<ATLAS_ERP.Models.Empresa>());
+            }
         }
 
-        // APROVAR EMPRESA
         [HttpPost]
         public ActionResult Aprovar(int empresaId)
         {
-            var empresa = db.Empresas.Find(empresaId);
-            if (empresa != null)
+            try
             {
-                empresa.Status = "Ativa";
-                empresa.Ativa = true;
-                db.Entry(empresa).State = EntityState.Modified;
-
-                // ativa todos os usuários da empresa
-                var usuarios = db.Usuarios
-                                 .Where(u => u.EmpresaId == empresaId)
-                                 .ToList();
-
-                foreach (var u in usuarios)
+                var empresa = db.Empresas.Find(empresaId);
+                if (empresa != null)
                 {
-                    u.Ativo = true;
-                    db.Entry(u).State = EntityState.Modified;
-                }
+                    empresa.Status = "Ativa";
+                    empresa.Ativa = true;
+                    db.Entry(empresa).State = EntityState.Modified;
 
-                db.SaveChanges();
+                    var usuarios = db.Usuarios.Where(u => u.EmpresaId == empresaId).ToList();
+                    foreach (var u in usuarios)
+                    {
+                        u.Ativo = true;
+                        db.Entry(u).State = EntityState.Modified;
+                    }
+                    db.SaveChanges();
+                }
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            catch
+            {
+                return RedirectToAction("Index");
+            }
         }
 
-        // REJEITAR / DESATIVAR EMPRESA
         [HttpPost]
         public ActionResult Rejeitar(int empresaId)
         {
-            var empresa = db.Empresas.Find(empresaId);
-            if (empresa != null)
+            try
             {
-                empresa.Status = "Pendente";
-                empresa.Ativa = false;
-                db.Entry(empresa).State = EntityState.Modified;
-
-                // desativa todos os usuários da empresa
-                var usuarios = db.Usuarios
-                                 .Where(u => u.EmpresaId == empresaId)
-                                 .ToList();
-
-                foreach (var u in usuarios)
+                var empresa = db.Empresas.Find(empresaId);
+                if (empresa != null)
                 {
-                    u.Ativo = false;
-                    db.Entry(u).State = EntityState.Modified;
-                }
+                    empresa.Status = "Pendente";
+                    empresa.Ativa = false;
+                    db.Entry(empresa).State = EntityState.Modified;
 
-                db.SaveChanges();
+                    var usuarios = db.Usuarios.Where(u => u.EmpresaId == empresaId).ToList();
+                    foreach (var u in usuarios)
+                    {
+                        u.Ativo = false;
+                        db.Entry(u).State = EntityState.Modified;
+                    }
+                    db.SaveChanges();
+                }
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            catch
+            {
+                return RedirectToAction("Index");
+            }
         }
 
-        // EXCLUIR EMPRESA
         [HttpPost]
         public ActionResult Excluir(int empresaId)
         {
-            var empresa = db.Empresas.Find(empresaId);
-            if (empresa != null)
+            try
             {
-                // remove usuários primeiro
-                var usuarios = db.Usuarios
-                                 .Where(u => u.EmpresaId == empresaId)
-                                 .ToList();
-                db.Usuarios.RemoveRange(usuarios);
-
-                db.Empresas.Remove(empresa);
-                db.SaveChanges();
+                var empresa = db.Empresas.Find(empresaId);
+                if (empresa != null)
+                {
+                    var usuarios = db.Usuarios.Where(u => u.EmpresaId == empresaId).ToList();
+                    db.Usuarios.RemoveRange(usuarios);
+                    db.Empresas.Remove(empresa);
+                    db.SaveChanges();
+                }
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            catch
+            {
+                return RedirectToAction("Index");
+            }
         }
     }
 }

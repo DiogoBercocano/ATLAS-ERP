@@ -8,59 +8,67 @@ namespace ATLAS_ERP.Controllers
     {
         private readonly AtlasContext db = new AtlasContext();
 
-        // GET
         public ActionResult Login()
         {
-            if (Session["UsuarioLogado"] != null)
+            try
             {
-                var role = Session["Role"]?.ToString();
-
-                if (role == "SuperAdmin")
-                    return RedirectToAction("Index", "SuperAdmin");
-
-                if (role == "Admin" || role == "Gerente")
-                    return RedirectToAction("Dashboard", "Admin");
-
-                return RedirectToAction("Index", "Produto");
+                if (Session["UsuarioLogado"] != null)
+                {
+                    var role = Session["Role"]?.ToString();
+                    if (role == "SuperAdmin")
+                        return RedirectToAction("Index", "SuperAdmin");
+                    if (role == "Admin" || role == "Gerente")
+                        return RedirectToAction("Dashboard", "Admin");
+                    return RedirectToAction("Index", "Produto");
+                }
+                return View();
             }
-            return View();
+            catch
+            {
+                return View();
+            }
         }
 
-        // POST
         [HttpPost]
         public ActionResult Login(string email, string senha)
         {
-            var user = db.Usuarios.FirstOrDefault(u =>
-                u.Email == email &&
-                u.SenhaHash == senha &&
-                u.Ativo == true
-            );
-
-            if (user != null)
+            try
             {
-                Session["UsuarioLogado"] = user.Name;
-                Session["UsuarioId"] = user.UsuarioId;
-                Session["Role"] = user.Role;
+                var user = db.Usuarios.FirstOrDefault(u =>
+                    u.Email == email &&
+                    u.SenhaHash == senha &&
+                    u.Ativo == true
+                );
 
-                if (user.EmpresaId.HasValue)
-                    Session["EmpresaId"] = user.EmpresaId.Value;
-                else
-                    Session["EmpresaId"] = null;
+                if (user != null)
+                {
+                    Session["UsuarioLogado"] = user.Name;
+                    Session["UsuarioId"] = user.UsuarioId;
+                    Session["Role"] = user.Role;
 
-                if (user.Role == "SuperAdmin")
-                    return RedirectToAction("Index", "SuperAdmin");
+                    if (user.EmpresaId.HasValue)
+                        Session["EmpresaId"] = user.EmpresaId.Value;
+                    else
+                        Session["EmpresaId"] = null;
 
-                if (user.Role == "Admin" || user.Role == "Gerente")
-                    return RedirectToAction("Dashboard", "Admin");
+                    if (user.Role == "SuperAdmin")
+                        return RedirectToAction("Index", "SuperAdmin");
+                    if (user.Role == "Admin" || user.Role == "Gerente")
+                        return RedirectToAction("Dashboard", "Admin");
 
-                return RedirectToAction("Index", "Produto");
+                    return RedirectToAction("Index", "Produto");
+                }
+
+                ViewBag.Erro = "E-mail ou senha inválidos.";
+                return View();
             }
-
-            ViewBag.Erro = "E-mail ou senha inválidos.";
-            return View();
+            catch
+            {
+                ViewBag.Erro = "Erro ao realizar login. Tente novamente.";
+                return View();
+            }
         }
 
-        // LOGOUT
         public ActionResult Logout()
         {
             Session.Clear();
