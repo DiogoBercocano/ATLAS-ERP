@@ -1,4 +1,6 @@
-﻿using System.Data.Entity;
+using System;
+using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using ATLAS_ERP.Data;
@@ -23,8 +25,9 @@ namespace ATLAS_ERP.Controllers
                 var empresas = db.Empresas.OrderByDescending(e => e.EmpresaId).ToList();
                 return View(empresas);
             }
-            catch
+            catch (Exception ex)
             {
+                Trace.TraceError("[SuperAdminController.Index] {0}", ex);
                 return View(new System.Collections.Generic.List<ATLAS_ERP.Models.Empresa>());
             }
         }
@@ -51,8 +54,9 @@ namespace ATLAS_ERP.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
+                Trace.TraceError("[SuperAdminController.Aprovar POST] {0}", ex);
                 return RedirectToAction("Index");
             }
         }
@@ -65,7 +69,7 @@ namespace ATLAS_ERP.Controllers
                 var empresa = db.Empresas.Find(empresaId);
                 if (empresa != null)
                 {
-                    empresa.Status = "Pendente";
+                    empresa.Status = "Rejeitada";
                     empresa.Ativa = false;
                     db.Entry(empresa).State = EntityState.Modified;
 
@@ -79,8 +83,9 @@ namespace ATLAS_ERP.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
+                Trace.TraceError("[SuperAdminController.Rejeitar POST] {0}", ex);
                 return RedirectToAction("Index");
             }
         }
@@ -100,10 +105,17 @@ namespace ATLAS_ERP.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
+                Trace.TraceError("[SuperAdminController.Excluir POST] {0}", ex);
                 return RedirectToAction("Index");
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) db.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

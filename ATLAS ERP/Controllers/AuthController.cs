@@ -1,6 +1,9 @@
-﻿using System.Linq;
+using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Web.Mvc;
 using ATLAS_ERP.Data;
+using ATLAS_ERP.Helpers;
 
 namespace ATLAS_ERP.Controllers
 {
@@ -23,8 +26,9 @@ namespace ATLAS_ERP.Controllers
                 }
                 return View();
             }
-            catch
+            catch (Exception ex)
             {
+                Trace.TraceError("[AuthController.Login GET] {0}", ex);
                 return View();
             }
         }
@@ -34,13 +38,18 @@ namespace ATLAS_ERP.Controllers
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(senha))
+                {
+                    ViewBag.Erro = "Informe e-mail e senha.";
+                    return View();
+                }
+
                 var user = db.Usuarios.FirstOrDefault(u =>
                     u.Email == email &&
-                    u.SenhaHash == senha &&
                     u.Ativo == true
                 );
 
-                if (user != null)
+                if (user != null && PasswordHelper.Verify(senha, user.SenhaHash))
                 {
                     Session["UsuarioLogado"] = user.Name;
                     Session["UsuarioId"] = user.UsuarioId;
@@ -62,8 +71,9 @@ namespace ATLAS_ERP.Controllers
                 ViewBag.Erro = "E-mail ou senha inválidos.";
                 return View();
             }
-            catch
+            catch (Exception ex)
             {
+                Trace.TraceError("[AuthController.Login POST] {0}", ex);
                 ViewBag.Erro = "Erro ao realizar login. Tente novamente.";
                 return View();
             }
@@ -73,6 +83,12 @@ namespace ATLAS_ERP.Controllers
         {
             Session.Clear();
             return RedirectToAction("Login");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) db.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

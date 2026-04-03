@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using ATLAS_ERP.Data;
@@ -16,6 +17,9 @@ namespace ATLAS_ERP.Controllers
         {
             try
             {
+                if (Session["EmpresaId"] == null)
+                    return RedirectToAction("Login", "Auth");
+
                 int empresaId = (int)Session["EmpresaId"];
                 var hoje = DateTime.Today;
 
@@ -28,10 +32,17 @@ namespace ATLAS_ERP.Controllers
 
                 return View();
             }
-            catch
+            catch (Exception ex)
             {
+                Trace.TraceError("[AdminController.Dashboard] {0}", ex);
                 return RedirectToAction("Error", "Home");
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) db.Dispose();
+            base.Dispose(disposing);
         }
     }
 }
