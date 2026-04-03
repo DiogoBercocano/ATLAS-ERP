@@ -1,10 +1,7 @@
-﻿using System.Data.Entity;
-using static System.Data.Entity.Infrastructure.Design.Executor;
-
-namespace ATLAS_ERP.Migrations
+﻿namespace ATLAS_ERP.Migrations
 {
+    using ATLAS_ERP.Helpers;
     using ATLAS_ERP.Models;
-    using System;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
@@ -32,32 +29,32 @@ namespace ATLAS_ERP.Migrations
             context.SaveChanges();
 
             // ADMIN DA EMPRESA
-            context.Usuarios.AddOrUpdate(u => u.Email,
-                new Usuario
+            if (!context.Usuarios.Any(u => u.Email == "admin@atlas.com"))
+            {
+                context.Usuarios.Add(new Usuario
                 {
-                    UsuarioId = 1,
                     Name = "Administrador",
                     Email = "admin@atlas.com",
-                    SenhaHash = "123",
+                    SenhaHash = PasswordHelper.Hash("Admin@123"),
                     Role = "Admin",
                     Ativo = true,
                     EmpresaId = 1
-                }
-            );
+                });
+            }
 
             // SUPER ADMIN — sem empresa
-            context.Usuarios.AddOrUpdate(u => u.Email,
-                new Usuario
+            if (!context.Usuarios.Any(u => u.Email == "superadmin@atlas.com"))
+            {
+                context.Usuarios.Add(new Usuario
                 {
-                    UsuarioId = 2,
                     Name = "Super Admin",
                     Email = "superadmin@atlas.com",
-                    SenhaHash = "123456",
+                    SenhaHash = PasswordHelper.Hash("Sadmin@123#654atlas"),
                     Role = "SuperAdmin",
                     Ativo = true,
                     EmpresaId = null
-                }
-            );
+                });
+            }
 
             context.SaveChanges();
         }

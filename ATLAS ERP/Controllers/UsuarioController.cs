@@ -1,6 +1,9 @@
-﻿using System.Linq;
+using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Web.Mvc;
 using ATLAS_ERP.Data;
+using ATLAS_ERP.Helpers;
 using ATLAS_ERP.Models;
 using ATLAS_ERP.Filters;
 
@@ -10,17 +13,25 @@ namespace ATLAS_ERP.Controllers
     public class UsuarioController : Controller
     {
         private readonly AtlasContext db = new AtlasContext();
-        private int EmpresaId => (int)Session["EmpresaId"];
+
+        private int? EmpresaIdOrNull => Session["EmpresaId"] as int?;
+
+        private static readonly string[] RolesPermitidas = { "Admin", "Gerente", "Funcionario" };
 
         public ActionResult Index()
         {
             try
             {
-                var usuarios = db.Usuarios.Where(u => u.EmpresaId == EmpresaId).ToList();
+                var empresaId = EmpresaIdOrNull;
+                if (empresaId == null)
+                    return RedirectToAction("Login", "Auth");
+
+                var usuarios = db.Usuarios.Where(u => u.EmpresaId == empresaId.Value).ToList();
                 return View(usuarios);
             }
-            catch
+            catch (Exception ex)
             {
+                Trace.TraceError("[UsuarioController.Index] {0}", ex);
                 ViewBag.Erro = "Erro ao carregar funcionários.";
                 return View(new System.Collections.Generic.List<Usuario>());
             }
@@ -36,47 +47,59 @@ namespace ATLAS_ERP.Controllers
         {
             try
             {
+                var empresaId = EmpresaIdOrNull;
+                if (empresaId == null)
+                    return RedirectToAction("Login", "Auth");
+
                 if (ModelState.IsValid)
                 {
                     user.Ativo = true;
-                    user.EmpresaId = EmpresaId;
+                    user.EmpresaId = empresaId.Value;
+                    user.SenhaHash = PasswordHelper.Hash(user.SenhaHash);
                     db.Usuarios.Add(user);
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
                 return View(user);
             }
-            catch
+            catch (Exception ex)
             {
+                Trace.TraceError("[UsuarioController.Create POST] {0}", ex);
                 ViewBag.Erro = "Erro ao cadastrar funcionário. Tente novamente.";
                 return View(user);
             }
         }
 
-        public ActionResult Edit()
-        {
-            return RedirectToAction("Index");
-        }
-
         [HttpPost]
-        public ActionResult Edit(int UsuarioId, string Name, string Email, string Role, string Ativo)
+        public ActionResult Edit(int usuarioId, string Name, string Email, string Role, bool Ativo)
         {
             try
             {
-                var u = db.Usuarios.FirstOrDefault(x => x.UsuarioId == UsuarioId && x.EmpresaId == EmpresaId);
+                var empresaId = EmpresaIdOrNull;
+                if (empresaId == null)
+                    return RedirectToAction("Login", "Auth");
+
+                if (!Array.Exists(RolesPermitidas, r => r == Role))
+                {
+                    TempData["Erro"] = "Perfil de acesso inválido.";
+                    return RedirectToAction("Index");
+                }
+
+                var u = db.Usuarios.FirstOrDefault(x => x.UsuarioId == usuarioId && x.EmpresaId == empresaId.Value);
                 if (u != null)
                 {
                     u.Name = Name;
                     u.Email = Email;
                     u.Role = Role;
-                    u.Ativo = Ativo == "true";
+                    u.Ativo = Ativo;
                     db.Entry(u).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
                 return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
+                Trace.TraceError("[UsuarioController.Edit POST] {0}", ex);
                 return RedirectToAction("Index");
             }
         }
@@ -86,7 +109,11 @@ namespace ATLAS_ERP.Controllers
         {
             try
             {
-                var u = db.Usuarios.FirstOrDefault(x => x.UsuarioId == usuarioId && x.EmpresaId == EmpresaId);
+                var empresaId = EmpresaIdOrNull;
+                if (empresaId == null)
+                    return RedirectToAction("Login", "Auth");
+
+                var u = db.Usuarios.FirstOrDefault(x => x.UsuarioId == usuarioId && x.EmpresaId == empresaId.Value);
                 if (u != null)
                 {
                     db.Usuarios.Remove(u);
@@ -94,10 +121,17 @@ namespace ATLAS_ERP.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
+                Trace.TraceError("[UsuarioController.Delete POST] {0}", ex);
                 return RedirectToAction("Index");
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) db.Dispose();
+            base.Dispose(disposing);
         }
     }
 }
