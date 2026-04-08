@@ -131,13 +131,27 @@
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\EmpresaController.cs" />
+    <Compile Include="Controllers\FornecedorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProdutoController.cs" />
     <Compile Include="Controllers\SuperAdminController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
+    <Compile Include="Controllers\VendaController.cs" />
     <Compile Include="Data\AtlasContext.cs" />
     <Compile Include="Filters\GlobalExceptionFilter.cs" />
     <Compile Include="Filters\RolerFilters.cs" />
+    <Compile Include="Helpers\PasswordHelper.cs" />
+    <Compile Include="Infrastructure\AppConstants.cs" />
+    <Compile Include="Migrations\202604080036475_AddEstoqueAtualRemoverFilial.cs" />
+    <Compile Include="Migrations\202604080036475_AddEstoqueAtualRemoverFilial.Designer.cs">
+      <DependentUpon>202604080036475_AddEstoqueAtualRemoverFilial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\ClienteService.cs" />
+    <Compile Include="Services\FornecedorService.cs" />
+    <Compile Include="Services\ProdutoService.cs" />
+    <Compile Include="Services\RelatorioService.cs" />
+    <Compile Include="Services\UsuarioService.cs" />
+    <Compile Include="Services\VendaService.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -173,7 +187,6 @@
     <Compile Include="Models\Cliente.cs" />
     <Compile Include="Models\ContaReceber.cs" />
     <Compile Include="Models\Empresa.cs" />
-    <Compile Include="Models\Filial.cs" />
     <Compile Include="Models\Fornecedor.cs" />
     <Compile Include="Models\Produto.cs" />
     <Compile Include="Models\Usuario.cs" />
@@ -297,6 +310,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202604011414241_AddTelefoneEnderecoCliente.resx">
       <DependentUpon>202604011414241_AddTelefoneEnderecoCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202604080036475_AddEstoqueAtualRemoverFilial.resx">
+      <DependentUpon>202604080036475_AddEstoqueAtualRemoverFilial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

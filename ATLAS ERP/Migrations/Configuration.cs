@@ -3,6 +3,7 @@ using static System.Data.Entity.Infrastructure.Design.Executor;
 
 namespace ATLAS_ERP.Migrations
 {
+    using ATLAS_ERP.Helpers;
     using ATLAS_ERP.Models;
     using System;
     using System.Data.Entity.Migrations;
@@ -38,7 +39,7 @@ namespace ATLAS_ERP.Migrations
                     UsuarioId = 1,
                     Name = "Administrador",
                     Email = "admin@atlas.com",
-                    SenhaHash = "123",
+                    SenhaHash = PasswordHelper.HashSenha("Atlas@2026"),
                     Role = "Admin",
                     Ativo = true,
                     EmpresaId = 1
@@ -52,7 +53,7 @@ namespace ATLAS_ERP.Migrations
                     UsuarioId = 2,
                     Name = "Super Admin",
                     Email = "superadmin@atlas.com",
-                    SenhaHash = "123456",
+                    SenhaHash = PasswordHelper.HashSenha("SuperAtlas@2026"),
                     Role = "SuperAdmin",
                     Ativo = true,
                     EmpresaId = null

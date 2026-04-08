@@ -686,6 +686,7 @@
             }
 
             <form method="POST" action="/Empresa/Cadastro">
+                @Html.AntiForgeryToken()
 
                 <!-- SECAO 1: DADOS DA EMPRESA -->
                 <div class="form-section">

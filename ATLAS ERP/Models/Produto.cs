@@ -20,6 +20,7 @@ namespace ATLAS_ERP.Models
         public decimal PrecoVenda { get; set; }
 
         public int EstoqueMinimo { get; set; }
+        public int EstoqueAtual  { get; set; }
         public bool Ativo { get; set; }
 
         [ForeignKey("Empresa")]

@@ -1,0 +1,216 @@
+@model List<ATLAS_ERP.Models.Venda>
+@{
+    ViewBag.Title = "Vendas - Atlas ERP";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atlas ERP – Vendas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <style>
+        :root{--bg:#050d1a;--panel:#0b1525;--card:#0f1e35;--card-hover:#132540;--border:rgba(100,160,255,0.10);--border-md:rgba(100,160,255,0.18);--accent:#3b82f6;--accent-soft:rgba(59,130,246,0.12);--accent-light:#60a5fa;--green:#34d399;--green-soft:rgba(52,211,153,0.10);--gold:#c9a84c;--gold-soft:rgba(201,168,76,0.12);--red:#f87171;--red-soft:rgba(248,113,113,0.10);--text:#e8f0fe;--muted:#7a9cc8;--faint:#3d5270;--sidebar-w:320px;--radius:14px;}
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}html,body{height:100%;}
+        body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;}
+        .bg-layer{position:fixed;inset:0;pointer-events:none;z-index:0;}
+        .bg-dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(59,130,246,.10) 1px,transparent 1px);background-size:36px 36px;mask-image:radial-gradient(ellipse 70% 70% at 60% 40%,black,transparent);}
+        .sidebar{width:var(--sidebar-w);height:100vh;background:var(--panel);border-right:1px solid var(--border);position:fixed;top:0;left:0;display:flex;flex-direction:column;padding:28px 16px;z-index:100;}
+        .sidebar-logo{display:flex;align-items:center;justify-content:center;margin-bottom:36px;}
+        .sidebar-logo a{display:flex;align-items:center;justify-content:center;width:100%;}
+        .sidebar-logo img{width:300px;max-width:100%;}
+        .sidebar-divider{height:1px;background:var(--border);margin:8px 0 16px;}
+        .menu-label{font-size:10px;font-weight:500;color:var(--faint);text-transform:uppercase;letter-spacing:.10em;padding:0 12px;margin-bottom:6px;}
+        .menu-item{display:flex;align-items:center;gap:10px;color:var(--muted);text-decoration:none;font-size:14px;padding:10px 12px;border-radius:10px;margin-bottom:2px;transition:background .18s,color .18s;position:relative;}
+        .menu-item svg{width:16px;height:16px;flex-shrink:0;opacity:.7;}
+        .menu-item:hover{background:var(--card);color:var(--text);}
+        .menu-item.active{background:var(--accent-soft);color:var(--accent-light);font-weight:500;}
+        .menu-item.active::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:3px;background:var(--accent);border-radius:0 3px 3px 0;}
+        .menu-item.danger{color:var(--red);}
+        .menu-item.danger:hover{background:var(--red-soft);}
+        .sidebar-spacer{flex:1;}
+        .sidebar-user{display:flex;align-items:center;gap:10px;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--card);}
+        .user-avatar{width:34px;height:34px;border-radius:50%;background:var(--accent-soft);border:1px solid var(--border-md);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--accent-light);flex-shrink:0;}
+        .user-name{font-size:13px;font-weight:500;color:var(--text);}
+        .user-role{font-size:11px;color:var(--faint);}
+        .main{margin-left:var(--sidebar-w);flex:1;padding:32px 40px;position:relative;z-index:1;}
+        .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;}
+        .page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;}
+        .page-subtitle{font-size:13px;color:var(--muted);margin-top:2px;}
+        .topbar-actions{display:flex;gap:10px;}
+        .btn-new{display:inline-flex;align-items:center;gap:7px;background:var(--accent);color:white;text-decoration:none;font-size:13px;font-weight:600;padding:10px 18px;border-radius:10px;transition:background .18s,transform .15s;box-shadow:0 4px 14px rgba(59,130,246,.3);}
+        .btn-new:hover{background:#2563eb;transform:translateY(-1px);}
+        .btn-new svg{width:14px;height:14px;}
+        .btn-financeiro{display:inline-flex;align-items:center;gap:7px;background:var(--gold-soft);color:var(--gold);border:1px solid rgba(201,168,76,.25);text-decoration:none;font-size:13px;font-weight:600;padding:10px 18px;border-radius:10px;transition:background .18s;}
+        .btn-financeiro:hover{background:rgba(201,168,76,.2);}
+        .btn-financeiro svg{width:14px;height:14px;}
+        .table-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;animation:fadeUp .5s ease both;}
+        .table-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--border);}
+        .table-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;}
+        .badge-pill{font-size:11px;background:var(--accent-soft);color:var(--accent-light);border:1px solid rgba(59,130,246,.2);padding:3px 10px;border-radius:20px;}
+        table{width:100%;border-collapse:collapse;}
+        thead th{font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:.07em;font-weight:500;padding:10px 20px;text-align:left;background:rgba(0,0,0,.15);}
+        tbody tr{border-top:1px solid var(--border);transition:background .15s;}
+        tbody tr:hover{background:var(--card-hover);}
+        tbody td{padding:13px 20px;font-size:14px;}
+        .td-muted{color:var(--muted);font-size:13px;}
+        .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:20px;}
+        .status-badge.concluida{background:var(--green-soft);color:var(--green);}
+        .status-badge.cancelada{background:var(--red-soft);color:var(--red);}
+        .status-badge.aberta{background:var(--gold-soft);color:var(--gold);}
+        .status-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+        .actions{display:flex;gap:6px;}
+        .btn-act{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:6px 11px;border-radius:7px;border:1px solid;cursor:pointer;background:none;transition:background .15s;white-space:nowrap;}
+        .btn-act svg{width:12px;height:12px;}
+        .btn-nota{border-color:rgba(59,130,246,.25);color:var(--accent-light);background:var(--accent-soft);}
+        .btn-nota:hover{background:rgba(59,130,246,.2);}
+        .btn-cancel-venda{border-color:rgba(248,113,113,.25);color:var(--red);background:var(--red-soft);}
+        .btn-cancel-venda:hover{background:rgba(248,113,113,.2);}
+        .empty-state{padding:60px;text-align:center;color:var(--faint);}
+        .empty-state svg{width:48px;height:48px;margin-bottom:16px;opacity:.3;}
+        /* MODAL CANCELAR */
+        .modal-overlay{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px;}
+        .modal-overlay.open{display:flex;}
+        .modal{background:var(--card);border:1px solid var(--border-md);border-radius:18px;padding:28px 32px;width:100%;max-width:380px;text-align:center;position:relative;animation:fadeUp .25s ease both;}
+        .modal-close{position:absolute;top:16px;right:16px;background:var(--panel);border:1px solid var(--border);border-radius:8px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);}
+        .modal-close svg{width:14px;height:14px;}
+        .modal-danger-icon{width:48px;height:48px;border-radius:50%;background:var(--red-soft);border:2px solid rgba(248,113,113,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;color:var(--red);}
+        .modal-danger-icon svg{width:22px;height:22px;}
+        .modal-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:6px;}
+        .modal-actions{display:flex;gap:10px;margin-top:20px;}
+        .modal-btn-cancel{flex:1;height:42px;background:none;border:1px solid var(--border);border-radius:9px;color:var(--muted);font-size:14px;cursor:pointer;}
+        .modal-btn-delete{flex:1;height:42px;background:var(--red);border:none;border-radius:9px;font-family:'Syne',sans-serif;font-size:14px;font-weight:600;color:white;cursor:pointer;}
+        @@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+        @@media(max-width:700px){.sidebar{display:none}.main{margin-left:0;padding:20px}}
+    </style>
+</head>
+<body>
+<div class="bg-layer"><div class="bg-dots"></div></div>
+
+<aside class="sidebar">
+    <div class="sidebar-logo">
+        <a href="/Admin/Dashboard"><img src="~/Content/images/logos/atlas_erp_diamante.svg" alt="Atlas ERP" /></a>
+    </div>
+    <span class="menu-label">Principal</span>
+    <a href="/Admin/Dashboard" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
+    <a href="/Venda" class="menu-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Vendas</a>
+    <a href="/Produto" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Produtos</a>
+    <a href="/Cliente" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clientes</a>
+    <a href="/Fornecedor" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Fornecedores</a>
+    <a href="/Usuario" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>Funcionários</a>
+    <div class="sidebar-divider"></div>
+    <span class="menu-label">Sistema</span>
+    <a href="/Auth/Logout" class="menu-item danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sair</a>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-user">
+        @{ var nm = Session["UsuarioLogado"]?.ToString() ?? "Usuário"; }
+        <div class="user-avatar">@(nm.Length > 0 ? nm[0].ToString().ToUpper() : "U")</div>
+        <div><div class="user-name">@nm</div><div class="user-role">@(Session["Role"]?.ToString())</div></div>
+    </div>
+</aside>
+
+<main class="main">
+    <div class="topbar">
+        <div>
+            <div class="page-title">Vendas</div>
+            <div class="page-subtitle">Histórico e gestão de vendas</div>
+        </div>
+        <div class="topbar-actions">
+            <a href="/Venda/Financeiro" class="btn-financeiro">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6"/></svg>
+                Financeiro
+            </a>
+            <a href="/Venda/Create" class="btn-new">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Nova Venda
+            </a>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <div class="table-header">
+            <span class="table-title">Todas as Vendas</span>
+            <span class="badge-pill">@Model.Count venda(s)</span>
+        </div>
+        @if (Model.Count > 0)
+        {
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Data</th>
+                        <th>Cliente</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var v in Model)
+                    {
+                        var sc = v.Status?.ToLower() ?? "concluida";
+                        <tr>
+                            <td class="td-muted">#@v.VendaId</td>
+                            <td class="td-muted">@v.DataVenda.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td><strong>@(v.Cliente?.Nome ?? "—")</strong></td>
+                            <td><strong>R$ @v.Total.ToString("N2")</strong></td>
+                            <td>
+                                <span class="status-badge @sc">
+                                    <span class="status-dot"></span>
+                                    @v.Status
+                                </span>
+                            </td>
+                            <td>
+                                <div class="actions">
+                                    <a href="/Venda/Nota/@v.VendaId" class="btn-act btn-nota">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                        Nota
+                                    </a>
+                                    @if (v.Status != "Cancelada")
+                                    {
+                                        <button class="btn-act btn-cancel-venda" onclick="abrirCancelar(@v.VendaId)">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                            Cancelar
+                                        </button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+                <p>Nenhuma venda registrada ainda.</p>
+            </div>
+        }
+    </div>
+</main>
+
+<div class="modal-overlay" id="modalCancelar" onclick="if(event.target===this)fechar()">
+    <div class="modal">
+        <button class="modal-close" onclick="fechar()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        <div class="modal-danger-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+        <div class="modal-title">Cancelar venda?</div>
+        <p style="font-size:13px;color:var(--faint);margin:8px 0 0;">O estoque dos produtos será restaurado. Esta ação não pode ser desfeita.</p>
+        <form method="POST" action="/Venda/Cancelar">
+            @Html.AntiForgeryToken()
+            <input type="hidden" id="cancelarId" name="vendaId" value="" />
+            <div class="modal-actions">
+                <button type="button" class="modal-btn-cancel" onclick="fechar()">Voltar</button>
+                <button type="submit" class="modal-btn-delete">Sim, cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function abrirCancelar(id) { document.getElementById('cancelarId').value = id; document.getElementById('modalCancelar').classList.add('open'); }
+    function fechar() { document.getElementById('modalCancelar').classList.remove('open'); }
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') fechar(); });
+</script>
+</body>
+</html>

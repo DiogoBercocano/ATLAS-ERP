@@ -1,0 +1,152 @@
+@model ATLAS_ERP.Models.Venda
+@{
+    ViewBag.Title = "Nota de Venda #" + Model.VendaId;
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nota #@Model.VendaId – Atlas ERP</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f1f5f9; padding: 24px; color: #1e293b; }
+        .nota { background: white; max-width: 760px; margin: 0 auto; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,.10); }
+        .nota-header { background: #050d1a; color: white; padding: 28px 36px; display: flex; justify-content: space-between; align-items: center; }
+        .nota-logo { font-size: 22px; font-weight: 800; letter-spacing: .03em; }
+        .nota-logo span { color: #60a5fa; }
+        .nota-num { font-size: 13px; color: rgba(255,255,255,.55); }
+        .nota-num strong { display: block; font-size: 20px; color: white; }
+        .nota-body { padding: 32px 36px; }
+        .nota-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 28px; }
+        .meta-block label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: #94a3b8; display: block; margin-bottom: 4px; }
+        .meta-block span { font-size: 14px; color: #1e293b; font-weight: 500; }
+        .nota-divider { height: 1px; background: #e2e8f0; margin: 0 0 24px; }
+        .itens-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: #64748b; margin-bottom: 12px; }
+        table { width: 100%; border-collapse: collapse; }
+        thead th { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: #94a3b8; padding: 10px 12px; text-align: left; background: #f8fafc; }
+        tbody td { padding: 12px; font-size: 14px; border-top: 1px solid #f1f5f9; }
+        .text-right { text-align: right; }
+        .nota-totais { margin-top: 20px; display: flex; justify-content: flex-end; }
+        .totais-box { min-width: 240px; }
+        .total-row { display: flex; justify-content: space-between; font-size: 14px; color: #64748b; padding: 6px 0; }
+        .total-final { display: flex; justify-content: space-between; font-size: 20px; font-weight: 700; color: #1e293b; padding: 12px 0 0; border-top: 2px solid #050d1a; margin-top: 6px; }
+        .nota-footer { background: #f8fafc; padding: 20px 36px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+        .footer-info { font-size: 12px; color: #94a3b8; }
+        .status-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: .05em; }
+        .status-badge.concluida { background: #dcfce7; color: #16a34a; }
+        .status-badge.cancelada { background: #fee2e2; color: #dc2626; }
+        .status-badge.aberta { background: #fef3c7; color: #d97706; }
+        .actions { display: flex; gap: 10px; max-width: 760px; margin: 20px auto 0; }
+        .btn { display: inline-flex; align-items: center; gap: 7px; padding: 10px 20px; border-radius: 9px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; border: none; transition: background .18s; }
+        .btn-print { background: #050d1a; color: white; }
+        .btn-print:hover { background: #0f172a; }
+        .btn-back { background: #e2e8f0; color: #475569; }
+        .btn-back:hover { background: #cbd5e1; }
+        .btn svg { width: 15px; height: 15px; }
+        @@media print {
+            body { background: white; padding: 0; }
+            .nota { box-shadow: none; border-radius: 0; }
+            .actions { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="actions">
+    <a href="/Venda" class="btn btn-back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        Voltar
+    </a>
+    <button onclick="window.print()" class="btn btn-print">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Imprimir
+    </button>
+</div>
+
+<div class="nota">
+    <div class="nota-header">
+        <div class="nota-logo">ATLAS<span>ERP</span></div>
+        <div class="nota-num">
+            Nota de Venda
+            <strong>#@Model.VendaId</strong>
+        </div>
+    </div>
+
+    <div class="nota-body">
+        <div class="nota-meta">
+            <div class="meta-block">
+                <label>Cliente</label>
+                <span>@(Model.Cliente?.Nome ?? "—")</span>
+            </div>
+            <div class="meta-block">
+                <label>Data da Venda</label>
+                <span>@Model.DataVenda.ToString("dd/MM/yyyy HH:mm")</span>
+            </div>
+            <div class="meta-block">
+                <label>Status</label>
+                <span class="status-badge @(Model.Status?.ToLower() ?? "concluida")">@Model.Status</span>
+            </div>
+        </div>
+
+        @if (Model.ContasReceber != null && Model.ContasReceber.Count > 0)
+        {
+            var conta = Model.ContasReceber.First();
+            <div class="nota-meta" style="margin-top:-8px;margin-bottom:24px;">
+                <div class="meta-block">
+                    <label>Vencimento</label>
+                    <span>@conta.DataVencimento.ToString("dd/MM/yyyy")</span>
+                </div>
+                <div class="meta-block">
+                    <label>Situação</label>
+                    <span>@(conta.Pago ? "✓ Pago em " + conta.DataPagamento?.ToString("dd/MM/yyyy") : "⏳ Pendente")</span>
+                </div>
+            </div>
+        }
+
+        <div class="nota-divider"></div>
+        <div class="itens-title">Itens</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th class="text-right">Qtd</th>
+                    <th class="text-right">Preço Unit.</th>
+                    <th class="text-right">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Itens != null)
+                {
+                    foreach (var item in Model.Itens)
+                    {
+                        <tr>
+                            <td>@(item.Produto?.Nome ?? "—")</td>
+                            <td class="text-right">@item.Quantidade</td>
+                            <td class="text-right">R$ @item.PrecoUnitario.ToString("N2")</td>
+                            <td class="text-right"><strong>R$ @item.Subtotal.ToString("N2")</strong></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+        <div class="nota-totais">
+            <div class="totais-box">
+                <div class="total-row"><span>Subtotal</span><span>R$ @Model.Total.ToString("N2")</span></div>
+                <div class="total-row"><span>Desconto</span><span>R$ 0,00</span></div>
+                <div class="total-final"><span>Total</span><span>R$ @Model.Total.ToString("N2")</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="nota-footer">
+        <div class="footer-info">Atlas ERP &nbsp;·&nbsp; Sistema de Gestão Comercial</div>
+        <div class="footer-info">Emitido em @DateTime.Now.ToString("dd/MM/yyyy HH:mm")</div>
+    </div>
+</div>
+
+</body>
+</html>

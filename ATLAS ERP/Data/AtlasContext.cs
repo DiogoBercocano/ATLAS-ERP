@@ -14,7 +14,6 @@ namespace ATLAS_ERP.Data
         }
 
         public DbSet<Empresa> Empresas { get; set; }
-        public DbSet<Filial> Filiais { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Produto> Produtos { get; set; }

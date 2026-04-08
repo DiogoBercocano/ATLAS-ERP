@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using static System.Data.Entity.Migrations.Model.UpdateDatabaseOperation;
 
 namespace ATLAS_ERP.Models
 {
@@ -26,8 +25,7 @@ namespace ATLAS_ERP.Models
         // "Pendente" ou "Ativa"
         public string Status { get; set; }
 
-        public ICollection<Filial> Filials { get; set; }
-        public ICollection<Usuario> Ususarios { get; set; }
+        public ICollection<Usuario> Usuarios { get; set; }
         public ICollection<Cliente> Clientes { get; set; }
         public ICollection<Produto> Produtos { get; set; }
         public ICollection<Fornecedor> Fornecedores { get; set; }

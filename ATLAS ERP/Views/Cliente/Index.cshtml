@@ -1054,6 +1054,7 @@
             <div class="modal-divider"></div>
 
             <form method="POST" action="/Cliente/Edit">
+                @Html.AntiForgeryToken()
                 <input type="hidden" id="editId" name="ClienteId" value="" />
 
                 <div class="modal-form-group">
@@ -1124,6 +1125,7 @@
             <div class="modal-sub" id="excluirNome" style="margin-top:4px;"></div>
             <p style="font-size:13px;color:var(--faint);margin:10px 0 22px;">Esta ação não pode ser desfeita.</p>
             <form method="POST" action="/Cliente/Delete">
+                @Html.AntiForgeryToken()
                 <input type="hidden" id="excluirId" name="clienteId" value="" />
                 <div class="modal-actions">
                     <button type="button" class="modal-btn-cancel" onclick="fechar('modalExcluir')">Cancelar</button>

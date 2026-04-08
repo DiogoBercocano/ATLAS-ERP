@@ -292,3 +292,4 @@ C:\Users\dgber\Documents\GitHub\ATLAS-ERP\ATLAS ERP\obj\Debug\ATLAS ERP.csproj.C
 C:\Users\dgber\Documents\GitHub\ATLAS-ERP\ATLAS ERP\obj\Debug\ATLAS ERP.csproj.Up2Date
 C:\Users\dgber\Documents\GitHub\ATLAS-ERP\ATLAS ERP\obj\Debug\ATLAS ERP.dll
 C:\Users\dgber\Documents\GitHub\ATLAS-ERP\ATLAS ERP\obj\Debug\ATLAS ERP.pdb
+C:\Users\dgber\Documents\GitHub\ATLAS ERP\ATLAS ERP\obj\Debug\ATLAS_ERP.Migrations.AddEstoqueAtualRemoverFilial.resources

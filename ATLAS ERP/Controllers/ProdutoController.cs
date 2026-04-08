@@ -1,40 +1,43 @@
-﻿using System.Linq;
+using System.Diagnostics;
 using System.Web.Mvc;
 using ATLAS_ERP.Data;
-using ATLAS_ERP.Models;
 using ATLAS_ERP.Filters;
+using ATLAS_ERP.Models;
+using ATLAS_ERP.Services;
 
 namespace ATLAS_ERP.Controllers
 {
     public class ProdutoController : Controller
     {
-        private readonly AtlasContext db = new AtlasContext();
-        private int EmpresaId => (int)Session["EmpresaId"];
+        private readonly ProdutoService _service;
+        private int EmpresaId => (int)Session[Infrastructure.SessionKeys.EmpresaId];
+
+        public ProdutoController()
+        {
+            _service = new ProdutoService(new AtlasContext());
+        }
 
         public ActionResult Index()
         {
+            if (Session[Infrastructure.SessionKeys.UsuarioLogado] == null)
+                return RedirectToAction("Login", "Auth");
             try
             {
-                if (Session["UsuarioLogado"] == null)
-                    return RedirectToAction("Login", "Auth");
-
-                var produtos = db.Produtos.Where(p => p.EmpresaId == EmpresaId).ToList();
-                return View(produtos);
+                return View(_service.ListarPorEmpresa(EmpresaId));
             }
-            catch
+            catch (System.Exception ex)
             {
+                Trace.TraceError("ProdutoController.Index: {0}", ex);
                 ViewBag.Erro = "Erro ao carregar produtos.";
                 return View(new System.Collections.Generic.List<Produto>());
             }
         }
 
         [RoleFilter("Admin", "Gerente")]
-        public ActionResult Create()
-        {
-            return View();
-        }
+        public ActionResult Create() => View();
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [RoleFilter("Admin", "Gerente")]
         public ActionResult Create(Produto produto)
         {
@@ -43,60 +46,50 @@ namespace ATLAS_ERP.Controllers
                 if (ModelState.IsValid)
                 {
                     produto.EmpresaId = EmpresaId;
-                    db.Produtos.Add(produto);
-                    db.SaveChanges();
+                    _service.Criar(produto);
                     return RedirectToAction("Index");
                 }
                 return View(produto);
             }
-            catch
+            catch (System.Exception ex)
             {
+                Trace.TraceError("ProdutoController.Create: {0}", ex);
                 ViewBag.Erro = "Erro ao cadastrar produto. Tente novamente.";
                 return View(produto);
             }
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [RoleFilter("Admin", "Gerente")]
-        public ActionResult Edit(int ProdutoId, string Nome, string Categoria, decimal PrecoVenda, int EstoqueMinimo, bool Ativo)
+        public ActionResult Edit(int ProdutoId, string Nome, string Categoria,
+                                 decimal PrecoVenda, int EstoqueMinimo, bool Ativo)
         {
             try
             {
-                var p = db.Produtos.FirstOrDefault(x => x.ProdutoId == ProdutoId && x.EmpresaId == EmpresaId);
-                if (p != null)
-                {
-                    p.Nome = Nome;
-                    p.Categoria = Categoria;
-                    p.PrecoVenda = PrecoVenda;
-                    p.EstoqueMinimo = EstoqueMinimo;
-                    p.Ativo = Ativo;
-                    db.Entry(p).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                }
+                _service.Editar(ProdutoId, EmpresaId, Nome, Categoria, PrecoVenda, EstoqueMinimo, Ativo);
                 return RedirectToAction("Index");
             }
-            catch
+            catch (System.Exception ex)
             {
+                Trace.TraceError("ProdutoController.Edit: {0}", ex);
                 return RedirectToAction("Index");
             }
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [RoleFilter("Admin")]
         public ActionResult Delete(int produtoId)
         {
             try
             {
-                var p = db.Produtos.FirstOrDefault(x => x.ProdutoId == produtoId && x.EmpresaId == EmpresaId);
-                if (p != null)
-                {
-                    db.Produtos.Remove(p);
-                    db.SaveChanges();
-                }
+                _service.Excluir(produtoId, EmpresaId);
                 return RedirectToAction("Index");
             }
-            catch
+            catch (System.Exception ex)
             {
+                Trace.TraceError("ProdutoController.Delete: {0}", ex);
                 return RedirectToAction("Index");
             }
         }

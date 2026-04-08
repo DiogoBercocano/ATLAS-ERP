@@ -601,6 +601,7 @@
                                         @if (e.Status != "Ativa")
                                         {
                                             <form method="POST" action="/SuperAdmin/Aprovar" style="display:inline;">
+                                                @Html.AntiForgeryToken()
                                                 <input type="hidden" name="empresaId" value="@e.EmpresaId" />
                                                 <button type="submit" class="btn-act btn-aprovar">
                                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -613,6 +614,7 @@
                                         else
                                         {
                                             <form method="POST" action="/SuperAdmin/Rejeitar" style="display:inline;">
+                                                @Html.AntiForgeryToken()
                                                 <input type="hidden" name="empresaId" value="@e.EmpresaId" />
                                                 <button type="submit" class="btn-act btn-rejeitar">
                                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -667,6 +669,7 @@
             <div class="modal-sub" id="excluirNome"></div>
             <div class="modal-warn">Todos os usuários desta empresa serão removidos. Esta ação não pode ser desfeita.</div>
             <form method="POST" action="/SuperAdmin/Excluir">
+                @Html.AntiForgeryToken()
                 <input type="hidden" id="excluirId" name="empresaId" value="" />
                 <div class="modal-actions">
                     <button type="button" class="modal-btn-cancel" onclick="fechar()">Cancelar</button>

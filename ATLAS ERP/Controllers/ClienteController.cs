@@ -1,40 +1,43 @@
-﻿using System.Linq;
+using System.Diagnostics;
 using System.Web.Mvc;
 using ATLAS_ERP.Data;
-using ATLAS_ERP.Models;
 using ATLAS_ERP.Filters;
+using ATLAS_ERP.Models;
+using ATLAS_ERP.Services;
 
 namespace ATLAS_ERP.Controllers
 {
     public class ClienteController : Controller
     {
-        private readonly AtlasContext db = new AtlasContext();
-        private int EmpresaId => (int)Session["EmpresaId"];
+        private readonly ClienteService _service;
+        private int EmpresaId => (int)Session[Infrastructure.SessionKeys.EmpresaId];
+
+        public ClienteController()
+        {
+            _service = new ClienteService(new AtlasContext());
+        }
 
         public ActionResult Index()
         {
+            if (Session[Infrastructure.SessionKeys.UsuarioLogado] == null)
+                return RedirectToAction("Login", "Auth");
             try
             {
-                if (Session["UsuarioLogado"] == null)
-                    return RedirectToAction("Login", "Auth");
-
-                var clientes = db.Clientes.Where(c => c.EmpresaId == EmpresaId).ToList();
-                return View(clientes);
+                return View(_service.ListarPorEmpresa(EmpresaId));
             }
-            catch
+            catch (System.Exception ex)
             {
+                Trace.TraceError("ClienteController.Index: {0}", ex);
                 ViewBag.Erro = "Erro ao carregar clientes.";
                 return View(new System.Collections.Generic.List<Cliente>());
             }
         }
 
         [RoleFilter("Admin", "Gerente")]
-        public ActionResult Create()
-        {
-            return View();
-        }
+        public ActionResult Create() => View();
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [RoleFilter("Admin", "Gerente")]
         public ActionResult Create(Cliente cliente)
         {
@@ -43,20 +46,21 @@ namespace ATLAS_ERP.Controllers
                 if (ModelState.IsValid)
                 {
                     cliente.EmpresaId = EmpresaId;
-                    db.Clientes.Add(cliente);
-                    db.SaveChanges();
+                    _service.Criar(cliente);
                     return RedirectToAction("Index");
                 }
                 return View(cliente);
             }
-            catch
+            catch (System.Exception ex)
             {
+                Trace.TraceError("ClienteController.Create: {0}", ex);
                 ViewBag.Erro = "Erro ao cadastrar cliente. Tente novamente.";
                 return View(cliente);
             }
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [RoleFilter("Admin", "Gerente")]
         public ActionResult Edit(int ClienteId, string Nome, string Documento,
                                  string Email, string Telefone, string Endereco,
@@ -64,43 +68,30 @@ namespace ATLAS_ERP.Controllers
         {
             try
             {
-                var c = db.Clientes.FirstOrDefault(x => x.ClienteId == ClienteId && x.EmpresaId == EmpresaId);
-                if (c != null)
-                {
-                    c.Nome = Nome;
-                    c.Documento = Documento;
-                    c.Email = Email;
-                    c.Telefone = Telefone;
-                    c.Endereco = Endereco;
-                    c.LimiteCredito = LimiteCredito ?? 0;
-                    c.Ativo = Ativo == "true";
-                    db.Entry(c).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                }
+                _service.Editar(ClienteId, EmpresaId, Nome, Documento, Email,
+                                Telefone, Endereco, LimiteCredito ?? 0, Ativo == "true");
                 return RedirectToAction("Index");
             }
-            catch
+            catch (System.Exception ex)
             {
+                Trace.TraceError("ClienteController.Edit: {0}", ex);
                 return RedirectToAction("Index");
             }
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [RoleFilter("Admin")]
         public ActionResult Delete(int clienteId)
         {
             try
             {
-                var c = db.Clientes.FirstOrDefault(x => x.ClienteId == clienteId && x.EmpresaId == EmpresaId);
-                if (c != null)
-                {
-                    db.Clientes.Remove(c);
-                    db.SaveChanges();
-                }
+                _service.Excluir(clienteId, EmpresaId);
                 return RedirectToAction("Index");
             }
-            catch
+            catch (System.Exception ex)
             {
+                Trace.TraceError("ClienteController.Delete: {0}", ex);
                 return RedirectToAction("Index");
             }
         }

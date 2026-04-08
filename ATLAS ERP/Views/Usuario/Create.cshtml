@@ -566,6 +566,7 @@
 
             @using (Html.BeginForm("Create", "Usuario", FormMethod.Post))
             {
+                @Html.AntiForgeryToken()
                 <div class="form-section-title">Dados Pessoais</div>
 
                 <div class="form-group">
