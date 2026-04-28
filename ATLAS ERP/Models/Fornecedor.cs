@@ -17,6 +17,7 @@ namespace ATLAS_ERP.Models
         public string CNPJ { get; set; }
         public string Telefone { get; set; }
         public string Email { get; set; }
+        public string Endereco { get; set; }
 
         [ForeignKey("Empresa")]
         public int EmpresaId { get; set; }

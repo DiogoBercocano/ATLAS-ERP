@@ -1,28 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|c:\\users\\dgber\\documents\\github\\atlas erp\\atlas erp\\migrations\\202604080036475_addestoqueatualremoverfilial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\migrations\\202604080036475_addestoqueatualremoverfilial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|c:\\users\\dgber\\documents\\github\\atlas erp\\atlas erp\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\atlas erp\\views\\empresa\\cadastro.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\views\\empresa\\cadastro.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\atlas erp\\views\\cliente\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\views\\cliente\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\atlas erp\\views\\cliente\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\views\\cliente\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -30,7 +9,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -39,68 +18,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "202604080036475_AddEstoqueAtualRemoverFilial.cs",
-              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Migrations\\202604080036475_AddEstoqueAtualRemoverFilial.cs",
-              "RelativeDocumentMoniker": "ATLAS ERP\\Migrations\\202604080036475_AddEstoqueAtualRemoverFilial.cs",
-              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Migrations\\202604080036475_AddEstoqueAtualRemoverFilial.cs",
-              "RelativeToolTip": "ATLAS ERP\\Migrations\\202604080036475_AddEstoqueAtualRemoverFilial.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-08T00:36:52.763Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Views\\Home\\Index.cshtml",
-              "RelativeDocumentMoniker": "ATLAS ERP\\Views\\Home\\Index.cshtml",
-              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Views\\Home\\Index.cshtml",
-              "RelativeToolTip": "ATLAS ERP\\Views\\Home\\Index.cshtml",
-              "ViewState": "AgIAAMYAAAAAAAAAAAAqwNUAAAAUAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-02T00:06:26.345Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Cadastro.cshtml",
-              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Views\\Empresa\\Cadastro.cshtml",
-              "RelativeDocumentMoniker": "ATLAS ERP\\Views\\Empresa\\Cadastro.cshtml",
-              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Views\\Empresa\\Cadastro.cshtml",
-              "RelativeToolTip": "ATLAS ERP\\Views\\Empresa\\Cadastro.cshtml",
-              "ViewState": "AgIAADoCAAAAAAAAAIAwwEkCAABuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-02T00:03:23.652Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Views\\Cliente\\Index.cshtml",
-              "RelativeDocumentMoniker": "ATLAS ERP\\Views\\Cliente\\Index.cshtml",
-              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Views\\Cliente\\Index.cshtml",
-              "RelativeToolTip": "ATLAS ERP\\Views\\Cliente\\Index.cshtml",
-              "ViewState": "AgIAAFYAAAAAAAAAAIAwwGUAAAAZAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-02T00:01:10.86Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Views\\Cliente\\Create.cshtml",
-              "RelativeDocumentMoniker": "ATLAS ERP\\Views\\Cliente\\Create.cshtml",
-              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Views\\Cliente\\Create.cshtml",
-              "RelativeToolTip": "ATLAS ERP\\Views\\Cliente\\Create.cshtml",
-              "ViewState": "AgIAAFwAAAAAAAAAAIAwwGoAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-01T23:56:56.652Z"
             }
           ]
         }

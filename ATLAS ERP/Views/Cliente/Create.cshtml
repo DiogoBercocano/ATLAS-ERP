@@ -1,9 +1,8 @@
-﻿@model ATLAS_ERP.Models.Cliente
+@model ATLAS_ERP.Models.Cliente
 @{
     ViewBag.Title = "Novo Cliente - Atlas ERP";
     Layout = null;
 }
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -13,706 +12,449 @@
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
     <style>
         :root {
-            --bg: #050d1a;
-            --panel: #0b1525;
-            --card: #0f1e35;
-            --card-hover: #132540;
-            --border: rgba(100,160,255,0.10);
-            --border-md: rgba(100,160,255,0.18);
-            --accent: #3b82f6;
-            --accent-soft: rgba(59,130,246,0.12);
-            --accent-glow: rgba(59,130,246,0.20);
-            --accent-light: #60a5fa;
-            --gold: #c9a84c;
-            --red: #f87171;
-            --red-soft: rgba(248,113,113,0.10);
-            --text: #e8f0fe;
-            --muted: #7a9cc8;
-            --faint: #3d5270;
-            --sidebar-w: 320px;
-            --radius: 14px;
+            --bg:#050d1a;--panel:#0b1525;--card:#0f1e35;--card-hover:#132540;
+            --border:rgba(100,160,255,0.10);--border-md:rgba(100,160,255,0.18);
+            --accent:#3b82f6;--accent-soft:rgba(59,130,246,0.12);--accent-glow:rgba(59,130,246,0.20);--accent-light:#60a5fa;
+            --green:#34d399;--green-soft:rgba(52,211,153,0.10);
+            --red:#f87171;--red-soft:rgba(248,113,113,0.10);
+            --gold:#c9a84c;--gold-soft:rgba(201,168,76,0.12);
+            --text:#e8f0fe;--muted:#7a9cc8;--faint:#3d5270;
+            --sidebar-w:320px;--radius:14px;
         }
-
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html, body {
-            height: 100%;
-        }
-
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .bg-layer {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .bg-dots {
-            position: absolute;
-            inset: 0;
-            background-image: radial-gradient(circle, rgba(59,130,246,0.10) 1px, transparent 1px);
-            background-size: 36px 36px;
-            mask-image: radial-gradient(ellipse 70% 70% at 60% 40%, black, transparent);
-        }
-
-        .bg-glow {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(90px);
-        }
-
-        /* SIDEBAR */
-        .sidebar {
-            width: var(--sidebar-w);
-            height: 100vh;
-            background: var(--panel);
-            border-right: 1px solid var(--border);
-            position: fixed;
-            top: 0;
-            left: 0;
-            display: flex;
-            flex-direction: column;
-            padding: 28px 16px;
-            z-index: 100;
-        }
-
-        .sidebar-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            margin-bottom: 36px;
-        }
-
-            .sidebar-logo a {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 100%;
-            }
-
-            .sidebar-logo img {
-                width: 300px;
-                max-width: 100%;
-            }
-
-        .sidebar-divider {
-            height: 1px;
-            background: var(--border);
-            margin: 8px 0 16px;
-        }
-
-        .menu-label {
-            font-size: 10px;
-            font-weight: 500;
-            color: var(--faint);
-            text-transform: uppercase;
-            letter-spacing: 0.10em;
-            padding: 0 12px;
-            margin-bottom: 6px;
-        }
-
-        .menu-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--muted);
-            text-decoration: none;
-            font-size: 14px;
-            padding: 10px 12px;
-            border-radius: 10px;
-            margin-bottom: 2px;
-            transition: background 0.18s, color 0.18s;
-            position: relative;
-        }
-
-            .menu-item svg {
-                width: 16px;
-                height: 16px;
-                flex-shrink: 0;
-                opacity: 0.7;
-            }
-
-            .menu-item:hover {
-                background: var(--card);
-                color: var(--text);
-            }
-
-                .menu-item:hover svg {
-                    opacity: 1;
-                }
-
-            .menu-item.active {
-                background: var(--accent-soft);
-                color: var(--accent-light);
-                font-weight: 500;
-            }
-
-                .menu-item.active svg {
-                    opacity: 1;
-                }
-
-                .menu-item.active::before {
-                    content: '';
-                    position: absolute;
-                    left: 0;
-                    top: 20%;
-                    bottom: 20%;
-                    width: 3px;
-                    background: var(--accent);
-                    border-radius: 0 3px 3px 0;
-                }
-
-            .menu-item.danger {
-                color: var(--red);
-            }
-
-                .menu-item.danger:hover {
-                    background: var(--red-soft);
-                }
-
-        .sidebar-spacer {
-            flex: 1;
-        }
-
-        .sidebar-user {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: var(--card);
-        }
-
-        .user-avatar {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            background: var(--accent-soft);
-            border: 1px solid var(--border-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Syne', sans-serif;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--accent-light);
-            flex-shrink: 0;
-        }
-
-        .user-name {
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text);
-        }
-
-        .user-role {
-            font-size: 11px;
-            color: var(--faint);
-        }
-
-        /* MAIN */
-        .main {
-            margin-left: var(--sidebar-w);
-            flex: 1;
-            padding: 32px 40px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .topbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 28px;
-        }
-
-        .page-title {
-            font-family: 'Syne', sans-serif;
-            font-size: 22px;
-            font-weight: 700;
-        }
-
-        .page-subtitle {
-            font-size: 13px;
-            color: var(--muted);
-            margin-top: 2px;
-        }
-
-        .btn-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            color: var(--muted);
-            text-decoration: none;
-            font-size: 13px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            padding: 9px 16px;
-            border-radius: 10px;
-            transition: background 0.18s, color 0.18s;
-        }
-
-            .btn-back:hover {
-                background: var(--card-hover);
-                color: var(--text);
-            }
-
-            .btn-back svg {
-                width: 14px;
-                height: 14px;
-            }
-
-        /* FORM */
-        .form-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 32px 36px;
-            max-width: 640px;
-            animation: fadeUp 0.5s ease both;
-        }
-
-        .form-section-title {
-            font-family: 'Syne', sans-serif;
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-bottom: 18px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        .form-row-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 11px;
-            font-weight: 500;
-            color: var(--muted);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .input-wrap {
-            position: relative;
-        }
-
-        .input-icon {
-            position: absolute;
-            left: 13px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--faint);
-            pointer-events: none;
-            display: flex;
-        }
-
-            .input-icon svg {
-                width: 14px;
-                height: 14px;
-            }
-
-        .form-control {
-            width: 100%;
-            height: 44px;
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 0 14px 0 40px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 14px;
-            color: var(--text);
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            -webkit-appearance: none;
-        }
-
-            .form-control::placeholder {
-                color: var(--faint);
-            }
-
-            .form-control:hover {
-                border-color: var(--border-md);
-            }
-
-            .form-control:focus {
-                border-color: var(--accent);
-                box-shadow: 0 0 0 3px var(--accent-glow);
-            }
-
-        select.form-control {
-            cursor: pointer;
-        }
-
-        .form-divider {
-            height: 1px;
-            background: var(--border);
-            margin: 24px 0;
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 28px;
-        }
-
-        .btn-submit {
-            flex: 1;
-            height: 48px;
-            background: var(--accent);
-            border: none;
-            border-radius: 10px;
-            font-family: 'Syne', sans-serif;
-            font-size: 15px;
-            font-weight: 600;
-            color: white;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.15s;
-            box-shadow: 0 4px 16px rgba(59,130,246,0.25);
-        }
-
-            .btn-submit:hover {
-                background: #2563eb;
-                transform: translateY(-1px);
-            }
-
-        .btn-cancel {
-            height: 48px;
-            padding: 0 24px;
-            background: none;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            color: var(--muted);
-            font-size: 14px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            transition: background 0.15s, color 0.15s;
-        }
-
-            .btn-cancel:hover {
-                background: var(--card-hover);
-                color: var(--text);
-            }
-
-        .field-error {
-            font-size: 12px;
-            color: var(--red);
-            margin-top: 5px;
-        }
-
-        @@keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @@media (max-width: 700px) {
-            .sidebar {
-                display: none;
-            }
-
-            .main {
-                margin-left: 0;
-                padding: 20px;
-            }
-
-            .form-row-2 {
-                grid-template-columns: 1fr;
-            }
-
-            .form-card {
-                padding: 24px;
-            }
-        }
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}html,body{height:100%;}
+        body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;}
+        .bg-layer{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+        .bg-dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(59,130,246,0.08) 1px,transparent 1px);background-size:36px 36px;mask-image:radial-gradient(ellipse 70% 70% at 60% 40%,black,transparent);}
+        .sidebar{width:var(--sidebar-w);height:100vh;background:var(--panel);border-right:1px solid var(--border);position:fixed;top:0;left:0;display:flex;flex-direction:column;padding:28px 16px;z-index:100;}
+        .sidebar-logo{display:flex;align-items:center;justify-content:center;margin-bottom:36px;}
+        .sidebar-logo a{display:flex;align-items:center;justify-content:center;width:100%;}
+        .sidebar-logo img{width:300px;max-width:100%;}
+        .sidebar-divider{height:1px;background:var(--border);margin:8px 0 16px;}
+        .menu-label{font-size:10px;font-weight:500;color:var(--faint);text-transform:uppercase;letter-spacing:.10em;padding:0 12px;margin-bottom:6px;}
+        .menu-item{display:flex;align-items:center;gap:10px;color:var(--muted);text-decoration:none;font-size:14px;padding:10px 12px;border-radius:10px;margin-bottom:2px;transition:background .18s,color .18s;position:relative;}
+        .menu-item svg{width:16px;height:16px;flex-shrink:0;opacity:.7;}
+        .menu-item:hover{background:var(--card);color:var(--text);}
+        .menu-item.active{background:var(--accent-soft);color:var(--accent-light);font-weight:500;}
+        .menu-item.active::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:3px;background:var(--accent);border-radius:0 3px 3px 0;}
+        .menu-item.danger{color:var(--red);}
+        .menu-item.danger:hover{background:var(--red-soft);}
+        .sidebar-spacer{flex:1;}
+        .sidebar-user{display:flex;align-items:center;gap:10px;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--card);}
+        .user-avatar{width:34px;height:34px;border-radius:50%;background:var(--accent-soft);border:1px solid var(--border-md);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--accent-light);flex-shrink:0;}
+        .user-name{font-size:13px;font-weight:500;color:var(--text);}
+        .user-role{font-size:11px;color:var(--faint);}
+        .main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;position:relative;z-index:1;}
+        .page-header{padding:28px 40px 22px;border-bottom:1px solid var(--border);background:rgba(11,21,37,0.6);backdrop-filter:blur(8px);position:sticky;top:0;z-index:10;}
+        .breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--faint);margin-bottom:10px;}
+        .breadcrumb a{color:var(--muted);text-decoration:none;transition:color .15s;}
+        .breadcrumb a:hover{color:var(--text);}
+        .breadcrumb-sep{opacity:.4;}
+        .header-row{display:flex;align-items:center;justify-content:space-between;}
+        .page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;}
+        .page-subtitle{font-size:13px;color:var(--muted);margin-top:3px;}
+        .btn-back{display:inline-flex;align-items:center;gap:7px;color:var(--muted);text-decoration:none;font-size:13px;background:var(--card);border:1px solid var(--border);padding:9px 16px;border-radius:10px;transition:background .18s,color .18s;}
+        .btn-back:hover{background:var(--card-hover);color:var(--text);}
+        .btn-back svg{width:14px;height:14px;}
+        .page-content{flex:1;padding:32px 40px;display:grid;grid-template-columns:1fr 320px;gap:28px;align-items:start;}
+        .form-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:14px;transition:border-color .2s;animation:fadeIn .4s ease both;}
+        .form-section:nth-child(2){animation-delay:.05s;}
+        .form-section:nth-child(3){animation-delay:.10s;}
+        .form-section:nth-child(4){animation-delay:.15s;}
+        .form-section:last-child{margin-bottom:0;}
+        .form-section:focus-within{border-color:var(--border-md);}
+        .section-head{display:flex;align-items:center;gap:14px;padding:16px 22px;border-bottom:1px solid var(--border);background:rgba(0,0,0,0.12);}
+        .section-num{width:26px;height:26px;border-radius:7px;background:var(--accent-soft);border:1px solid rgba(59,130,246,0.22);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--accent-light);flex-shrink:0;}
+        .section-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;}
+        .section-desc{font-size:11px;color:var(--faint);margin-top:2px;}
+        .section-body{padding:22px 22px 18px;}
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+        .form-group{margin-bottom:16px;}
+        .form-group:last-child{margin-bottom:0;}
+        .form-label{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;}
+        .input-wrap{position:relative;}
+        .input-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--faint);pointer-events:none;display:flex;transition:color .2s;}
+        .input-icon svg{width:15px;height:15px;}
+        .form-control{width:100%;height:46px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:0 14px 0 44px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;}
+        .form-control::placeholder{color:var(--faint);}
+        .form-control:hover{border-color:var(--border-md);}
+        .form-control:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow);}
+        .form-control:focus~.input-icon{color:var(--accent-light);}
+        .form-control-lookup{padding-right:115px;}
+        select.form-control{cursor:pointer;}
+        .field-error{font-size:12px;color:var(--red);margin-top:5px;}
+        .api-badge{font-size:11px;font-weight:500;display:none;align-items:center;gap:5px;white-space:nowrap;border-radius:6px;padding:2px 8px;}
+        .api-badge.show{display:inline-flex;}
+        .api-badge.loading{color:var(--muted);background:rgba(100,160,255,0.08);}
+        .api-badge.ok{color:var(--green);background:var(--green-soft);}
+        .api-badge.err{color:var(--red);background:var(--red-soft);}
+        .api-badge.warn{color:var(--gold);background:var(--gold-soft);}
+        .spinner{width:11px;height:11px;border:2px solid var(--border-md);border-top-color:var(--accent-light);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+        @@keyframes spin{to{transform:rotate(360deg)}}
+        .preview-sticky{position:sticky;top:calc(28px + 22px + 62px + 28px);}
+        .preview-label{font-size:11px;font-weight:600;color:var(--faint);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;}
+        .preview-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+        .preview-top{padding:28px 22px 22px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;align-items:center;text-align:center;background:linear-gradient(160deg,#0f1e35 0%,#0b1a30 100%);}
+        .preview-avatar{width:56px;height:56px;border-radius:50%;background:var(--accent-soft);border:1px solid rgba(59,130,246,0.22);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:var(--accent-light);margin-bottom:12px;transition:background .3s;}
+        .preview-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px;max-width:100%;word-break:break-word;}
+        .preview-doc{font-size:12px;color:var(--faint);font-family:monospace;letter-spacing:.04em;}
+        .preview-body{padding:18px 22px;display:flex;flex-direction:column;gap:12px;}
+        .preview-row{display:flex;align-items:flex-start;gap:12px;}
+        .preview-icon{width:30px;height:30px;border-radius:8px;background:var(--panel);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--faint);}
+        .preview-icon svg{width:13px;height:13px;}
+        .preview-field-label{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--faint);font-weight:500;margin-bottom:2px;}
+        .preview-field-val{font-size:13px;color:var(--text);}
+        .preview-field-val.empty{color:var(--faint);font-style:italic;}
+        .preview-tip{margin-top:14px;display:flex;align-items:flex-start;gap:9px;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.12);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--muted);line-height:1.5;}
+        .preview-tip svg{width:14px;height:14px;flex-shrink:0;color:var(--accent-light);margin-top:1px;}
+        .action-bar{padding:18px 40px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(5,13,26,0.85);backdrop-filter:blur(10px);position:sticky;bottom:0;z-index:10;}
+        .action-hint{font-size:12px;color:var(--faint);}
+        .action-hint span{color:var(--red);}
+        .action-btns{display:flex;gap:10px;}
+        .btn-cancel{height:44px;padding:0 22px;background:none;border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:14px;text-decoration:none;display:inline-flex;align-items:center;transition:background .15s,color .15s;}
+        .btn-cancel:hover{background:var(--card-hover);color:var(--text);}
+        .btn-submit{height:44px;padding:0 28px;background:var(--accent);border:none;border-radius:10px;font-family:'Syne',sans-serif;font-size:14px;font-weight:600;color:white;cursor:pointer;transition:background .2s,transform .15s;box-shadow:0 4px 16px rgba(59,130,246,.25);display:inline-flex;align-items:center;gap:8px;}
+        .btn-submit svg{width:15px;height:15px;}
+        .btn-submit:hover{background:#2563eb;transform:translateY(-1px);}
+        @@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+        @@media(max-width:1100px){.page-content{grid-template-columns:1fr}.preview-sticky{position:static}}
+        @@media(max-width:700px){.sidebar{display:none}.main{margin-left:0}.page-header,.page-content,.action-bar{padding-left:20px;padding-right:20px}.form-row{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
 
-    <div class="bg-layer">
-        <div class="bg-dots"></div>
-        <div class="bg-glow" style="width:400px;height:400px;top:-100px;right:5%;background:rgba(30,60,130,0.18);"></div>
+<div class="bg-layer"><div class="bg-dots"></div></div>
+
+<aside class="sidebar">
+    <div class="sidebar-logo">
+        <a href="/Admin/Dashboard"><img src="~/Content/images/logos/atlas_erp_diamante.svg" alt="Atlas ERP" /></a>
     </div>
+    <span class="menu-label">Principal</span>
+    <a href="/Admin/Dashboard" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
+    <a href="/Venda" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Vendas</a>
+    <a href="/Produto" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Produtos</a>
+    <a href="/Cliente" class="menu-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clientes</a>
+    <a href="/Fornecedor" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Fornecedores</a>
+    <a href="/Usuario" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>Funcion&aacute;rios</a>
+    <div class="sidebar-divider"></div>
+    <span class="menu-label">Sistema</span>
+    <a href="/Auth/Logout" class="menu-item danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sair</a>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-user">
+        @{ var nm = Session["UsuarioLogado"]?.ToString() ?? "Usuário"; var ini = nm.Length > 0 ? nm[0].ToString().ToUpper() : "U"; }
+        <div class="user-avatar">@ini</div>
+        <div><div class="user-name">@nm</div><div class="user-role">@(Session["Role"]?.ToString() ?? "Usuário")</div></div>
+    </div>
+</aside>
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-        <div class="sidebar-logo">
-            <a href="/Admin/Dashboard">
-                <img src="~/Content/images/logos/atlas_erp_diamante.svg" alt="Atlas ERP" />
-            </a>
-        </div>
+@using (Html.BeginForm("Create", "Cliente", FormMethod.Post, new { id = "mainForm" }))
+{
+    @Html.AntiForgeryToken()
 
-        <span class="menu-label">Principal</span>
-
-        <a href="/Admin/Dashboard" class="menu-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="7" height="7" rx="1" />
-                <rect x="14" y="3" width="7" height="7" rx="1" />
-                <rect x="3" y="14" width="7" height="7" rx="1" />
-                <rect x="14" y="14" width="7" height="7" rx="1" />
-            </svg>
-            Dashboard
-        </a>
-
-        <a href="/Venda" class="menu-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                <line x1="3" y1="6" x2="21" y2="6"/>
-                <path d="M16 10a4 4 0 0 1-8 0"/>
-            </svg>
-            Vendas
-        </a>
-
-        <a href="/Produto" class="menu-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-            </svg>
-            Produtos
-        </a>
-
-        <a href="/Cliente" class="menu-item active">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-            </svg>
-            Clientes
-        </a>
-
-        <a href="/Fornecedor" class="menu-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                <circle cx="9" cy="7" r="4"/>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-            </svg>
-            Fornecedores
-        </a>
-
-        <a href="/Usuario" class="menu-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-                <line x1="19" y1="8" x2="19" y2="14" />
-                <line x1="22" y1="11" x2="16" y2="11" />
-            </svg>
-            Funcionários
-        </a>
-
-        <div class="sidebar-divider"></div>
-        <span class="menu-label">Sistema</span>
-
-        <a href="/Auth/Logout" class="menu-item danger">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                <polyline points="16 17 21 12 16 7" />
-                <line x1="21" y1="12" x2="9" y2="12" />
-            </svg>
-            Sair
-        </a>
-
-        <div class="sidebar-spacer"></div>
-
-        <div class="sidebar-user">
-            @{
-                var nomeUsuario = Session["UsuarioLogado"]?.ToString() ?? "Usuário";
-                var inicial = nomeUsuario.Length > 0 ? nomeUsuario[0].ToString().ToUpper() : "U";
-            }
-            <div class="user-avatar">@inicial</div>
-            <div>
-                <div class="user-name">@nomeUsuario</div>
-                <div class="user-role">@(Session["Role"]?.ToString() ?? "Usuário")</div>
+    <div class="main">
+        <div class="page-header">
+            <div class="breadcrumb">
+                <a href="/Admin/Dashboard">Dashboard</a>
+                <span class="breadcrumb-sep">›</span>
+                <a href="/Cliente">Clientes</a>
+                <span class="breadcrumb-sep">›</span>
+                <span>Novo cadastro</span>
+            </div>
+            <div class="header-row">
+                <div>
+                    <div class="page-title">Novo Cliente</div>
+                    <div class="page-subtitle">CPF ou CNPJ preenchidos automaticamente — endereço via CEP</div>
+                </div>
+                <a href="/Cliente" class="btn-back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                    Voltar
+                </a>
             </div>
         </div>
-    </aside>
 
-    <!-- CONTEUDO -->
-    <main class="main">
+        <div class="page-content">
+            <div class="form-col">
 
-        <div class="topbar">
-            <div>
-                <div class="page-title">Novo Cliente</div>
-                <div class="page-subtitle">Preencha os dados para cadastrar</div>
+                <!-- 1: DOCUMENTO -->
+                <div class="form-section">
+                    <div class="section-head">
+                        <div class="section-num">1</div>
+                        <div>
+                            <div class="section-title">Identificação</div>
+                            <div class="section-desc">CPF validado automaticamente · CNPJ preenche os dados da empresa</div>
+                        </div>
+                    </div>
+                    <div class="section-body">
+                        <div class="form-group">
+                            <label class="form-label">
+                                CPF / CNPJ <span class="api-badge" id="docBadge"></span>
+                            </label>
+                            <div class="input-wrap">
+                                @Html.TextBoxFor(m => m.Documento, new { @class = "form-control form-control-lookup", placeholder = "CPF (000.000.000-00) ou CNPJ", id = "docInput", autocomplete = "off" })
+                                <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2: DADOS PESSOAIS -->
+                <div class="form-section">
+                    <div class="section-head">
+                        <div class="section-num">2</div>
+                        <div>
+                            <div class="section-title">Dados Pessoais</div>
+                            <div class="section-desc">Nome completo e informações de contato</div>
+                        </div>
+                    </div>
+                    <div class="section-body">
+                        <div class="form-group">
+                            <label class="form-label">Nome <span style="color:var(--red)">*</span></label>
+                            <div class="input-wrap">
+                                @Html.TextBoxFor(m => m.Nome, new { @class = "form-control", placeholder = "Nome completo do cliente", id = "nomeInput", required = "required" })
+                                <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Nome, "", new { @class = "field-error" })
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Telefone</label>
+                                <div class="input-wrap">
+                                    @Html.TextBoxFor(m => m.Telefone, new { @class = "form-control", placeholder = "(00) 00000-0000", id = "telInput" })
+                                    <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6.29 6.29l.95-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">E-mail</label>
+                                <div class="input-wrap">
+                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "cliente@email.com", id = "emailInput", type = "email" })
+                                    <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7L22 7"/></svg></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3: ENDEREÇO -->
+                <div class="form-section">
+                    <div class="section-head">
+                        <div class="section-num">3</div>
+                        <div>
+                            <div class="section-title">Endereço</div>
+                            <div class="section-desc">CEP preenche o endereço automaticamente</div>
+                        </div>
+                    </div>
+                    <div class="section-body">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">CEP <span class="api-badge" id="cepBadge"></span></label>
+                                <div class="input-wrap">
+                                    <input type="text" id="cepInput" class="form-control form-control-lookup" placeholder="00000-000" maxlength="9" autocomplete="off" />
+                                    <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Endereço</label>
+                            <div class="input-wrap">
+                                @Html.TextBoxFor(m => m.Endereco, new { @class = "form-control", placeholder = "Rua, número, bairro, cidade — UF", id = "enderecoInput" })
+                                <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4: COMERCIAL -->
+                <div class="form-section">
+                    <div class="section-head">
+                        <div class="section-num">4</div>
+                        <div>
+                            <div class="section-title">Configurações Comerciais</div>
+                            <div class="section-desc">Limite de crédito e status do cliente</div>
+                        </div>
+                    </div>
+                    <div class="section-body">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Limite de Crédito (R$)</label>
+                                <div class="input-wrap">
+                                    @Html.TextBoxFor(m => m.LimiteCredito, new { @class = "form-control", placeholder = "0,00", type = "number", step = "0.01", min = "0", id = "limiteInput" })
+                                    <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6"/></svg></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Status</label>
+                                <div class="input-wrap">
+                                    @Html.DropDownListFor(m => m.Ativo,
+                                        new SelectList(new[] {
+                                            new { Value = "true",  Text = "Ativo" },
+                                            new { Value = "false", Text = "Inativo" }
+                                        }, "Value", "Text"),
+                                        new { @class = "form-control", id = "statusInput" }
+                                    )
+                                    <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /form-col -->
+
+            <!-- PREVIEW -->
+            <div class="preview-sticky">
+                <div class="preview-label">Prévia do cadastro</div>
+                <div class="preview-card">
+                    <div class="preview-top">
+                        <div class="preview-avatar" id="previewAvatar">?</div>
+                        <div class="preview-name" id="previewNome">Nome do cliente</div>
+                        <div class="preview-doc" id="previewDoc">Documento não informado</div>
+                    </div>
+                    <div class="preview-body">
+                        <div class="preview-row">
+                            <div class="preview-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07"/><path d="M1.61 3.4a2 2 0 0 1 2-.18h3a2 2 0 0 1 2 1.72"/></svg></div>
+                            <div><div class="preview-field-label">Telefone</div><div class="preview-field-val empty" id="previewTel">Não informado</div></div>
+                        </div>
+                        <div class="preview-row">
+                            <div class="preview-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7L22 7"/></svg></div>
+                            <div><div class="preview-field-label">E-mail</div><div class="preview-field-val empty" id="previewEmail">Não informado</div></div>
+                        </div>
+                        <div class="preview-row">
+                            <div class="preview-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+                            <div><div class="preview-field-label">Endereço</div><div class="preview-field-val empty" id="previewEndereco">Não informado</div></div>
+                        </div>
+                        <div class="preview-row">
+                            <div class="preview-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6"/></svg></div>
+                            <div><div class="preview-field-label">Limite de Crédito</div><div class="preview-field-val empty" id="previewLimite">R$ 0,00</div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="preview-tip">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    CNPJ preenche automaticamente. CPF é validado. CEP completa o endereço.
+                </div>
             </div>
-            <a href="/Cliente" class="btn-back">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="15 18 9 12 15 6" />
-                </svg>
-                Voltar
-            </a>
+
         </div>
 
-        <div class="form-card">
-
-            @using (Html.BeginForm("Create", "Cliente", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-                <div class="form-section-title">Dados Pessoais</div>
-
-                <div class="form-group">
-                    <label class="form-label">Nome completo</label>
-                    <div class="input-wrap">
-                        @Html.TextBoxFor(m => m.Nome, new { @class = "form-control", placeholder = "Nome do cliente" })
-                        <span class="input-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                <circle cx="12" cy="7" r="4" />
-                            </svg>
-                        </span>
-                    </div>
-                    @Html.ValidationMessageFor(m => m.Nome, "", new { @class = "field-error" })
-                </div>
-
-                <div class="form-row-2">
-                    <div class="form-group">
-                        <label class="form-label">Documento (CPF/CNPJ)</label>
-                        <div class="input-wrap">
-                            @Html.TextBoxFor(m => m.Documento, new { @class = "form-control", placeholder = "000.000.000-00", id = "docInput" })
-                            <span class="input-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                    <polyline points="14 2 14 8 20 8" />
-                                </svg>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Telefone</label>
-                        <div class="input-wrap">
-                            @Html.TextBoxFor(m => m.Telefone, new { @class = "form-control", placeholder = "(00) 00000-0000", id = "telInput" })
-                            <span class="input-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6.29 6.29l.95-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
-                                </svg>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">E-mail</label>
-                    <div class="input-wrap">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "cliente@email.com", type = "email" })
-                        <span class="input-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="2" y="4" width="20" height="16" rx="2" />
-                                <path d="m2 7 10 7L22 7" />
-                            </svg>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Endereço</label>
-                    <div class="input-wrap">
-                        @Html.TextBoxFor(m => m.Endereco, new { @class = "form-control", placeholder = "Rua, número, bairro, cidade - UF" })
-                        <span class="input-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                <circle cx="12" cy="10" r="3" />
-                            </svg>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="form-divider"></div>
-                <div class="form-section-title">Informações Comerciais</div>
-
-                <div class="form-row-2">
-                    <div class="form-group">
-                        <label class="form-label">Limite de Crédito (R$)</label>
-                        <div class="input-wrap">
-                            @Html.TextBoxFor(m => m.LimiteCredito, new { @class = "form-control", placeholder = "0,00", type = "number", step = "0.01", min = "0" })
-                            <span class="input-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="12" y1="1" x2="12" y2="23" />
-                                    <path d="M17 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6" />
-                                </svg>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Status</label>
-                        <div class="input-wrap">
-                            @Html.DropDownListFor(m => m.Ativo,
-                                new SelectList(new[] {
-                                    new { Value = "true",  Text = "Ativo" },
-                                    new { Value = "false", Text = "Inativo" }
-                                }, "Value", "Text"),
-                                new { @class = "form-control" }
-                            )
-                            <span class="input-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10" />
-                                    <polyline points="12 6 12 12 16 14" />
-                                </svg>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-actions">
-                    <a href="/Cliente" class="btn-cancel">Cancelar</a>
-                    <button type="submit" class="btn-submit">Cadastrar Cliente</button>
-                </div>
-            }
+        <div class="action-bar">
+            <span class="action-hint"><span>*</span> Campos obrigatórios</span>
+            <div class="action-btns">
+                <a href="/Cliente" class="btn-cancel">Cancelar</a>
+                <button type="submit" class="btn-submit">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    Cadastrar Cliente
+                </button>
+            </div>
         </div>
-    </main>
+    </div>
+}
 
-    <script>
-        document.getElementById('docInput').addEventListener('input', function(e) {
-            var v = e.target.value.replace(/\D/g, '');
-            if (v.length <= 11) {
-                v = v.replace(/(\d{3})(\d)/, '$1.$2');
-                v = v.replace(/(\d{3})(\d)/, '$1.$2');
-                v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-            } else {
-                v = v.replace(/^(\d{2})(\d)/, '$1.$2');
-                v = v.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
-                v = v.replace(/\.(\d{3})(\d)/, '.$1/$2');
-                v = v.replace(/(\d{4})(\d)/, '$1-$2');
-            }
-            e.target.value = v;
-        });
+<script>
+    function maskCPF(v){v=v.replace(/\D/g,'').slice(0,11);v=v.replace(/(\d{3})(\d)/,'$1.$2');v=v.replace(/(\d{3})(\d)/,'$1.$2');v=v.replace(/(\d{3})(\d{1,2})$/,'$1-$2');return v;}
+    function maskCNPJ(v){v=v.replace(/\D/g,'').slice(0,14);v=v.replace(/^(\d{2})(\d)/,'$1.$2');v=v.replace(/^(\d{2})\.(\d{3})(\d)/,'$1.$2.$3');v=v.replace(/\.(\d{3})(\d)/,'.$1/$2');v=v.replace(/(\d{4})(\d)/,'$1-$2');return v;}
+    function maskTel(v){v=v.replace(/\D/g,'').slice(0,11);v=v.replace(/^(\d{2})(\d)/,'($1) $2');v=v.replace(/(\d{5})(\d)/,'$1-$2');return v;}
+    function maskCEP(v){v=v.replace(/\D/g,'').slice(0,8);v=v.replace(/^(\d{5})(\d)/,'$1-$2');return v;}
 
-        document.getElementById('telInput').addEventListener('input', function(e) {
-            var v = e.target.value.replace(/\D/g, '');
-            v = v.replace(/^(\d{2})(\d)/, '($1) $2');
-            v = v.replace(/(\d{5})(\d)/, '$1-$2');
-            e.target.value = v;
-        });
-    </script>
+    function validarCPF(cpf){
+        cpf=cpf.replace(/\D/g,'');
+        if(cpf.length!==11||/^(\d)\1{10}$/.test(cpf))return false;
+        var s=0,r;
+        for(var i=0;i<9;i++)s+=parseInt(cpf[i])*(10-i);
+        r=(s*10)%11;if(r===10||r===11)r=0;if(r!==parseInt(cpf[9]))return false;
+        s=0;for(var i=0;i<10;i++)s+=parseInt(cpf[i])*(11-i);
+        r=(s*10)%11;if(r===10||r===11)r=0;return r===parseInt(cpf[10]);
+    }
 
+    function badge(id,state,msg){var el=document.getElementById(id);el.className='api-badge show '+state;el.innerHTML=state==='loading'?'<span class="spinner"></span> '+msg:msg;}
+    function hideBadge(id){document.getElementById(id).className='api-badge';}
+
+    function updatePreview(){
+        var nome=document.getElementById('nomeInput').value.trim();
+        var doc=document.getElementById('docInput').value.trim();
+        var tel=document.getElementById('telInput').value.trim();
+        var email=document.getElementById('emailInput').value.trim();
+        var end=document.getElementById('enderecoInput').value.trim();
+        var limite=document.getElementById('limiteInput').value.trim();
+
+        document.getElementById('previewNome').textContent=nome||'Nome do cliente';
+        document.getElementById('previewDoc').textContent=doc||'Documento não informado';
+        var av=document.getElementById('previewAvatar');
+        av.textContent=nome?nome[0].toUpperCase():'?';
+
+        function setF(id,val,empty){var el=document.getElementById(id);if(val){el.textContent=val;el.classList.remove('empty');}else{el.textContent=empty;el.classList.add('empty');}}
+        setF('previewTel',tel,'Não informado');
+        setF('previewEmail',email,'Não informado');
+        setF('previewEndereco',end,'Não informado');
+        setF('previewLimite',limite?'R$ '+parseFloat(limite).toFixed(2).replace('.',','):null,'R$ 0,00');
+    }
+
+    ['nomeInput','telInput','emailInput','enderecoInput','limiteInput'].forEach(function(id){
+        var el=document.getElementById(id);
+        if(el)el.addEventListener('input',updatePreview);
+    });
+
+    var docTimer=null;
+    document.getElementById('docInput').addEventListener('input',function(e){
+        clearTimeout(docTimer);
+        var digits=e.target.value.replace(/\D/g,'');
+        if(digits.length<=11){
+            e.target.value=maskCPF(e.target.value);
+            if(digits.length===11){
+                docTimer=setTimeout(function(){
+                    if(validarCPF(digits)){badge('docBadge','ok','✓ CPF válido');}
+                    else{badge('docBadge','err','✗ CPF inválido');}
+                    setTimeout(function(){hideBadge('docBadge');},4000);
+                },300);
+            }else{hideBadge('docBadge');}
+        }else{
+            e.target.value=maskCNPJ(e.target.value);
+            if(digits.length===14){docTimer=setTimeout(function(){buscarCNPJ(digits);},300);}
+            else{hideBadge('docBadge');}
+        }
+        updatePreview();
+    });
+    document.getElementById('telInput').addEventListener('input',function(e){e.target.value=maskTel(e.target.value);});
+    document.getElementById('cepInput').addEventListener('input',function(e){
+        e.target.value=maskCEP(e.target.value);
+        if(e.target.value.replace(/\D/g,'').length===8)buscarCEP(e.target.value.replace(/\D/g,''));
+    });
+
+    function buscarCNPJ(digits){
+        badge('docBadge','loading','Consultando CNPJ...');
+        fetch('https://brasilapi.com.br/api/cnpj/v1/'+digits)
+            .then(function(r){return r.ok?r.json():Promise.reject('CNPJ não encontrado');})
+            .then(function(d){
+                var nome=d.razao_social||d.nome_fantasia||'';
+                var tel=d.ddd_telefone_1?d.ddd_telefone_1.replace(/\D/g,''):'';
+                var end=[d.logradouro,d.numero,d.bairro,d.municipio,d.uf].filter(Boolean).join(', ');
+                if(nome)document.getElementById('nomeInput').value=nome;
+                if(tel)document.getElementById('telInput').value=maskTel(tel);
+                if(d.email)document.getElementById('emailInput').value=d.email;
+                if(end)document.getElementById('enderecoInput').value=end;
+                updatePreview();
+                badge('docBadge','ok','✓ Dados preenchidos');
+                setTimeout(function(){hideBadge('docBadge');},3000);
+            })
+            .catch(function(err){
+                badge('docBadge','err','✗ '+(typeof err==='string'?err:'Erro'));
+                setTimeout(function(){hideBadge('docBadge');},4000);
+            });
+    }
+
+    function buscarCEP(digits){
+        badge('cepBadge','loading','Buscando...');
+        fetch('https://brasilapi.com.br/api/cep/v2/'+digits)
+            .then(function(r){return r.ok?r.json():Promise.reject('CEP não encontrado');})
+            .then(function(d){
+                var end=[d.street,d.neighborhood,d.city,d.state].filter(Boolean).join(', ');
+                if(end){document.getElementById('enderecoInput').value=end;updatePreview();}
+                badge('cepBadge','ok','✓ Preenchido');
+                setTimeout(function(){hideBadge('cepBadge');},3000);
+            })
+            .catch(function(err){
+                badge('cepBadge','err','✗ '+(typeof err==='string'?err:'Inválido'));
+                setTimeout(function(){hideBadge('cepBadge');},4000);
+            });
+    }
+</script>
 </body>
 </html>

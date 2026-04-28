@@ -32,7 +32,7 @@
             --text: #e8f0fe;
             --muted: #7a9cc8;
             --faint: #3d5270;
-            --sidebar-w: 240px;
+            --sidebar-w: 320px;
             --radius: 14px;
         }
 
@@ -92,13 +92,23 @@
         }
 
         .sidebar-logo {
-            padding: 0 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
             margin-bottom: 36px;
         }
 
+            .sidebar-logo a {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+            }
+
             .sidebar-logo img {
-                width: 110px;
-                filter: brightness(0) invert(1);
+                width: 300px;
+                max-width: 100%;
             }
 
         .sidebar-divider {
@@ -810,8 +820,8 @@
     <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="sidebar-logo">
-            <a href="/Admin/Dashboard ">
-                <img src="~/Content/images/Logo_atlas.png" alt="Atlas ERP" />
+            <a href="/Admin/Dashboard">
+                <img src="~/Content/images/logos/atlas_erp_diamante.svg" alt="Atlas ERP" />
             </a>
         </div>
 
@@ -825,6 +835,15 @@
                 <rect x="14" y="14" width="7" height="7" rx="1" />
             </svg>
             Dashboard
+        </a>
+
+        <a href="/Venda" class="menu-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <path d="M16 10a4 4 0 0 1-8 0" />
+            </svg>
+            Vendas
         </a>
 
         <a href="/Produto" class="menu-item">
@@ -842,6 +861,15 @@
                 <path d="M16 3.13a4 4 0 0 1 0 7.75" />
             </svg>
             Clientes
+        </a>
+
+        <a href="/Fornecedor" class="menu-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            </svg>
+            Fornecedores
         </a>
 
         <a href="/Usuario" class="menu-item active">

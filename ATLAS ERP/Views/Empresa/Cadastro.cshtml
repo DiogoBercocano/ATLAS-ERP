@@ -540,6 +540,15 @@
             line-height: 1.6;
         }
 
+        .form-control-lookup { padding-right: 110px; }
+        .api-badge { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 11px; font-weight: 500; display: none; align-items: center; gap: 5px; white-space: nowrap; border-radius: 6px; padding: 2px 8px; }
+        .api-badge.show { display: flex; }
+        .api-badge.loading { color: var(--muted); background: rgba(100,160,255,0.08); }
+        .api-badge.ok { color: var(--green); background: var(--green-soft); }
+        .api-badge.err { color: var(--red); background: var(--red-soft); }
+        .spinner { width: 11px; height: 11px; border: 2px solid rgba(100,160,255,0.18); border-top-color: #60a5fa; border-radius: 50%; animation: spin .7s linear infinite; display: inline-block; }
+        @@keyframes spin { to { transform: rotate(360deg); } }
+
         @@keyframes fadeUp {
             from {
                 opacity: 0;
@@ -704,10 +713,24 @@
                     </div>
 
                     <div class="form-group">
+                        <label class="form-label">CNPJ <span id="cnpjBadge" class="api-badge"></span></label>
+                        <div class="input-wrap">
+                            <input type="text" name="CNPJ" id="cnpjInput" class="form-control form-control-lookup"
+                                   placeholder="00.000.000/0000-00" maxlength="18" required autocomplete="off" />
+                            <span class="input-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label class="form-label">Razão Social</label>
                         <div class="input-wrap">
-                            <input type="text" name="NomeEmpresa" class="form-control"
-                                   placeholder="Ex: Comércio e Serviços Silva Ltda" required />
+                            <input type="text" name="NomeEmpresa" id="nomeEmpresaInput" class="form-control"
+                                   placeholder="Preenchida automaticamente pelo CNPJ" required />
                             <span class="input-icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <rect x="2" y="7" width="20" height="14" rx="2" />
@@ -718,19 +741,6 @@
                     </div>
 
                     <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">CNPJ</label>
-                            <div class="input-wrap">
-                                <input type="text" name="CNPJ" id="cnpjInput" class="form-control"
-                                       placeholder="00.000.000/0000-00" maxlength="18" required />
-                                <span class="input-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                        <polyline points="14 2 14 8 20 8" />
-                                    </svg>
-                                </span>
-                            </div>
-                        </div>
                         <div class="form-group">
                             <label class="form-label">Segmento</label>
                             <div class="input-wrap">
@@ -751,17 +761,56 @@
                                 </span>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="form-label">Telefone</label>
+                            <div class="input-wrap">
+                                <input type="text" name="Telefone" id="telEmpresaInput" class="form-control"
+                                       placeholder="(00) 00000-0000" maxlength="15" />
+                                <span class="input-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6.29 6.29l.95-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">CEP <span id="cepBadge" class="api-badge"></span></label>
+                            <div class="input-wrap">
+                                <input type="text" id="cepInput" class="form-control form-control-lookup"
+                                       placeholder="00000-000" maxlength="9" autocomplete="off" />
+                                <span class="input-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">E-mail Corporativo</label>
+                            <div class="input-wrap">
+                                <input type="email" name="EmailEmpresa" id="emailEmpresaInput" class="form-control"
+                                       placeholder="contato@suaempresa.com.br" />
+                                <span class="input-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="2" y="4" width="20" height="16" rx="2" />
+                                        <path d="m2 7 10 7L22 7" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="form-group" style="margin-bottom:0;">
-                        <label class="form-label">E-mail Corporativo</label>
+                        <label class="form-label">Endereço</label>
                         <div class="input-wrap">
-                            <input type="email" name="EmailEmpresa" class="form-control"
-                                   placeholder="contato@suaempresa.com.br" />
+                            <input type="text" name="Endereco" id="enderecoEmpresaInput" class="form-control"
+                                   placeholder="Preenchido pelo CEP ou digitar manualmente" />
                             <span class="input-icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="2" y="4" width="20" height="16" rx="2" />
-                                    <path d="m2 7 10 7L22 7" />
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
                                 </svg>
                             </span>
                         </div>
@@ -848,7 +897,8 @@
         </div>
     </div>
 
-    <script>// toggle senha
+    <script>
+        // --- Toggle senha ---
         function toggleSenha() {
             var input = document.getElementById('senhaInput');
             var icon  = document.getElementById('eyeIcon');
@@ -861,15 +911,87 @@
             }
         }
 
-        // mascara CNPJ
-        document.getElementById('cnpjInput').addEventListener('input', function(e) {
-            var v = e.target.value.replace(/\D/g, '');
+        // --- Máscaras ---
+        function maskCNPJ(v) {
+            v = v.replace(/\D/g, '').slice(0, 14);
             v = v.replace(/^(\d{2})(\d)/, '$1.$2');
             v = v.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
             v = v.replace(/\.(\d{3})(\d)/, '.$1/$2');
             v = v.replace(/(\d{4})(\d)/, '$1-$2');
-            e.target.value = v;
-        });</script>
+            return v;
+        }
+        function maskTel(v) {
+            v = v.replace(/\D/g, '').slice(0, 11);
+            v = v.replace(/^(\d{2})(\d)/, '($1) $2');
+            v = v.replace(/(\d{5})(\d)/, '$1-$2');
+            return v;
+        }
+        function maskCEP(v) {
+            v = v.replace(/\D/g, '').slice(0, 8);
+            v = v.replace(/^(\d{5})(\d)/, '$1-$2');
+            return v;
+        }
+
+        // --- Badge helpers ---
+        function badge(id, state, msg) {
+            var el = document.getElementById(id);
+            el.className = 'api-badge show ' + state;
+            el.innerHTML = state === 'loading' ? '<span class="spinner"></span> ' + msg : msg;
+        }
+        function hideBadge(id) { document.getElementById(id).className = 'api-badge'; }
+
+        // --- Listeners ---
+        document.getElementById('cnpjInput').addEventListener('input', function(e) {
+            e.target.value = maskCNPJ(e.target.value);
+            if (e.target.value.replace(/\D/g, '').length === 14) buscarCNPJ(e.target.value.replace(/\D/g, ''));
+        });
+        document.getElementById('telEmpresaInput').addEventListener('input', function(e) { e.target.value = maskTel(e.target.value); });
+        document.getElementById('cepInput').addEventListener('input', function(e) {
+            e.target.value = maskCEP(e.target.value);
+            if (e.target.value.replace(/\D/g, '').length === 8) buscarCEP(e.target.value.replace(/\D/g, ''));
+        });
+
+        // --- Busca CNPJ (BrasilAPI) ---
+        function buscarCNPJ(digits) {
+            badge('cnpjBadge', 'loading', 'Consultando...');
+            fetch('https://brasilapi.com.br/api/cnpj/v1/' + digits)
+                .then(function(r) { return r.ok ? r.json() : Promise.reject('CNPJ não encontrado'); })
+                .then(function(d) {
+                    var nome = d.razao_social || d.nome_fantasia || '';
+                    var tel  = d.ddd_telefone_1 ? d.ddd_telefone_1.replace(/\D/g,'') : '';
+                    var end  = [d.logradouro, d.numero, d.bairro, d.municipio, d.uf].filter(Boolean).join(', ');
+
+                    if (nome) document.getElementById('nomeEmpresaInput').value = nome;
+                    if (tel)  document.getElementById('telEmpresaInput').value  = maskTel(tel);
+                    if (d.email) document.getElementById('emailEmpresaInput').value = d.email;
+                    if (end)  document.getElementById('enderecoEmpresaInput').value = end;
+
+                    badge('cnpjBadge', 'ok', '✓ Dados preenchidos');
+                    setTimeout(function(){ hideBadge('cnpjBadge'); }, 3000);
+                })
+                .catch(function(err) {
+                    badge('cnpjBadge', 'err', '✗ ' + (typeof err === 'string' ? err : 'Erro na consulta'));
+                    setTimeout(function(){ hideBadge('cnpjBadge'); }, 4000);
+                });
+        }
+
+        // --- Busca CEP (BrasilAPI) ---
+        function buscarCEP(digits) {
+            badge('cepBadge', 'loading', 'Buscando...');
+            fetch('https://brasilapi.com.br/api/cep/v2/' + digits)
+                .then(function(r) { return r.ok ? r.json() : Promise.reject('CEP não encontrado'); })
+                .then(function(d) {
+                    var end = [d.street, d.neighborhood, d.city, d.state].filter(Boolean).join(', ');
+                    if (end) document.getElementById('enderecoEmpresaInput').value = end;
+                    badge('cepBadge', 'ok', '✓ Endereço preenchido');
+                    setTimeout(function(){ hideBadge('cepBadge'); }, 3000);
+                })
+                .catch(function(err) {
+                    badge('cepBadge', 'err', '✗ ' + (typeof err === 'string' ? err : 'CEP inválido'));
+                    setTimeout(function(){ hideBadge('cepBadge'); }, 4000);
+                });
+        }
+    </script>
 
 </body>
 </html>
