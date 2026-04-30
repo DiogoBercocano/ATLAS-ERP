@@ -167,6 +167,10 @@
     <Compile Include="Migrations\20260429204000_FinalCargoPermissaoSync.Designer.cs">
       <DependentUpon>20260429204000_FinalCargoPermissaoSync.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20260430_AddDefaultPermissoes.cs" />
+    <Compile Include="Migrations\20260430_AddDefaultPermissoes.Designer.cs">
+      <DependentUpon>20260430_AddDefaultPermissoes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\CargoService.cs" />
     <Compile Include="Services\ClienteService.cs" />
     <Compile Include="Services\FornecedorService.cs" />
@@ -361,6 +365,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\20260429204000_FinalCargoPermissaoSync.resx">
       <DependentUpon>20260429204000_FinalCargoPermissaoSync.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\20260430_AddDefaultPermissoes.resx">
+      <DependentUpon>20260430_AddDefaultPermissoes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

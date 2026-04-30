@@ -67,6 +67,7 @@ namespace ATLAS_ERP.Filters
                 return;
 
             var cargoId = (int?)session["CargoId"];
+            var cargoNome = session["CargoNome"]?.ToString();
 
             if (!cargoId.HasValue)
             {
@@ -74,19 +75,28 @@ namespace ATLAS_ERP.Filters
                 return;
             }
 
-            using (var db = new AtlasContext())
+            try
             {
-                var temPermissao = db.CargoPermissoes
-                    .Where(cp => cp.CargoId == cargoId.Value)
-                    .Select(cp => cp.Permissao.Chave)
-                    .ToList()
-                    .Any(chave => permissoes.Contains(chave));
-
-                if (!temPermissao)
+                using (var db = new AtlasContext())
                 {
-                    filterContext.Result = new RedirectResult("/Admin/Dashboard");
-                    return;
+                    var usuarioPermissoes = db.CargoPermissoes
+                        .Where(cp => cp.CargoId == cargoId.Value)
+                        .Select(cp => cp.Permissao.Chave)
+                        .ToList();
+
+                    var temPermissao = usuarioPermissoes.Any(chave => permissoes.Contains(chave));
+
+                    if (!temPermissao)
+                    {
+                        filterContext.Result = new RedirectResult("/Admin/Dashboard");
+                        return;
+                    }
                 }
+            }
+            catch (System.Exception)
+            {
+                filterContext.Result = new RedirectResult("/Auth/Login");
+                return;
             }
         }
     }
