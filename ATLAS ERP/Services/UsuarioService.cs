@@ -30,14 +30,14 @@ namespace ATLAS_ERP.Services
             _db.SaveChanges();
         }
 
-        public bool Editar(int usuarioId, int empresaId, string name, string email, string role, bool ativo)
+        public bool Editar(int usuarioId, int empresaId, string name, string email, int? cargoId, bool ativo)
         {
             var u = _db.Usuarios.FirstOrDefault(x => x.UsuarioId == usuarioId && x.EmpresaId == empresaId);
             if (u == null) return false;
 
             u.Name  = name;
             u.Email = email;
-            u.Role  = role;
+            u.CargoId = cargoId;
             u.Ativo = ativo;
             _db.Entry(u).State = System.Data.Entity.EntityState.Modified;
             _db.SaveChanges();

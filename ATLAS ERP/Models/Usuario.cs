@@ -11,7 +11,6 @@ namespace ATLAS_ERP.Models
     {
         public int UsuarioId { get; set; }
 
-
         [Required]
         public string Name { get; set; }
 
@@ -21,9 +20,12 @@ namespace ATLAS_ERP.Models
 
         [Required]
         public string SenhaHash { get; set; }
-        public string Role { get; set; }
-        public bool Ativo { get; set; }
 
+        [ForeignKey("Cargo")]
+        public int? CargoId { get; set; }
+        public virtual Cargo Cargo { get; set; }
+
+        public bool Ativo { get; set; }
 
         [ForeignKey("Empresa")]
         public int? EmpresaId { get; set; }

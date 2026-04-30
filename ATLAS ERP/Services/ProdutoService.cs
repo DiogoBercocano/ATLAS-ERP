@@ -34,7 +34,7 @@ namespace ATLAS_ERP.Services
         }
 
         public bool Editar(int produtoId, int empresaId, string nome, string categoria,
-                           decimal precoVenda, int estoqueMinimo, bool ativo)
+                           decimal precoVenda, int estoqueMinimo, bool ativo, string fotoUrl = null)
         {
             var p = _db.Produtos.FirstOrDefault(x => x.ProdutoId == produtoId && x.EmpresaId == empresaId);
             if (p == null) return false;
@@ -44,6 +44,7 @@ namespace ATLAS_ERP.Services
             p.PrecoVenda    = precoVenda;
             p.EstoqueMinimo = estoqueMinimo;
             p.Ativo         = ativo;
+            if (fotoUrl != null) p.FotoUrl = fotoUrl;
             _db.Entry(p).State = System.Data.Entity.EntityState.Modified;
             _db.SaveChanges();
             return true;

@@ -23,6 +23,8 @@ namespace ATLAS_ERP.Models
         public int EstoqueAtual  { get; set; }
         public bool Ativo { get; set; }
 
+        public string FotoUrl { get; set; }
+
         [ForeignKey("Empresa")]
         public int EmpresaId { get; set; }
         public Empresa Empresa { get; set; }

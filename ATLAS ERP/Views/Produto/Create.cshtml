@@ -1,7 +1,8 @@
-@model ATLAS_ERP.Models.Produto
+﻿@model ATLAS_ERP.Models.Produto
 @{
     ViewBag.Title = "Novo Produto - Atlas ERP";
     Layout = null;
+    var role = Session["CargoNome"]?.ToString() ?? "";
 }
 
 <!DOCTYPE html>
@@ -56,7 +57,7 @@
         .bg-layer { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
         .bg-dots {
             position: absolute; inset: 0;
-            background-image: radial-gradient(circle, rgba(59,130,246,0.10) 1px, transparent 1px);
+            background-image: radial-gradient(circle, rgba(59,130,246,0.09) 1px, transparent 1px);
             background-size: 36px 36px;
             mask-image: radial-gradient(ellipse 80% 70% at 60% 30%, black, transparent);
         }
@@ -134,11 +135,7 @@
         .breadcrumb a { color: var(--faint); text-decoration: none; transition: color .15s; }
         .breadcrumb a:hover { color: var(--muted); }
         .breadcrumb-sep { opacity: .5; }
-        .breadcrumb-current { color: var(--muted); }
-        .page-title {
-            font-family: 'Syne', sans-serif;
-            font-size: 20px; font-weight: 700; margin-top: 3px;
-        }
+        .page-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-top: 3px; }
         .btn-back {
             display: inline-flex; align-items: center; gap: 7px;
             color: var(--muted); text-decoration: none; font-size: 13px;
@@ -156,7 +153,7 @@
         }
         .form-area { flex: 1; min-width: 0; }
 
-        /* SECTIONS */
+        /* SECTION CARDS */
         .section-card {
             background: var(--card); border: 1px solid var(--border);
             border-radius: var(--radius); padding: 28px 32px;
@@ -164,10 +161,8 @@
         }
         .section-card:nth-child(2) { animation-delay: .07s; }
         .section-card:nth-child(3) { animation-delay: .14s; }
-        .section-head {
-            display: flex; align-items: flex-start; gap: 14px;
-            margin-bottom: 24px;
-        }
+
+        .section-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 24px; }
         .section-num {
             width: 28px; height: 28px; border-radius: 8px;
             background: var(--accent-soft); border: 1px solid rgba(59,130,246,0.25);
@@ -175,10 +170,7 @@
             font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
             color: var(--accent-light); flex-shrink: 0; margin-top: 2px;
         }
-        .section-title {
-            font-family: 'Syne', sans-serif;
-            font-size: 14px; font-weight: 700; color: var(--text);
-        }
+        .section-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; }
         .section-desc { font-size: 12px; color: var(--faint); margin-top: 2px; }
 
         /* FORM */
@@ -197,10 +189,6 @@
             color: var(--faint); pointer-events: none; display: flex;
         }
         .input-icon svg { width: 15px; height: 15px; }
-        .input-suffix {
-            position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
-            font-size: 12px; color: var(--faint); pointer-events: none;
-        }
 
         .form-control {
             width: 100%; height: 46px;
@@ -214,19 +202,49 @@
         .form-control:hover { border-color: var(--border-md); }
         .form-control:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
         .form-control.no-icon { padding-left: 14px; }
-        .form-control.has-suffix { padding-right: 52px; }
 
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+        .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
         .field-error { font-size: 12px; color: var(--red); margin-top: 5px; }
-        .field-hint { font-size: 11px; color: var(--faint); margin-top: 5px; }
+        .field-hint  { font-size: 11px; color: var(--faint); margin-top: 5px; }
 
         .validation-summary {
             background: var(--red-soft); border: 1px solid rgba(248,113,113,0.2);
             border-radius: 10px; padding: 12px 16px; margin-bottom: 20px;
             font-size: 13px; color: var(--red);
         }
+
+        /* FOTO UPLOAD */
+        .foto-drop {
+            border: 2px dashed var(--border-md); border-radius: 12px;
+            background: var(--panel); cursor: pointer;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 10px; padding: 28px 20px; transition: border-color .2s, background .2s;
+            position: relative; overflow: hidden;
+        }
+        .foto-drop:hover, .foto-drop.drag-over { border-color: var(--accent); background: var(--accent-soft); }
+        .foto-drop input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+        .foto-drop-icon { color: var(--faint); }
+        .foto-drop-icon svg { width: 36px; height: 36px; }
+        .foto-drop-text { font-size: 13px; color: var(--muted); text-align: center; line-height: 1.5; }
+        .foto-drop-text strong { color: var(--accent-light); }
+        .foto-drop-hint { font-size: 11px; color: var(--faint); }
+        .foto-preview-wrap { display: none; position: relative; }
+        .foto-preview-img {
+            width: 100%; max-height: 220px; object-fit: cover;
+            border-radius: 10px; border: 1px solid var(--border-md);
+            display: block;
+        }
+        .foto-remove-btn {
+            position: absolute; top: 8px; right: 8px;
+            width: 28px; height: 28px; border-radius: 8px;
+            background: rgba(2,8,18,.8); border: 1px solid rgba(248,113,113,.3);
+            color: var(--red); cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background .15s;
+        }
+        .foto-remove-btn:hover { background: var(--red-soft); }
+        .foto-remove-btn svg { width: 13px; height: 13px; }
 
         /* CATEGORY CHIPS */
         .cat-grid {
@@ -236,29 +254,26 @@
         .cat-chip {
             display: flex; flex-direction: column; align-items: center; gap: 5px;
             padding: 12px 8px; border-radius: 10px;
-            border: 1px solid var(--border);
-            background: var(--panel); cursor: pointer;
-            transition: all .18s; font-size: 11px; color: var(--muted);
-            font-weight: 500; letter-spacing: .03em; text-align: center;
-            user-select: none;
+            border: 1px solid var(--border); background: var(--panel);
+            cursor: pointer; transition: all .18s;
+            font-size: 11px; color: var(--muted); font-weight: 500;
+            text-align: center; user-select: none;
         }
-        .cat-chip .cat-icon { font-size: 22px; line-height: 1; }
+        .cat-chip .cat-icon { width: 28px; height: 28px; line-height: 1; color: currentColor; }
         .cat-chip:hover { border-color: var(--border-md); color: var(--text); background: var(--card-hover); }
         .cat-chip.selected { font-weight: 600; }
+        .cat-chip[data-cat="Eletronicos"].selected  { border-color: rgba(59,130,246,.4); background: var(--accent-soft); color: var(--accent-light); }
+        .cat-chip[data-cat="Alimentos"].selected    { border-color: rgba(52,211,153,.4); background: var(--green-soft);  color: var(--green); }
+        .cat-chip[data-cat="Roupas"].selected       { border-color: rgba(244,114,182,.4); background: var(--pink-soft);  color: var(--pink); }
+        .cat-chip[data-cat="Ferramentas"].selected  { border-color: rgba(251,146,60,.4); background: var(--orange-soft); color: var(--orange); }
+        .cat-chip[data-cat="Servicos"].selected     { border-color: rgba(167,139,250,.4); background: var(--purple-soft); color: var(--purple); }
+        .cat-chip[data-cat="Bebidas"].selected      { border-color: rgba(45,212,191,.4); background: var(--teal-soft);  color: var(--teal); }
+        .cat-chip[data-cat="Limpeza"].selected      { border-color: rgba(59,130,246,.4); background: var(--accent-soft); color: var(--accent-light); }
+        .cat-chip[data-cat="Outros"].selected       { border-color: rgba(201,168,76,.4); background: var(--gold-soft);  color: var(--gold); }
 
-        .cat-chip[data-cat="Eletrônicos"].selected      { border-color: rgba(59,130,246,.4); background: var(--accent-soft); color: var(--accent-light); }
-        .cat-chip[data-cat="Alimentos"].selected        { border-color: rgba(52,211,153,.4); background: var(--green-soft); color: var(--green); }
-        .cat-chip[data-cat="Roupas"].selected           { border-color: rgba(244,114,182,.4); background: var(--pink-soft); color: var(--pink); }
-        .cat-chip[data-cat="Ferramentas"].selected      { border-color: rgba(251,146,60,.4); background: var(--orange-soft); color: var(--orange); }
-        .cat-chip[data-cat="Serviços"].selected         { border-color: rgba(167,139,250,.4); background: var(--purple-soft); color: var(--purple); }
-        .cat-chip[data-cat="Bebidas"].selected          { border-color: rgba(45,212,191,.4); background: var(--teal-soft); color: var(--teal); }
-        .cat-chip[data-cat="Limpeza"].selected          { border-color: rgba(59,130,246,.4); background: var(--accent-soft); color: var(--accent-light); }
-        .cat-chip[data-cat="Outros"].selected           { border-color: rgba(201,168,76,.4); background: var(--gold-soft); color: var(--gold); }
-
-        .cat-custom-wrap { margin-top: 6px; }
         .cat-custom-label { font-size: 11px; color: var(--faint); margin-bottom: 6px; }
 
-        /* PRICE INPUT */
+        /* PRICE */
         .price-wrapper { position: relative; }
         .price-prefix {
             position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
@@ -270,140 +285,89 @@
             font-family: 'Syne', sans-serif !important;
             font-size: 22px !important; font-weight: 700 !important;
             color: var(--green) !important; height: 58px !important;
-            letter-spacing: -.01em;
         }
-
-        /* STOCK ROW */
-        .stock-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
         /* TOGGLE */
         .toggle-row {
             display: flex; align-items: center; justify-content: space-between;
             padding: 16px 18px; border-radius: 10px;
             background: var(--panel); border: 1px solid var(--border);
-            cursor: pointer; user-select: none;
-            transition: border-color .2s;
+            cursor: pointer; user-select: none; transition: border-color .2s;
         }
         .toggle-row:hover { border-color: var(--border-md); }
         .toggle-row.on { border-color: rgba(52,211,153,.3); background: rgba(52,211,153,.04); }
-
-        .toggle-info {}
         .toggle-title { font-size: 14px; font-weight: 500; color: var(--text); }
         .toggle-sub { font-size: 12px; color: var(--faint); margin-top: 2px; }
-
-        .toggle-switch {
-            position: relative; width: 44px; height: 24px; flex-shrink: 0;
-        }
+        .toggle-switch { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
         .toggle-track {
             position: absolute; inset: 0; border-radius: 12px;
-            background: var(--faint); transition: background .2s;
-            cursor: pointer;
+            background: var(--faint); transition: background .2s; cursor: pointer;
         }
         .toggle-switch input:checked + .toggle-track { background: var(--green); }
         .toggle-thumb {
             position: absolute; top: 3px; left: 3px;
             width: 18px; height: 18px; border-radius: 50%;
-            background: white; transition: transform .2s;
-            pointer-events: none;
+            background: white; transition: transform .2s; pointer-events: none;
         }
         .toggle-switch input:checked ~ .toggle-thumb { transform: translateX(20px); }
 
-        /* HIDDEN INPUTS for model binding */
-        .hidden-cat-input { display: none; }
-
-        /* ─── PREVIEW ──────────────────────────────────── */
-        .preview-aside { width: 310px; flex-shrink: 0; position: sticky; top: 84px; }
-
+        /* PREVIEW */
+        .preview-aside { width: 300px; flex-shrink: 0; position: sticky; top: 84px; }
         .preview-card {
             background: var(--card); border: 1px solid var(--border);
             border-radius: var(--radius); overflow: hidden;
             animation: fadeUp .5s ease .12s both;
         }
-
-        /* Product image area */
         .preview-img-area {
-            height: 160px; position: relative; overflow: hidden;
+            height: 150px; position: relative; overflow: hidden;
             display: flex; align-items: center; justify-content: center;
-            transition: background .4s;
+            background: var(--panel);
         }
-        .preview-img-bg {
-            position: absolute; inset: 0;
-            transition: opacity .4s;
+        .preview-img-bg { position: absolute; inset: 0; transition: background .4s; }
+        .preview-cat-icon {
+            width: 64px; height: 64px; line-height: 1; position: relative; z-index: 1;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,.3));
+            color: currentColor;
         }
-        .preview-cat-icon-big {
-            font-size: 64px; line-height: 1; position: relative; z-index: 1;
-            filter: drop-shadow(0 4px 16px rgba(0,0,0,.3));
-            transition: all .3s;
-        }
+        .preview-cat-icon svg { width: 100%; height: 100%; }
         .preview-status-pill {
-            position: absolute; top: 12px; right: 12px; z-index: 2;
-            padding: 4px 11px; border-radius: 20px; font-size: 11px; font-weight: 600;
+            position: absolute; top: 10px; right: 10px; z-index: 2;
+            padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 600;
             letter-spacing: .04em; text-transform: uppercase;
-            transition: all .2s;
         }
         .pill-ativo   { background: var(--green-soft); color: var(--green); border: 1px solid rgba(52,211,153,.3); }
         .pill-inativo { background: var(--red-soft);   color: var(--red);   border: 1px solid rgba(248,113,113,.2); }
-
         .preview-cat-badge {
-            position: absolute; bottom: 12px; left: 12px; z-index: 2;
-            padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 600;
+            position: absolute; bottom: 10px; left: 10px; z-index: 2;
+            padding: 2px 9px; border-radius: 20px; font-size: 9px; font-weight: 600;
             letter-spacing: .05em; text-transform: uppercase;
-            transition: all .2s;
         }
-
-        .preview-body { padding: 20px 22px; }
-
-        .preview-prod-name {
-            font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700;
-            color: var(--text); margin-bottom: 16px; min-height: 26px;
-            line-height: 1.2;
+        .preview-body { padding: 18px 20px; }
+        .preview-name {
+            font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700;
+            color: var(--text); margin-bottom: 14px; min-height: 22px; line-height: 1.25;
         }
-        .preview-prod-name.empty { color: var(--faint); font-weight: 400; font-style: italic; font-size: 14px; }
-
-        .preview-price-row {
-            display: flex; align-items: baseline; gap: 6px;
-            margin-bottom: 18px;
+        .preview-name.empty { color: var(--faint); font-style: italic; font-weight: 400; font-size: 13px; }
+        .preview-price {
+            font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800;
+            color: var(--green); letter-spacing: -.02em; margin-bottom: 16px;
         }
-        .preview-price-label { font-size: 11px; color: var(--faint); text-transform: uppercase; letter-spacing: .05em; }
-        .preview-price-val {
-            font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800;
-            color: var(--green); letter-spacing: -.02em;
-            transition: all .2s;
-        }
-        .preview-price-val.empty { font-size: 16px; color: var(--faint); font-weight: 400; }
-
-        .preview-divider { height: 1px; background: var(--border); margin: 0 0 16px; }
-
-        .preview-stock-section {}
+        .preview-price.empty { font-size: 15px; color: var(--faint); font-weight: 400; }
+        .preview-divider { height: 1px; background: var(--border); margin-bottom: 14px; }
         .preview-stock-header {
-            display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 8px;
+            display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;
         }
-        .preview-stock-label { font-size: 11px; color: var(--faint); text-transform: uppercase; letter-spacing: .05em; }
-        .preview-stock-nums { font-size: 12px; font-weight: 500; }
-
-        .stock-bar-track {
-            height: 6px; border-radius: 3px; background: rgba(255,255,255,.06);
-            overflow: hidden; margin-bottom: 6px;
-        }
-        .stock-bar-fill {
-            height: 100%; border-radius: 3px;
-            transition: width .4s cubic-bezier(.4,0,.2,1), background .3s;
-        }
-        .stock-bar-minmark {
-            display: flex; align-items: center; gap: 4px;
-            font-size: 10px; color: var(--faint);
-        }
-        .stock-bar-minmark::before {
-            content: ''; width: 8px; height: 2px;
-            background: var(--red); border-radius: 1px; flex-shrink: 0;
-        }
+        .preview-stock-label { font-size: 10px; color: var(--faint); text-transform: uppercase; letter-spacing: .05em; }
+        .preview-stock-num { font-size: 12px; font-weight: 600; }
+        .stock-track { height: 5px; border-radius: 3px; background: rgba(255,255,255,.06); overflow: hidden; margin-bottom: 5px; }
+        .stock-fill  { height: 100%; border-radius: 3px; transition: width .4s, background .3s; }
+        .stock-min-label { font-size: 10px; color: var(--faint); }
 
         .preview-tip {
             background: rgba(59,130,246,.06); border: 1px solid rgba(59,130,246,.12);
-            border-radius: 10px; padding: 14px 16px; margin-top: 14px;
-            font-size: 12px; color: var(--faint); line-height: 1.5;
+            border-radius: 10px; padding: 12px 14px; margin-top: 14px;
+            font-size: 11px; color: var(--faint); line-height: 1.5;
         }
         .preview-tip strong { color: var(--muted); }
 
@@ -418,6 +382,7 @@
         .action-hint { font-size: 12px; color: var(--faint); }
         .action-hint span { color: var(--red); }
         .action-btns { display: flex; gap: 12px; }
+
         .btn-cancel {
             height: 44px; padding: 0 22px;
             background: none; border: 1px solid var(--border); border-radius: 10px;
@@ -427,17 +392,17 @@
             transition: background .18s, color .18s;
         }
         .btn-cancel:hover { background: var(--card-hover); color: var(--text); }
+
         .btn-submit {
             height: 44px; padding: 0 28px;
             background: var(--accent); border: none; border-radius: 10px;
             font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600;
-            color: white; cursor: pointer; letter-spacing: .02em;
+            color: white; cursor: pointer;
             transition: background .2s, transform .15s;
             box-shadow: 0 4px 16px rgba(59,130,246,.25);
             display: inline-flex; align-items: center; gap: 8px;
         }
         .btn-submit:hover { background: #2563eb; transform: translateY(-1px); }
-        .btn-submit:active { transform: translateY(0); }
         .btn-submit svg { width: 15px; height: 15px; }
 
         @@keyframes fadeUp {
@@ -452,7 +417,7 @@
             .content-wrap { padding: 20px 16px; }
             .page-header, .action-bar { padding: 14px 16px; }
             .cat-grid { grid-template-columns: repeat(4, 1fr); }
-            .form-row, .form-row-3, .stock-row { grid-template-columns: 1fr; }
+            .form-row-2 { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -471,70 +436,86 @@
             <img src="~/Content/images/logos/atlas_erp_diamante.svg" alt="Atlas ERP" />
         </a>
     </div>
-
     <span class="menu-label">Principal</span>
+    @{
+        var userRole = Session["CargoNome"]?.ToString() ?? "";
+        var canAccess = userRole == "Admin" || userRole == "Gerente" || userRole == "SuperAdmin";
+    }
 
-    <a href="/Admin/Dashboard" class="menu-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
-            <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
-        </svg>
-        Dashboard
-    </a>
-    <a href="/Venda" class="menu-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-            <line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
-        </svg>
-        Vendas
-    </a>
-    <a href="/Produto" class="menu-item active">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-        </svg>
-        Produtos
-    </a>
-    <a href="/Cliente" class="menu-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-        </svg>
-        Clientes
-    </a>
-    <a href="/Fornecedor" class="menu-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-        </svg>
-        Fornecedores
-    </a>
+    @if (canAccess)
+    {
+        <a href="/Admin/Dashboard" class="menu-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>Dashboard
+        </a>
+        <a href="/Venda" class="menu-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>Vendas
+        </a>
+        <a href="/Produto" class="menu-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            </svg>Produtos
+        </a>
+        <a href="/Cliente" class="menu-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>Clientes
+        </a>
+        <a href="/Fornecedor" class="menu-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            </svg>Fornecedores
+        </a>
+    }
+
     <a href="/Usuario" class="menu-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
             <line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/>
+        </svg>Funcionários
+    </a>
+
+    <a href="/Cargo" class="menu-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
         </svg>
-        Funcion&aacute;rios
+        Cargos
     </a>
 
     <div class="sidebar-divider"></div>
     <span class="menu-label">Sistema</span>
+
+    <button class="menu-item" onclick="abrirConfig()" style="background: none; border: none; cursor: pointer; width: 100%; text-align: left;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3" />
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14" />
+        </svg>
+        Configurações
+    </button>
+
     <a href="/Auth/Logout" class="menu-item danger">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
             <polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
-        </svg>
-        Sair
+        </svg>Sair
     </a>
     <div class="sidebar-spacer"></div>
     <div class="sidebar-user">
         @{
-            var nomeUsuario = Session["UsuarioLogado"]?.ToString() ?? "Usuário";
+            var nomeUsuario = Session["UsuarioLogado"]?.ToString() ?? "Usuario";
             var inicial = nomeUsuario.Length > 0 ? nomeUsuario[0].ToString().ToUpper() : "U";
         }
         <div class="user-avatar">@inicial</div>
         <div>
             <div class="user-name">@nomeUsuario</div>
-            <div class="user-role">Administrador</div>
+            <div class="user-role">@role</div>
         </div>
     </div>
 </aside>
@@ -547,10 +528,10 @@
         <div>
             <div class="breadcrumb">
                 <a href="/Admin/Dashboard">Dashboard</a>
-                <span class="breadcrumb-sep">›</span>
+                <span class="breadcrumb-sep">/</span>
                 <a href="/Produto">Produtos</a>
-                <span class="breadcrumb-sep">›</span>
-                <span class="breadcrumb-current">Novo</span>
+                <span class="breadcrumb-sep">/</span>
+                <span style="color:var(--muted)">Novo</span>
             </div>
             <div class="page-title">Novo Produto</div>
         </div>
@@ -562,7 +543,7 @@
         </a>
     </div>
 
-    @using (Html.BeginForm("Create", "Produto", FormMethod.Post, new { id = "formProduto" }))
+    @using (Html.BeginForm("Create", "Produto", FormMethod.Post, new { id = "formProduto", enctype = "multipart/form-data", onsubmit = "onFormSubmit(event)" }))
     {
         @Html.AntiForgeryToken()
 
@@ -571,12 +552,54 @@
             <!-- FORM AREA -->
             <div class="form-area">
 
-                @if (!ViewData.ModelState.IsValid)
+                @if (!ViewData.ModelState.IsValid && ViewData.ModelState.Values.Any(v => v.Errors.Any()))
                 {
-                    <div class="validation-summary">@Html.ValidationSummary(false)</div>
+                    <div class="validation-summary">
+                        @Html.ValidationSummary(false)
+                    </div>
                 }
 
-                <!-- SECTION 1: Identidade -->
+                <!-- 0. Foto -->
+                <div class="section-card">
+                    <div class="section-head">
+                        <div class="section-num">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                                <polyline points="21 15 16 10 5 21"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="section-title">Foto do Produto</div>
+                            <div class="section-desc">Imagem exibida no card do produto (JPG, PNG, WEBP — máx. 10 MB)</div>
+                        </div>
+                    </div>
+
+                    <div id="fotoDropArea" class="foto-drop" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+                        <input type="file" name="foto" id="fotoInput" accept="image/jpeg,image/png,image/webp,image/gif"
+                               onchange="onFotoChange(this)" />
+                        <div class="foto-drop-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                                <polyline points="21 15 16 10 5 21"/>
+                            </svg>
+                        </div>
+                        <div class="foto-drop-text">
+                            <strong>Clique para selecionar</strong> ou arraste a imagem aqui
+                        </div>
+                        <div class="foto-drop-hint">JPG, PNG, WEBP ou GIF — máximo 10 MB</div>
+                    </div>
+
+                    <div class="foto-preview-wrap" id="fotoPreviewWrap">
+                        <img id="fotoPreviewImg" class="foto-preview-img" src="" alt="Preview" />
+                        <button type="button" class="foto-remove-btn" onclick="removerFoto()" title="Remover foto">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 1. Identidade -->
                 <div class="section-card">
                     <div class="section-head">
                         <div class="section-num">1</div>
@@ -607,86 +630,81 @@
 
                     <div class="form-group">
                         <label class="form-label">Categoria</label>
-                        <div class="cat-grid" id="catGrid">
-                            <div class="cat-chip" data-cat="Eletrônicos" onclick="selectCat(this)">
-                                <span class="cat-icon">💻</span>Eletr&ocirc;nicos
+                        <div class="cat-grid">
+                            <div class="cat-chip" data-cat="Eletronicos" data-label="Eletrônicos" onclick="selectCat(this)">
+                                <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="13" rx="1"></rect><path d="M3 17h18"></path></svg>Eletrônicos
                             </div>
-                            <div class="cat-chip" data-cat="Alimentos" onclick="selectCat(this)">
-                                <span class="cat-icon">🍎</span>Alimentos
+                            <div class="cat-chip" data-cat="Alimentos" data-label="Alimentos" onclick="selectCat(this)">
+                                <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M12 5v4m0 4v4"></path><path d="M12 2a1 1 0 0 0 -0.5 0.2"></path></svg>Alimentos
                             </div>
-                            <div class="cat-chip" data-cat="Roupas" onclick="selectCat(this)">
-                                <span class="cat-icon">👕</span>Roupas
+                            <div class="cat-chip" data-cat="Roupas" data-label="Roupas" onclick="selectCat(this)">
+                                <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 5l3 2v9h6v-9l3 -2M9 7h6M6 14h12v6H6z"></path></svg>Roupas
                             </div>
-                            <div class="cat-chip" data-cat="Ferramentas" onclick="selectCat(this)">
-                                <span class="cat-icon">🔧</span>Ferramentas
+                            <div class="cat-chip" data-cat="Ferramentas" data-label="Ferramentas" onclick="selectCat(this)">
+                                <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.4 14.4L9.6 9.6m8.8 2L14 5.2a2 2 0 0 0 -2.8 0l-7 7a2 2 0 0 0 0 2.8l7 7a2 2 0 0 0 2.8 0l7-7a2 2 0 0 0 0 -2.8z"></path></svg>Ferramentas
                             </div>
-                            <div class="cat-chip" data-cat="Serviços" onclick="selectCat(this)">
-                                <span class="cat-icon">⚙️</span>Servi&ccedil;os
+                            <div class="cat-chip" data-cat="Servicos" data-label="Serviços" onclick="selectCat(this)">
+                                <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m4.24-4.24l4.24-4.24"></path></svg>Serviços
                             </div>
-                            <div class="cat-chip" data-cat="Bebidas" onclick="selectCat(this)">
-                                <span class="cat-icon">🥤</span>Bebidas
+                            <div class="cat-chip" data-cat="Bebidas" data-label="Bebidas" onclick="selectCat(this)">
+                                <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 4h10v8c0 2 -2 4 -5 4c-3 0 -5 -2 -5 -4z"></path><path d="M8 16h8M7 20h10"></path></svg>Bebidas
                             </div>
-                            <div class="cat-chip" data-cat="Limpeza" onclick="selectCat(this)">
-                                <span class="cat-icon">🧹</span>Limpeza
+                            <div class="cat-chip" data-cat="Limpeza" data-label="Limpeza" onclick="selectCat(this)">
+                                <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l-2 3h-3l2 3H6l2 3H5l2 3H4l2 3H3l3 4h12l3 -4h-3l2 -3h-3l2 -3h-3l2 -3h-3l2 -3h-3z"></path><path d="M6 19h12"></path></svg>Limpeza
                             </div>
-                            <div class="cat-chip" data-cat="Outros" onclick="selectCat(this)">
-                                <span class="cat-icon">📦</span>Outros
-                            </div>
-                        </div>
-                        <div class="cat-custom-wrap">
-                            <div class="cat-custom-label">Ou digite uma categoria personalizada:</div>
-                            <div class="input-wrapper">
-                                <input type="text" id="catCustom" class="form-control no-icon"
-                                       placeholder="Ex: Papelaria, Móveis, Higiene..."
-                                       oninput="onCatCustomInput(this)"
-                                       autocomplete="off" />
+                            <div class="cat-chip" data-cat="Outros" data-label="Outros" onclick="selectCat(this)">
+                                <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>Outros
                             </div>
                         </div>
+                        <div class="cat-custom-label">Ou digite uma categoria personalizada:</div>
+                        <input type="text" id="catCustom" class="form-control no-icon"
+                               placeholder="Ex: Papelaria, Moveis, Higiene..."
+                               oninput="onCatCustomInput(this)"
+                               autocomplete="off" />
                         @Html.HiddenFor(m => m.Categoria, new { id = "categoriaHidden" })
                         @Html.ValidationMessageFor(m => m.Categoria, "", new { @class = "field-error" })
                     </div>
                 </div>
 
-                <!-- SECTION 2: Precificação -->
+                <!-- 2. Precificação -->
                 <div class="section-card">
                     <div class="section-head">
                         <div class="section-num">2</div>
                         <div>
-                            <div class="section-title">Precifica&ccedil;&atilde;o</div>
+                            <div class="section-title">Precificação</div>
                             <div class="section-desc">Valor de venda praticado para este produto</div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Pre&ccedil;o de venda <span>*</span></label>
+                        <label class="form-label">Preço de venda <span>*</span></label>
                         <div class="price-wrapper">
                             <span class="price-prefix">R$</span>
-                            @Html.TextBoxFor(m => m.PrecoVenda, new {
-                                @class = "form-control price-input",
-                                id = "precoInput",
-                                placeholder = "0,00",
-                                autocomplete = "off",
-                                inputmode = "decimal"
-                            })
+                            <input type="text" name="PrecoVendaDisplay" class="form-control price-input"
+                                   id="precoInput"
+                                   placeholder="0,00"
+                                   autocomplete="off"
+                                   inputmode="decimal" />
+                            <input type="hidden" name="PrecoVenda" id="precoVendaHidden" />
                         </div>
-                        <div class="field-hint">Use v&iacute;rgula para decimais. Ex: 149,90</div>
+                        <div class="field-hint">Use vírgula para decimais — Ex: 149,90</div>
                         @Html.ValidationMessageFor(m => m.PrecoVenda, "", new { @class = "field-error" })
                     </div>
                 </div>
 
-                <!-- SECTION 3: Estoque -->
+                <!-- 3. Estoque & Status -->
                 <div class="section-card">
                     <div class="section-head">
                         <div class="section-num">3</div>
                         <div>
                             <div class="section-title">Estoque &amp; Status</div>
-                            <div class="section-desc">Controle de quantidade e disponibilidade</div>
+                            <div class="section-desc">Quantidade disponível e disponibilidade do produto</div>
                         </div>
                     </div>
 
-                    <div class="stock-row">
+                    <div class="form-row-2">
                         <div class="form-group">
-                            <label class="form-label">Estoque atual</label>
+                            <label class="form-label">Estoque inicial</label>
                             <div class="input-wrapper">
                                 @Html.TextBoxFor(m => m.EstoqueAtual, new {
                                     @class = "form-control",
@@ -704,7 +722,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Estoque m&iacute;nimo</label>
+                            <label class="form-label">Estoque mínimo</label>
                             <div class="input-wrapper">
                                 @Html.TextBoxFor(m => m.EstoqueMinimo, new {
                                     @class = "form-control",
@@ -719,15 +737,15 @@
                                     </svg>
                                 </span>
                             </div>
-                            <div class="field-hint">Alerta quando estoque for abaixo deste valor</div>
+                            <div class="field-hint">Alerta quando abaixo deste valor</div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="toggle-row" id="toggleRow" for="ativoCheck">
-                            <div class="toggle-info">
+                            <div>
                                 <div class="toggle-title">Produto ativo</div>
-                                <div class="toggle-sub" id="toggleSub">Este produto estar&aacute; dispon&iacute;vel para vendas</div>
+                                <div class="toggle-sub" id="toggleSub">Este produto estará disponível para vendas</div>
                             </div>
                             <label class="toggle-switch">
                                 @Html.CheckBoxFor(m => m.Ativo, new { id = "ativoCheck", onchange = "onAtivoChange(this)" })
@@ -738,52 +756,46 @@
                     </div>
                 </div>
 
-            </div>
+            </div><!-- /form-area -->
 
             <!-- PREVIEW -->
             <aside class="preview-aside">
                 <div class="preview-card">
-                    <div class="preview-img-area" id="prevImgArea">
-                        <div class="preview-img-bg" id="prevImgBg"></div>
-                        <div class="preview-cat-icon-big" id="prevCatIcon">📦</div>
-                        <div class="preview-status-pill pill-inativo" id="prevStatusPill">Inativo</div>
-                        <div class="preview-cat-badge" id="prevCatBadge" style="display:none"></div>
+                    <div class="preview-img-area">
+                        <div class="preview-img-bg" id="prevBg"></div>
+                        <div class="preview-cat-icon" id="prevIcon">&#x1F4E6;</div>
+                        <div class="preview-status-pill pill-inativo" id="prevPill">Inativo</div>
+                        <div class="preview-cat-badge" id="prevBadge" style="display:none"></div>
                     </div>
                     <div class="preview-body">
-                        <div class="preview-prod-name empty" id="prevNome">Nome do produto</div>
-                        <div class="preview-price-row">
-                            <div class="preview-price-label">Pre&ccedil;o</div>
-                            <div class="preview-price-val empty" id="prevPreco">—</div>
-                        </div>
+                        <div class="preview-name empty" id="prevNome">Nome do produto</div>
+                        <div class="preview-price empty" id="prevPreco">—</div>
                         <div class="preview-divider"></div>
-                        <div class="preview-stock-section">
-                            <div class="preview-stock-header">
-                                <div class="preview-stock-label">Estoque</div>
-                                <div class="preview-stock-nums" id="prevStockNums" style="color:var(--faint)">0 un</div>
-                            </div>
-                            <div class="stock-bar-track">
-                                <div class="stock-bar-fill" id="stockBarFill" style="width:0%;background:var(--faint)"></div>
-                            </div>
-                            <div class="stock-bar-minmark" id="stockBarMin">M&iacute;nimo: 0 un</div>
+                        <div class="preview-stock-header">
+                            <div class="preview-stock-label">Estoque</div>
+                            <div class="preview-stock-num" id="prevStockNum" style="color:var(--faint)">0 un</div>
                         </div>
+                        <div class="stock-track">
+                            <div class="stock-fill" id="stockFill" style="width:0%;background:var(--faint)"></div>
+                        </div>
+                        <div class="stock-min-label" id="stockMinLabel">Mínimo: 0 un</div>
                     </div>
                 </div>
-
                 <div class="preview-tip">
-                    <strong>Dica:</strong> Defina o estoque m&iacute;nimo para receber alertas quando o produto estiver prestes a esgotar.
+                    <strong>Dica:</strong> O estoque mínimo gera alertas na listagem quando o produto estiver prestes a esgotar.
                 </div>
             </aside>
 
-        </div>
+        </div><!-- /content-wrap -->
 
         <!-- ACTION BAR -->
         <div class="action-bar">
-            <div class="action-hint"><span>*</span> Campos obrigat&oacute;rios</div>
+            <div class="action-hint"><span>*</span> Campos obrigatórios</div>
             <div class="action-btns">
                 <a href="/Produto" class="btn-cancel">Cancelar</a>
                 <button type="submit" class="btn-submit">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                     </svg>
                     Cadastrar Produto
                 </button>
@@ -794,180 +806,309 @@
 </main>
 
 <script>
-/* ── Category config ────────────────────────── */
-var catConfig = {
-    'Eletr\u00f4nicos': { icon: '💻', bg: 'rgba(59,130,246,0.18)',  badge: 'rgba(59,130,246,0.22)',  color: '#60a5fa' },
-    'Alimentos':        { icon: '🍎', bg: 'rgba(52,211,153,0.14)',  badge: 'rgba(52,211,153,0.22)',  color: '#34d399' },
-    'Roupas':           { icon: '👕', bg: 'rgba(244,114,182,0.14)', badge: 'rgba(244,114,182,0.22)', color: '#f472b6' },
-    'Ferramentas':      { icon: '🔧', bg: 'rgba(251,146,60,0.14)',  badge: 'rgba(251,146,60,0.22)',  color: '#fb923c' },
-    'Servi\u00e7os':   { icon: '⚙️', bg: 'rgba(167,139,250,0.14)', badge: 'rgba(167,139,250,0.22)', color: '#a78bfa' },
-    'Bebidas':          { icon: '🥤', bg: 'rgba(45,212,191,0.14)',  badge: 'rgba(45,212,191,0.22)',  color: '#2dd4bf' },
-    'Limpeza':          { icon: '🧹', bg: 'rgba(59,130,246,0.14)',  badge: 'rgba(59,130,246,0.20)',  color: '#60a5fa' },
-    'Outros':           { icon: '📦', bg: 'rgba(201,168,76,0.14)',  badge: 'rgba(201,168,76,0.22)',  color: '#c9a84c' }
+/* ── Form submission ──────────────────────────── */
+function onFormSubmit(event) {
+    var displayVal = document.getElementById('precoInput').value.trim();
+    if (displayVal) {
+        var numVal = parseFloat(displayVal.replace(/\./g, '').replace(',', '.'));
+        document.getElementById('precoVendaHidden').value = numVal.toString();
+    }
+}
+
+/* ── Foto upload ──────────────────────────────── */
+function onFotoChange(input) {
+    if (input.files && input.files[0]) mostrarPreviewFoto(input.files[0]);
+}
+function onDragOver(e) {
+    e.preventDefault();
+    document.getElementById('fotoDropArea').classList.add('drag-over');
+}
+function onDragLeave(e) {
+    document.getElementById('fotoDropArea').classList.remove('drag-over');
+}
+function onDrop(e) {
+    e.preventDefault();
+    document.getElementById('fotoDropArea').classList.remove('drag-over');
+    var file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+        /* Assign to the real file input via DataTransfer */
+        var dt = new DataTransfer();
+        dt.items.add(file);
+        document.getElementById('fotoInput').files = dt.files;
+        mostrarPreviewFoto(file);
+    }
+}
+function mostrarPreviewFoto(file) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        document.getElementById('fotoPreviewImg').src = e.target.result;
+        document.getElementById('fotoDropArea').style.display   = 'none';
+        document.getElementById('fotoPreviewWrap').style.display = '';
+        /* update card preview too */
+        document.getElementById('prevIcon').style.display = 'none';
+        var img = document.getElementById('prevFotoImg');
+        if (!img) {
+            img = document.createElement('img');
+            img.id = 'prevFotoImg';
+            img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;';
+            document.getElementById('prevBg').parentNode.appendChild(img);
+        }
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+function removerFoto() {
+    document.getElementById('fotoInput').value = '';
+    document.getElementById('fotoDropArea').style.display   = '';
+    document.getElementById('fotoPreviewWrap').style.display = 'none';
+    document.getElementById('prevIcon').style.display = '';
+    var img = document.getElementById('prevFotoImg');
+    if (img) img.remove();
+}
+
+/* ── Category config ──────────────────────────── */
+var catCfg = {
+    'Eletronicos': { bg: 'rgba(59,130,246,0.18)',   badge: 'rgba(59,130,246,0.22)',  color: '#60a5fa' },
+    'Alimentos':   { bg: 'rgba(52,211,153,0.15)',   badge: 'rgba(52,211,153,0.22)',  color: '#34d399' },
+    'Roupas':      { bg: 'rgba(244,114,182,0.15)',  badge: 'rgba(244,114,182,0.22)', color: '#f472b6' },
+    'Ferramentas': { bg: 'rgba(251,146,60,0.15)',   badge: 'rgba(251,146,60,0.22)',  color: '#fb923c' },
+    'Servicos':    { bg: 'rgba(167,139,250,0.15)', badge: 'rgba(167,139,250,0.22)', color: '#a78bfa' },
+    'Bebidas':     { bg: 'rgba(45,212,191,0.15)',   badge: 'rgba(45,212,191,0.22)',  color: '#2dd4bf' },
+    'Limpeza':     { bg: 'rgba(59,130,246,0.15)',   badge: 'rgba(59,130,246,0.20)',  color: '#60a5fa' },
+    'Outros':      { bg: 'rgba(201,168,76,0.15)',   badge: 'rgba(201,168,76,0.22)',  color: '#c9a84c' }
 };
-var defaultCat = { icon: '📦', bg: 'rgba(61,82,112,0.20)', badge: 'rgba(61,82,112,0.30)', color: '#7a9cc8' };
+var defCfg = { bg: 'rgba(61,82,112,0.20)', badge: 'rgba(61,82,112,0.30)', color: '#7a9cc8' };
 
-/* ── Elements ───────────────────────────────── */
-var nomeInput        = document.getElementById('nomeInput');
-var precoInput       = document.getElementById('precoInput');
-var estoqueAtual     = document.getElementById('estoqueAtualInput');
-var estoqueMinimo    = document.getElementById('estoqueMinimoInput');
-var ativoCheck       = document.getElementById('ativoCheck');
-var categoriaHidden  = document.getElementById('categoriaHidden');
-var catCustom        = document.getElementById('catCustom');
-
-var prevImgArea   = document.getElementById('prevImgArea');
-var prevImgBg     = document.getElementById('prevImgBg');
-var prevCatIcon   = document.getElementById('prevCatIcon');
-var prevCatBadge  = document.getElementById('prevCatBadge');
-var prevStatusPill = document.getElementById('prevStatusPill');
-var prevNome      = document.getElementById('prevNome');
-var prevPreco     = document.getElementById('prevPreco');
-var prevStockNums = document.getElementById('prevStockNums');
-var stockBarFill  = document.getElementById('stockBarFill');
-var stockBarMin   = document.getElementById('stockBarMin');
-var toggleRow     = document.getElementById('toggleRow');
-var toggleSub     = document.getElementById('toggleSub');
+function getCategorySvg(cat) {
+    const svgs = {
+        'Eletronicos': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="13" rx="1"></rect><path d="M3 17h18"></path></svg>',
+        'Alimentos': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M12 5v4m0 4v4"></path><path d="M12 2a1 1 0 0 0 -0.5 0.2"></path></svg>',
+        'Roupas': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 5l3 2v9h6v-9l3 -2M9 7h6M6 14h12v6H6z"></path></svg>',
+        'Ferramentas': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.4 14.4L9.6 9.6m8.8 2L14 5.2a2 2 0 0 0 -2.8 0l-7 7a2 2 0 0 0 0 2.8l7 7a2 2 0 0 0 2.8 0l7-7a2 2 0 0 0 0 -2.8z"></path></svg>',
+        'Servicos': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m4.24-4.24l4.24-4.24"></path></svg>',
+        'Bebidas': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 4h10v8c0 2 -2 4 -5 4c-3 0 -5 -2 -5 -4z"></path><path d="M8 16h8M7 20h10"></path></svg>',
+        'Limpeza': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l-2 3h-3l2 3H6l2 3H5l2 3H4l2 3H3l3 4h12l3 -4h-3l2 -3h-3l2 -3h-3l2 -3h-3l2 -3h-3z"></path><path d="M6 19h12"></path></svg>',
+        'Outros': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>'
+    };
+    return svgs[cat] || svgs['Outros'];
+}
 
 var currentCat = '';
 
-/* ── Category selection ─────────────────────── */
+/* ── DOM refs ─────────────────────────────────── */
+var nomeInput       = document.getElementById('nomeInput');
+var precoInput      = document.getElementById('precoInput');
+var estoqueAtual    = document.getElementById('estoqueAtualInput');
+var estoqueMinimo   = document.getElementById('estoqueMinimoInput');
+var ativoCheck      = document.getElementById('ativoCheck');
+var categoriaHidden = document.getElementById('categoriaHidden');
+var catCustom       = document.getElementById('catCustom');
+var toggleRow       = document.getElementById('toggleRow');
+var toggleSub       = document.getElementById('toggleSub');
+
+/* ── Category selection ───────────────────────── */
 function selectCat(chip) {
-    document.querySelectorAll('.cat-chip').forEach(function(c){ c.classList.remove('selected'); });
+    document.querySelectorAll('.cat-chip').forEach(function(c) { c.classList.remove('selected'); });
     chip.classList.add('selected');
     currentCat = chip.getAttribute('data-cat');
-    categoriaHidden.value = currentCat;
+    categoriaHidden.value = chip.getAttribute('data-label') || currentCat;
     catCustom.value = '';
     updatePreview();
 }
 
 function onCatCustomInput(input) {
-    document.querySelectorAll('.cat-chip').forEach(function(c){ c.classList.remove('selected'); });
-    currentCat = input.value.trim();
-    categoriaHidden.value = currentCat;
+    document.querySelectorAll('.cat-chip').forEach(function(c) { c.classList.remove('selected'); });
+    currentCat = '';
+    categoriaHidden.value = input.value.trim();
     updatePreview();
 }
 
-/* ── Price mask (R$ format) ─────────────────── */
-precoInput.addEventListener('input', function() {
-    var raw = this.value.replace(/[^0-9,\.]/g, '');
-    categoriaHidden; // just reference to avoid lint
+/* ── Toggle ───────────────────────────────────── */
+function onAtivoChange(cb) {
+    toggleRow.classList.toggle('on', cb.checked);
+    toggleSub.textContent = cb.checked
+        ? 'Este produto estará disponível para vendas'
+        : 'Produto inativo não aparecerá nas vendas';
     updatePreview();
-});
+}
 
+/* ── Price helpers ────────────────────────────── */
 function parsePreco() {
     var v = precoInput.value.trim().replace(/\./g, '').replace(',', '.');
     var n = parseFloat(v);
     return isNaN(n) ? 0 : n;
 }
-
 function formatBRL(n) {
-    return n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-/* ── Ativo toggle ───────────────────────────── */
-function onAtivoChange(cb) {
-    if (cb.checked) {
-        toggleRow.classList.add('on');
-        toggleSub.textContent = 'Este produto estar\u00e1 dispon\u00edvel para vendas';
-    } else {
-        toggleRow.classList.remove('on');
-        toggleSub.textContent = 'Produto inativo n\u00e3o aparecer\u00e1 nas vendas';
-    }
-    updatePreview();
-}
-
-/* ── Main preview update ────────────────────── */
+/* ── Preview update ───────────────────────────── */
 function updatePreview() {
-    var cfg = catConfig[currentCat] || (currentCat ? defaultCat : defaultCat);
+    var cfg = catCfg[currentCat] || defCfg;
 
-    /* Category icon + bg */
-    prevCatIcon.textContent = cfg.icon;
-    prevImgBg.style.background = 'linear-gradient(135deg, ' + cfg.bg + ', rgba(5,13,26,0.0))';
-    prevImgArea.style.background = 'var(--panel)';
+    document.getElementById('prevIcon').innerHTML = getCategorySvg(currentCat);
+    document.getElementById('prevBg').style.background =
+        'linear-gradient(135deg,' + cfg.bg + ',rgba(5,13,26,0))';
 
-    /* Category badge */
-    if (currentCat) {
-        prevCatBadge.style.display = '';
-        prevCatBadge.textContent = currentCat;
-        prevCatBadge.style.background = cfg.badge;
-        prevCatBadge.style.color = cfg.color;
-        prevCatBadge.style.border = '1px solid ' + cfg.color + '33';
+    var badge = document.getElementById('prevBadge');
+    var label = categoriaHidden.value.trim();
+    if (label) {
+        badge.style.display = '';
+        badge.textContent = label;
+        badge.style.background = cfg.badge;
+        badge.style.color = cfg.color;
+        badge.style.border = '1px solid ' + cfg.color + '44';
     } else {
-        prevCatBadge.style.display = 'none';
+        badge.style.display = 'none';
     }
 
-    /* Status pill */
+    var pill = document.getElementById('prevPill');
     if (ativoCheck.checked) {
-        prevStatusPill.className = 'preview-status-pill pill-ativo';
-        prevStatusPill.textContent = 'Ativo';
+        pill.className = 'preview-status-pill pill-ativo';
+        pill.textContent = 'Ativo';
     } else {
-        prevStatusPill.className = 'preview-status-pill pill-inativo';
-        prevStatusPill.textContent = 'Inativo';
+        pill.className = 'preview-status-pill pill-inativo';
+        pill.textContent = 'Inativo';
     }
 
-    /* Nome */
+    var nomeEl = document.getElementById('prevNome');
     var nome = nomeInput.value.trim();
-    if (nome) {
-        prevNome.textContent = nome;
-        prevNome.classList.remove('empty');
-    } else {
-        prevNome.textContent = 'Nome do produto';
-        prevNome.classList.add('empty');
-    }
+    nomeEl.textContent = nome || 'Nome do produto';
+    nomeEl.classList.toggle('empty', !nome);
 
-    /* Preço */
+    var precoEl = document.getElementById('prevPreco');
     var preco = parsePreco();
     if (preco > 0) {
-        prevPreco.textContent = 'R$ ' + formatBRL(preco);
-        prevPreco.classList.remove('empty');
-        prevPreco.style.color = 'var(--green)';
+        precoEl.textContent = formatBRL(preco);
+        precoEl.classList.remove('empty');
     } else {
-        prevPreco.textContent = '\u2014';
-        prevPreco.classList.add('empty');
-        prevPreco.style.color = '';
+        precoEl.textContent = '—';
+        precoEl.classList.add('empty');
     }
 
-    /* Stock bar */
-    var atual = parseInt(estoqueAtual.value) || 0;
+    var atual  = parseInt(estoqueAtual.value)  || 0;
     var minimo = parseInt(estoqueMinimo.value) || 0;
-    var max = Math.max(atual, minimo * 2, 10);
-    var pct = Math.min(100, Math.round((atual / max) * 100));
+    var max    = Math.max(atual, minimo * 2, 10);
+    var pct    = Math.min(100, Math.round(atual / max * 100));
+    var barColor, numColor;
+    if (atual === 0)              { barColor = numColor = 'var(--red)'; }
+    else if (minimo > 0 && atual <= minimo) { barColor = numColor = 'var(--orange)'; }
+    else                          { barColor = numColor = 'var(--green)'; }
 
-    var barColor;
-    if (atual === 0) {
-        barColor = 'var(--red)';
-        prevStockNums.style.color = 'var(--red)';
-    } else if (minimo > 0 && atual <= minimo) {
-        barColor = 'var(--orange)';
-        prevStockNums.style.color = 'var(--orange)';
-    } else {
-        barColor = 'var(--green)';
-        prevStockNums.style.color = 'var(--green)';
-    }
-
-    stockBarFill.style.width = pct + '%';
-    stockBarFill.style.background = barColor;
-    prevStockNums.textContent = atual + ' un';
-    stockBarMin.textContent = 'M\u00ednimo: ' + minimo + ' un';
+    document.getElementById('stockFill').style.width      = pct + '%';
+    document.getElementById('stockFill').style.background = barColor;
+    document.getElementById('prevStockNum').textContent   = atual + ' un';
+    document.getElementById('prevStockNum').style.color   = numColor;
+    document.getElementById('stockMinLabel').textContent  = 'Mínimo: ' + minimo + ' un';
 }
 
-/* ── Event bindings ─────────────────────────── */
+/* ── Event listeners ──────────────────────────── */
 nomeInput.addEventListener('input', updatePreview);
 precoInput.addEventListener('input', updatePreview);
 estoqueAtual.addEventListener('input', updatePreview);
 estoqueMinimo.addEventListener('input', updatePreview);
 
-/* ── Price formatting on blur ───────────────── */
 precoInput.addEventListener('blur', function() {
     var n = parsePreco();
-    if (n > 0) this.value = formatBRL(n);
+    if (n > 0) this.value = n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     updatePreview();
 });
 
-/* ── Initial render ─────────────────────────── */
+/* ── Init ─────────────────────────────────────── */
+onAtivoChange(ativoCheck);
 updatePreview();
 </script>
+
+    <!-- MODAL CONFIGURACOES -->
+    <div class="modal-overlay" id="modalConfig" onclick="fecharFora(event)">
+        <div class="modal">
+            <button class="modal-close" onclick="fecharConfig()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+
+            <div class="modal-title">Configurações da Empresa</div>
+            <div class="modal-sub">Atualize as informações da sua empresa</div>
+            <div class="modal-divider"></div>
+
+            <form method="POST" action="/Empresa/Configuracoes" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+
+                <div class="modal-form-group">
+                    <label class="modal-form-label">E-mail da Empresa</label>
+                    <input type="email" name="Email" class="modal-input" placeholder="contato@suaempresa.com" />
+                </div>
+
+                <div class="modal-form-group">
+                    <label class="modal-form-label">Logo da Empresa</label>
+                    <div class="upload-area" id="uploadArea">
+                        <input type="file" name="Logo" accept="image/*" id="logoInput" onchange="previewLogo(this)" />
+                        <div class="upload-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="17 8 12 3 7 8" />
+                                <line x1="12" y1="3" x2="12" y2="15" />
+                            </svg>
+                        </div>
+                        <div class="upload-text">Clique para selecionar uma imagem</div>
+                        <div class="upload-hint">PNG, JPG ou SVG — máx. 2MB</div>
+                    </div>
+                    <div class="upload-preview" id="uploadPreview">
+                        <img id="previewImg" src="" alt="preview" />
+                        <span class="upload-preview-name" id="previewName"></span>
+                        <button type="button" class="upload-preview-remove" onclick="removerLogo()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18" />
+                                <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn-cancel" onclick="fecharConfig()">Cancelar</button>
+                    <button type="submit" class="modal-btn-submit">Salvar alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function abrirConfig() {
+            document.getElementById('modalConfig').classList.add('open');
+        }
+
+        function fecharConfig() {
+            document.getElementById('modalConfig').classList.remove('open');
+        }
+
+        function fecharFora(e) {
+            if (e.target === document.getElementById('modalConfig')) fecharConfig();
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') fecharConfig();
+        });
+
+        function previewLogo(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewImg').src = e.target.result;
+                    document.getElementById('previewName').textContent = input.files[0].name;
+                    document.getElementById('uploadPreview').classList.add('visible');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function removerLogo() {
+            document.getElementById('logoInput').value = '';
+            document.getElementById('uploadPreview').classList.remove('visible');
+        }
+    </script>
 
 </body>
 </html>

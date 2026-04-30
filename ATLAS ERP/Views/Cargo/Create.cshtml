@@ -1,0 +1,200 @@
+@model ATLAS_ERP.Models.Cargo
+@{
+    ViewBag.Title = "Novo Cargo - Atlas ERP";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Novo Cargo - Atlas ERP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #050d1a;
+            --panel: #0b1525;
+            --card: #0f1e35;
+            --border: rgba(100,160,255,0.15);
+            --accent: #3b82f6;
+            --text: #e8f0fe;
+            --muted: #7a9cc8;
+            --faint: #3d5270;
+            --sidebar-w: 280px;
+            --radius: 16px;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+
+        .sidebar {
+            width: var(--sidebar-w);
+            height: 100vh;
+            background: linear-gradient(135deg, var(--panel) 0%, #0a0f1e 100%);
+            border-right: 1px solid var(--border);
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            padding: 32px 16px;
+            z-index: 100;
+        }
+
+        .sidebar-logo { display: flex; align-items: center; justify-content: center; margin-bottom: 48px; }
+        .sidebar-logo img { width: 280px; max-width: 100%; }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 11px 14px;
+            border-radius: 10px;
+            transition: all 0.25s;
+        }
+        .menu-item:hover {
+            background: rgba(59,130,246,0.1);
+            color: var(--accent);
+            transform: translateX(4px);
+        }
+
+        .main {
+            flex: 1;
+            margin-left: var(--sidebar-w);
+            padding: 48px 40px;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(135deg, #050d1a 0%, #0a1428 100%);
+        }
+        .content { max-width: 600px; }
+
+        .header { margin-bottom: 40px; }
+        .header h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #e8f0fe 0%, #60a5fa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header p { color: var(--faint); font-size: 15px; margin-top: 12px; }
+
+        .form-group { margin-bottom: 28px; }
+        label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, var(--panel) 0%, #0d1f2e 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+        }
+        input[type="text"]:focus,
+        textarea:focus {
+            border-color: var(--accent);
+            background: linear-gradient(135deg, #0d1f2e 0%, #112a3e 100%);
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+        }
+
+        textarea { resize: vertical; min-height: 120px; }
+
+        .form-actions { display: flex; gap: 12px; margin-top: 40px; }
+        .btn {
+            padding: 13px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent) 0%, #2563eb 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(59,130,246,0.3);
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59,130,246,0.4);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover {
+            background: rgba(59,130,246,0.1);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .error { color: #f87171; font-size: 12px; margin-top: 6px; }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <a href="/"><img src="~/Content/images/logos/atlas_erp_diamante.svg" alt="Atlas ERP" /></a>
+        </div>
+        <a href="/Cargo" class="menu-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;">
+                <line x1="19" y1="12" x2="5" y2="12" />
+                <polyline points="12 19 5 12 12 5" />
+            </svg>
+            Voltar
+        </a>
+    </aside>
+
+    <main class="main">
+        <div class="content">
+            <div class="header">
+                <h1>Novo Cargo</h1>
+                <p>Crie um novo cargo para sua empresa e defina suas permissões</p>
+            </div>
+
+            <form method="POST" action="/Cargo/Create">
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    <label>Nome do Cargo *</label>
+                    <input type="text" name="Nome" value="@(Model?.Nome ?? "")" required placeholder="Ex: Vendedor, Gerente, Analista" />
+                    @Html.ValidationMessage("Nome", new { @class = "error" })
+                </div>
+
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <textarea name="Descricao" placeholder="Descreva o cargo e suas responsabilidades principais...">@(Model?.Descricao ?? "")</textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Criar Cargo</button>
+                    <a href="/Cargo" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

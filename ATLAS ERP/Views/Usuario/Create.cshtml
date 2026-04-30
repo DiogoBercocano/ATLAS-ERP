@@ -1,4 +1,4 @@
-@model ATLAS_ERP.Models.Usuario
+﻿@model ATLAS_ERP.Models.Usuario
 @{
     ViewBag.Title = "Novo Funcionário - Atlas ERP";
     Layout = null;
@@ -410,6 +410,9 @@
         </div>
 
         <span class="menu-label">Principal</span>
+        @{
+            var cargoNome = Session["CargoNome"]?.ToString() ?? "";
+        }
 
         <a href="/Admin/Dashboard" class="menu-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -463,11 +466,27 @@
                 <line x1="19" y1="8" x2="19" y2="14" />
                 <line x1="22" y1="11" x2="16" y2="11" />
             </svg>
-            Funcion&aacute;rios
+            Funcionários
+        </a>
+
+        <a href="/Cargo" class="menu-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+            </svg>
+            Cargos
         </a>
 
         <div class="sidebar-divider"></div>
         <span class="menu-label">Sistema</span>
+
+        <button class="menu-item" onclick="abrirConfig()" style="background: none; border: none; cursor: pointer; width: 100%; text-align: left;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14" />
+            </svg>
+            Configurações
+        </button>
 
         <a href="/Auth/Logout" class="menu-item danger">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -501,13 +520,13 @@
             <div>
                 <div class="breadcrumb">
                     <a href="/Admin/Dashboard">Dashboard</a>
-                    <span class="breadcrumb-sep">›</span>
-                    <a href="/Usuario">Funcion&aacute;rios</a>
-                    <span class="breadcrumb-sep">›</span>
+                    <span class="breadcrumb-sep">/</span>
+                    <a href="/Usuario">Funcionários</a>
+                    <span class="breadcrumb-sep">/</span>
                     <span class="breadcrumb-current">Novo</span>
                 </div>
                 <div class="page-title-block">
-                    <div class="page-title">Novo Funcion&aacute;rio</div>
+                    <div class="page-title">Novo Funcionário</div>
                 </div>
             </div>
             <a href="/Usuario" class="btn-back">
@@ -540,8 +559,8 @@
                         <div class="section-head">
                             <div class="section-num">1</div>
                             <div class="section-info">
-                                <div class="section-title">Identifica&ccedil;&atilde;o</div>
-                                <div class="section-desc">Nome e e-mail do funcion&aacute;rio</div>
+                                <div class="section-title">Identificação</div>
+                                <div class="section-desc">Nome e e-mail do funcionário</div>
                             </div>
                         </div>
 
@@ -590,7 +609,7 @@
                             <div class="section-num">2</div>
                             <div class="section-info">
                                 <div class="section-title">Acesso ao Sistema</div>
-                                <div class="section-desc">Defina a senha e o n&iacute;vel de permiss&atilde;o</div>
+                                <div class="section-desc">Defina a senha e o nível de permissão</div>
                             </div>
                         </div>
 
@@ -618,16 +637,15 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">Cargo / Permiss&atilde;o <span>*</span></label>
+                                <label class="form-label">Cargo <span>*</span></label>
                                 <div class="input-wrapper">
-                                    @Html.DropDownListFor(m => m.Role,
-                                        new SelectList(new[] {
-                                            new { Value = "Funcionario", Text = "Funcionário" },
-                                            new { Value = "Gerente",     Text = "Gerente" },
-                                            new { Value = "Admin",       Text = "Admin" }
-                                        }, "Value", "Text"),
-                                        "Selecione...",
-                                        new { @class = "form-control", id = "roleSelect" }
+                                    @{
+                                        var cargos = ViewBag.Cargos as List<ATLAS_ERP.Models.Cargo> ?? new List<ATLAS_ERP.Models.Cargo>();
+                                    }
+                                    @Html.DropDownListFor(m => m.CargoId,
+                                        new SelectList(cargos, "CargoId", "Nome"),
+                                        "Selecione um cargo...",
+                                        new { @class = "form-control", id = "cargoSelect" }
                                     )
                                     <span class="input-icon">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -636,8 +654,7 @@
                                         </svg>
                                     </span>
                                 </div>
-                                <div class="role-desc" id="roleDesc"></div>
-                                @Html.ValidationMessageFor(m => m.Role, "", new { @class = "field-error" })
+                                @Html.ValidationMessageFor(m => m.CargoId, "", new { @class = "field-error" })
                             </div>
                         </div>
                     </div>
@@ -649,7 +666,7 @@
                     <div class="preview-card">
                         <div class="preview-header">
                             <div class="preview-avatar" id="prevAvatar">?</div>
-                            <div class="preview-name" id="prevNome">Nome do funcion&aacute;rio</div>
+                            <div class="preview-name" id="prevNome">Nome do funcionário</div>
                             <div class="preview-email" id="prevEmail">email@empresa.com</div>
                         </div>
                         <div class="preview-body">
@@ -662,7 +679,7 @@
                                 </div>
                                 <div class="preview-row-label">Cargo</div>
                                 <div class="preview-row-val" id="prevRole">
-                                    <span class="role-badge empty-badge">n&atilde;o definido</span>
+                                    <span class="role-badge empty-badge">não definido</span>
                                 </div>
                             </div>
                             <div class="preview-row">
@@ -674,14 +691,14 @@
                                 </div>
                                 <div class="preview-row-label">Senha</div>
                                 <div class="preview-row-val" id="prevSenha">
-                                    <span class="empty">n&atilde;o definida</span>
+                                    <span class="empty">não definida</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="preview-tip">
-                        <strong>Dica:</strong> O funcion&aacute;rio poder&aacute; alterar sua senha ap&oacute;s o primeiro acesso. Escolha um cargo adequado &agrave;s responsabilidades.
+                        <strong>Dica:</strong> O funcionário poderá alterar sua senha após o primeiro acesso. Escolha um cargo adequado às responsabilidades.
                     </div>
                 </aside>
 
@@ -689,7 +706,7 @@
 
             <!-- ACTION BAR -->
             <div class="action-bar">
-                <div class="action-hint"><span>*</span> Campos obrigat&oacute;rios</div>
+                <div class="action-hint"><span>*</span> Campos obrigatórios</div>
                 <div class="action-btns">
                     <a href="/Usuario" class="btn-cancel">Cancelar</a>
                     <button type="submit" class="btn-submit">
@@ -699,7 +716,7 @@
                             <line x1="19" y1="8" x2="19" y2="14" />
                             <line x1="22" y1="11" x2="16" y2="11" />
                         </svg>
-                        Criar Funcion&aacute;rio
+                        Criar Funcionário
                     </button>
                 </div>
             </div>
@@ -711,7 +728,7 @@
         var nomeInput  = document.getElementById('nomeInput');
         var emailInput = document.getElementById('emailInput');
         var senhaInput = document.getElementById('senhaInput');
-        var roleSelect = document.getElementById('roleSelect');
+        var cargoSelect = document.getElementById('cargoSelect');
 
         var prevAvatar = document.getElementById('prevAvatar');
         var prevNome   = document.getElementById('prevNome');
@@ -720,13 +737,6 @@
         var prevSenha  = document.getElementById('prevSenha');
         var strengthFill = document.getElementById('strengthFill');
         var strengthHint = document.getElementById('strengthHint');
-        var roleDesc     = document.getElementById('roleDesc');
-
-        var roleColors = {
-            'Admin':       { cls: 'admin',       label: 'Admin',       desc: 'Acesso total ao sistema, incluindo configura\u00e7\u00f5es e relat\u00f3rios.' },
-            'Gerente':     { cls: 'gerente',      label: 'Gerente',     desc: 'Gerencia equipes, visualiza relat\u00f3rios e aprova opera\u00e7\u00f5es.' },
-            'Funcionario': { cls: 'funcionario',  label: 'Funcion\u00e1rio', desc: 'Acesso operacional padr\u00e3o: vendas, clientes e produtos.' }
-        };
 
         function updatePreview() {
             // Avatar + nome
@@ -753,15 +763,13 @@
                 prevEmail.classList.add('empty');
             }
 
-            // Role
-            var roleVal = roleSelect.value;
-            if (roleVal && roleColors[roleVal]) {
-                var r = roleColors[roleVal];
-                prevRole.innerHTML = '<span class="role-badge ' + r.cls + '">' + r.label + '</span>';
-                roleDesc.textContent = r.desc;
+            // Cargo
+            var cargoSelected = cargoSelect.options[cargoSelect.selectedIndex];
+            if (cargoSelected && cargoSelected.value) {
+                var cargoNome = cargoSelected.text;
+                prevRole.innerHTML = '<span class="role-badge">' + cargoNome + '</span>';
             } else {
                 prevRole.innerHTML = '<span class="role-badge empty-badge">n\u00e3o definido</span>';
-                roleDesc.textContent = '';
             }
 
             // Senha strength
@@ -800,9 +808,77 @@
         nomeInput.addEventListener('input',  updatePreview);
         emailInput.addEventListener('input', updatePreview);
         senhaInput.addEventListener('input', updatePreview);
-        roleSelect.addEventListener('change', updatePreview);
+        cargoSelect.addEventListener('change', updatePreview);
 
         updatePreview();
+    </script>
+
+    <!-- MODAL CONFIGURACOES -->
+    <div class="modal-overlay" id="modalConfig" onclick="fecharFora(event)" style="position: fixed; inset: 0; z-index: 999; background: rgba(0,0,0,0.65); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 20px;">
+        <div class="modal" style="background: var(--card); border: 1px solid var(--border-md); border-radius: 18px; padding: 32px 36px; width: 100%; max-width: 480px; position: relative; animation: fadeUp 0.25s ease both;">
+            <button class="modal-close" onclick="fecharConfig()" style="position: absolute; top: 16px; right: 16px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--muted); transition: background 0.15s, color 0.15s;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+
+            <div style="font-family: 'Syne',sans-serif; font-size: 17px; font-weight: 700; margin-bottom: 4px;">Configurações da Empresa</div>
+            <div style="font-size: 13px; color: var(--muted); margin-bottom: 22px;">Atualize as informações da sua empresa</div>
+            <div style="height: 1px; background: var(--border); margin-bottom: 22px;"></div>
+
+            <form method="POST" action="/Empresa/Configuracoes" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; font-size: 11px; font-weight: 500; color: var(--muted); margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.05em;">E-mail da Empresa</label>
+                    <input type="email" name="Email" style="width: 100%; height: 42px; background: var(--panel); border: 1px solid var(--border); border-radius: 9px; padding: 0 14px; font-family: 'DM Sans',sans-serif; font-size: 14px; color: var(--text); outline: none;" placeholder="contato@suaempresa.com" />
+                </div>
+
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; font-size: 11px; font-weight: 500; color: var(--muted); margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.05em;">Logo da Empresa</label>
+                    <div style="border: 2px dashed var(--border); border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s;" id="uploadArea">
+                        <input type="file" name="Logo" accept="image/*" id="logoInput" onchange="previewLogo(this)" style="position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%;" />
+                        <div style="color: var(--faint); margin-bottom: 8px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 28px; height: 28px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg></div>
+                        <div style="font-size: 13px; color: var(--muted);">Clique para selecionar uma imagem</div>
+                        <div style="font-size: 11px; color: var(--faint); margin-top: 4px;">PNG, JPG ou SVG — máx. 2MB</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-top: 24px;">
+                    <button type="button" class="modal-btn-cancel" onclick="fecharConfig()" style="height: 44px; padding: 0 20px; background: none; border: 1px solid var(--border); border-radius: 9px; color: var(--muted); font-size: 14px; cursor: pointer; transition: background 0.15s, color 0.15s;">Cancelar</button>
+                    <button type="submit" style="flex: 1; height: 44px; background: var(--accent); border: none; border-radius: 9px; font-family: 'Syne',sans-serif; font-size: 14px; font-weight: 600; color: white; cursor: pointer; transition: background 0.2s, transform 0.15s;">Salvar alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function abrirConfig() {
+            document.getElementById('modalConfig').style.display = 'flex';
+        }
+
+        function fecharConfig() {
+            document.getElementById('modalConfig').style.display = 'none';
+        }
+
+        function fecharFora(e) {
+            if (e.target === document.getElementById('modalConfig')) fecharConfig();
+        }
+
+        function previewLogo(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    console.log('Logo preview loaded');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') fecharConfig();
+        });
     </script>
 
 </body>
