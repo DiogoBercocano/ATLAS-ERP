@@ -13,7 +13,6 @@ namespace ATLAS_ERP.Controllers
     {
         private readonly AtlasContext db = new AtlasContext();
 
-        [PermissaoFilter("dashboard_view")]
         public ActionResult Dashboard()
         {
             try

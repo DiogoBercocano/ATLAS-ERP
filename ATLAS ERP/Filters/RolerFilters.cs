@@ -88,7 +88,7 @@ namespace ATLAS_ERP.Filters
 
                     if (!temPermissao)
                     {
-                        filterContext.Result = new RedirectResult("/Admin/Dashboard");
+                        filterContext.Result = new RedirectResult("/");
                         return;
                     }
                 }
