@@ -27,7 +27,7 @@ namespace ATLAS_ERP.Controllers
             _relatorioService = new RelatorioService(db);
         }
 
-        [RoleFilter("Admin", "Gerente")]
+        [PermissaoFilter("vendas_view")]
         public ActionResult Index()
         {
             try
@@ -42,7 +42,7 @@ namespace ATLAS_ERP.Controllers
             }
         }
 
-        [RoleFilter("Admin", "Gerente")]
+        [PermissaoFilter("vendas_create")]
         public ActionResult Create()
         {
             ViewBag.Clientes = _clienteService.ListarPorEmpresa(EmpresaId);
@@ -52,7 +52,7 @@ namespace ATLAS_ERP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [RoleFilter("Admin", "Gerente")]
+        [PermissaoFilter("vendas_create")]
         public ActionResult Create(int clienteId, DateTime vencimento,
                                    int[] produtoIds, int[] quantidades, decimal[] precos)
         {
@@ -85,7 +85,7 @@ namespace ATLAS_ERP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [RoleFilter("Admin")]
+        [PermissaoFilter("vendas_delete")]
         public ActionResult Cancelar(int vendaId)
         {
             try
@@ -102,7 +102,7 @@ namespace ATLAS_ERP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [RoleFilter("Admin", "Gerente")]
+        [PermissaoFilter("vendas_edit")]
         public ActionResult RegistrarPagamento(int contaId)
         {
             try
@@ -117,7 +117,7 @@ namespace ATLAS_ERP.Controllers
             }
         }
 
-        [RoleFilter("Admin", "Gerente")]
+        [PermissaoFilter("vendas_view")]
         public ActionResult Nota(int id)
         {
             try
@@ -133,7 +133,7 @@ namespace ATLAS_ERP.Controllers
             }
         }
 
-        [RoleFilter("Admin", "Gerente")]
+        [PermissaoFilter("vendas_view")]
         public ActionResult Financeiro()
         {
             try

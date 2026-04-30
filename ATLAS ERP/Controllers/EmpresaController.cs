@@ -55,7 +55,6 @@ namespace ATLAS_ERP.Controllers
                     Name       = NomeAdmin,
                     Email      = EmailAdmin,
                     SenhaHash  = PasswordHelper.HashSenha(Senha),
-                    Role       = Roles.Admin,
                     Ativo      = false,
                     EmpresaId  = empresa.EmpresaId
                 });

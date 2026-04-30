@@ -17,6 +17,7 @@ namespace ATLAS_ERP.Controllers
             _service = new ClienteService(new AtlasContext());
         }
 
+        [PermissaoFilter("clientes_view")]
         public ActionResult Index()
         {
             if (Session[Infrastructure.SessionKeys.UsuarioLogado] == null)
@@ -33,12 +34,12 @@ namespace ATLAS_ERP.Controllers
             }
         }
 
-        [RoleFilter("Admin", "Gerente")]
+        [PermissaoFilter("clientes_create")]
         public ActionResult Create() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [RoleFilter("Admin", "Gerente")]
+        [PermissaoFilter("clientes_create")]
         public ActionResult Create(Cliente cliente)
         {
             try
@@ -61,7 +62,7 @@ namespace ATLAS_ERP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [RoleFilter("Admin", "Gerente")]
+        [PermissaoFilter("clientes_edit")]
         public ActionResult Edit(int ClienteId, string Nome, string Documento,
                                  string Email, string Telefone, string Endereco,
                                  decimal? LimiteCredito, string Ativo)
@@ -81,7 +82,7 @@ namespace ATLAS_ERP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [RoleFilter("Admin")]
+        [PermissaoFilter("clientes_delete")]
         public ActionResult Delete(int clienteId)
         {
             try

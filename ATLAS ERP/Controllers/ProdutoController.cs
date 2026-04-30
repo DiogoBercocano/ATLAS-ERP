@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.IO;
+using System.Web;
 using System.Web.Mvc;
 using ATLAS_ERP.Data;
 using ATLAS_ERP.Filters;
@@ -17,6 +19,7 @@ namespace ATLAS_ERP.Controllers
             _service = new ProdutoService(new AtlasContext());
         }
 
+        [PermissaoFilter("produtos_view")]
         public ActionResult Index()
         {
             if (Session[Infrastructure.SessionKeys.UsuarioLogado] == null)
@@ -33,19 +36,20 @@ namespace ATLAS_ERP.Controllers
             }
         }
 
-        [RoleFilter("Admin", "Gerente")]
+        [PermissaoFilter("produtos_create")]
         public ActionResult Create() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [RoleFilter("Admin", "Gerente")]
-        public ActionResult Create(Produto produto)
+        [PermissaoFilter("produtos_create")]
+        public ActionResult Create(Produto produto, HttpPostedFileBase foto)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     produto.EmpresaId = EmpresaId;
+                    produto.FotoUrl   = SalvarFoto(foto);
                     _service.Criar(produto);
                     return RedirectToAction("Index");
                 }
@@ -61,13 +65,23 @@ namespace ATLAS_ERP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [RoleFilter("Admin", "Gerente")]
+        [PermissaoFilter("produtos_edit")]
         public ActionResult Edit(int ProdutoId, string Nome, string Categoria,
-                                 decimal PrecoVenda, int EstoqueMinimo, bool Ativo)
+                                 string PrecoVenda, int EstoqueMinimo, bool Ativo,
+                                 HttpPostedFileBase foto)
         {
             try
             {
-                _service.Editar(ProdutoId, EmpresaId, Nome, Categoria, PrecoVenda, EstoqueMinimo, Ativo);
+                decimal.TryParse(PrecoVenda,
+                    System.Globalization.NumberStyles.Any,
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    out decimal preco);
+
+                var novaFoto = SalvarFoto(foto);
+                if (novaFoto != null)
+                    DeletarFoto(_service.BuscarPorId(ProdutoId, EmpresaId)?.FotoUrl);
+
+                _service.Editar(ProdutoId, EmpresaId, Nome, Categoria, preco, EstoqueMinimo, Ativo, novaFoto);
                 return RedirectToAction("Index");
             }
             catch (System.Exception ex)
@@ -77,9 +91,37 @@ namespace ATLAS_ERP.Controllers
             }
         }
 
+        private void DeletarFoto(string fotoUrl)
+        {
+            if (string.IsNullOrEmpty(fotoUrl)) return;
+            try
+            {
+                var path = Server.MapPath("~" + fotoUrl);
+                if (System.IO.File.Exists(path)) System.IO.File.Delete(path);
+            }
+            catch { }
+        }
+
+        private string SalvarFoto(HttpPostedFileBase foto)
+        {
+            if (foto == null || foto.ContentLength == 0) return null;
+
+            var exts = new[] { ".jpg", ".jpeg", ".png", ".webp", ".gif" };
+            var ext  = Path.GetExtension(foto.FileName).ToLowerInvariant();
+            if (System.Array.IndexOf(exts, ext) < 0) return null;
+
+            var pasta = Server.MapPath("~/Content/images/produtos");
+            if (!Directory.Exists(pasta)) Directory.CreateDirectory(pasta);
+
+            var nomeArquivo = System.Guid.NewGuid().ToString("N") + ext;
+            foto.SaveAs(Path.Combine(pasta, nomeArquivo));
+
+            return "/Content/images/produtos/" + nomeArquivo;
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [RoleFilter("Admin")]
+        [PermissaoFilter("produtos_delete")]
         public ActionResult Delete(int produtoId)
         {
             try

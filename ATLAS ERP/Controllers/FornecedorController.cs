@@ -18,6 +18,7 @@ namespace ATLAS_ERP.Controllers
             _service = new FornecedorService(new AtlasContext());
         }
 
+        [PermissaoFilter("fornecedores_view")]
         public ActionResult Index()
         {
             if (Session[Infrastructure.SessionKeys.UsuarioLogado] == null)
@@ -34,12 +35,12 @@ namespace ATLAS_ERP.Controllers
             }
         }
 
-        [RoleFilter("Admin", "Gerente")]
+        [PermissaoFilter("fornecedores_create")]
         public ActionResult Create() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [RoleFilter("Admin", "Gerente")]
+        [PermissaoFilter("fornecedores_create")]
         public ActionResult Create(Fornecedor fornecedor)
         {
             try
@@ -62,7 +63,7 @@ namespace ATLAS_ERP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [RoleFilter("Admin", "Gerente")]
+        [PermissaoFilter("fornecedores_edit")]
         public ActionResult Edit(int FornecedorId, string Nome, string CNPJ, string Telefone, string Email)
         {
             try
@@ -79,7 +80,7 @@ namespace ATLAS_ERP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [RoleFilter("Admin")]
+        [PermissaoFilter("fornecedores_delete")]
         public ActionResult Delete(int fornecedorId)
         {
             try

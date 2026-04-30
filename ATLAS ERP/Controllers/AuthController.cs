@@ -1,3 +1,4 @@
+using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
@@ -17,10 +18,10 @@ namespace ATLAS_ERP.Controllers
             {
                 if (Session[SessionKeys.UsuarioLogado] != null)
                 {
-                    var role = Session[SessionKeys.Role]?.ToString();
-                    if (role == Roles.SuperAdmin)
+                    var cargoNome = Session[SessionKeys.CargoNome]?.ToString();
+                    if (cargoNome == "SuperAdmin")
                         return RedirectToAction("Index", "SuperAdmin");
-                    if (role == Roles.Admin || role == Roles.Gerente)
+                    if (cargoNome == "Admin" || cargoNome == "Gerente")
                         return RedirectToAction("Dashboard", "Admin");
                     return RedirectToAction("Index", "Produto");
                 }
@@ -40,22 +41,26 @@ namespace ATLAS_ERP.Controllers
             try
             {
                 var senhaHash = PasswordHelper.HashSenha(senha);
-                var user = db.Usuarios.FirstOrDefault(u =>
-                    u.Email == email &&
-                    u.SenhaHash == senhaHash &&
-                    u.Ativo == true
-                );
+                var user = db.Usuarios
+                    .Include(u => u.Cargo)
+                    .FirstOrDefault(u =>
+                        u.Email == email &&
+                        u.SenhaHash == senhaHash &&
+                        u.Ativo == true
+                    );
 
                 if (user != null)
                 {
                     Session[SessionKeys.UsuarioLogado] = user.Name;
                     Session[SessionKeys.UsuarioId]     = user.UsuarioId;
-                    Session[SessionKeys.Role]          = user.Role;
+                    Session[SessionKeys.CargoId]       = user.CargoId;
+                    Session[SessionKeys.CargoNome]     = user.Cargo?.Nome;
                     Session[SessionKeys.EmpresaId]     = user.EmpresaId.HasValue ? (object)user.EmpresaId.Value : null;
 
-                    if (user.Role == Roles.SuperAdmin)
+                    var cargoNome = user.Cargo?.Nome;
+                    if (cargoNome == "SuperAdmin")
                         return RedirectToAction("Index", "SuperAdmin");
-                    if (user.Role == Roles.Admin || user.Role == Roles.Gerente)
+                    if (cargoNome == "Admin" || cargoNome == "Gerente")
                         return RedirectToAction("Dashboard", "Admin");
 
                     return RedirectToAction("Index", "Produto");
