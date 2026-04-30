@@ -977,6 +977,9 @@
         </div>
 
         <span class="menu-label">Principal</span>
+        @{
+            var cargoNome = Session["CargoNome"]?.ToString() ?? "";
+        }
 
         <a href="/Admin/Dashboard" class="menu-item active">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1015,12 +1018,20 @@
             Funcionários
         </a>
 
-        <a href="#" class="menu-item">
+        <a href="/Venda" class="menu-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="12" y1="1" x2="12" y2="23" />
                 <path d="M17 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6" />
             </svg>
-            Financeiro
+            Vendas
+        </a>
+
+        <a href="/Cargo" class="menu-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+            </svg>
+            Cargos
         </a>
 
         <div class="sidebar-divider"></div>
@@ -1054,7 +1065,7 @@
             <div class="user-avatar">@inicial</div>
             <div>
                 <div class="user-name">@nomeUsuario</div>
-                <div class="user-role">@(Session["Role"]?.ToString() ?? "Usuário")</div>
+                <div class="user-role">@(cargoNome ?? "Sem cargo")</div>
             </div>
         </div>
     </aside>
