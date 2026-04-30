@@ -129,6 +129,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
+    <Compile Include="Controllers\CargoController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\EmpresaController.cs" />
     <Compile Include="Controllers\FornecedorController.cs" />
@@ -146,8 +147,30 @@
     <Compile Include="Migrations\202604080036475_AddEstoqueAtualRemoverFilial.Designer.cs">
       <DependentUpon>202604080036475_AddEstoqueAtualRemoverFilial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202604280040504_AddPaginaCreateProdutos.cs" />
+    <Compile Include="Migrations\202604280040504_AddPaginaCreateProdutos.Designer.cs">
+      <DependentUpon>202604280040504_AddPaginaCreateProdutos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202604282250250_AddFotoProduto.cs" />
+    <Compile Include="Migrations\202604282250250_AddFotoProduto.Designer.cs">
+      <DependentUpon>202604282250250_AddFotoProduto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20260429202512_AddCargoAndPermissoes.cs" />
+    <Compile Include="Migrations\20260429202512_AddCargoAndPermissoes.Designer.cs">
+      <DependentUpon>20260429202512_AddCargoAndPermissoes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20260429203000_UpdateCargoPermissaoKey.cs" />
+    <Compile Include="Migrations\20260429203000_UpdateCargoPermissaoKey.Designer.cs">
+      <DependentUpon>20260429203000_UpdateCargoPermissaoKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20260429204000_FinalCargoPermissaoSync.cs" />
+    <Compile Include="Migrations\20260429204000_FinalCargoPermissaoSync.Designer.cs">
+      <DependentUpon>20260429204000_FinalCargoPermissaoSync.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\CargoService.cs" />
     <Compile Include="Services\ClienteService.cs" />
     <Compile Include="Services\FornecedorService.cs" />
+    <Compile Include="Services\PermissaoService.cs" />
     <Compile Include="Services\ProdutoService.cs" />
     <Compile Include="Services\RelatorioService.cs" />
     <Compile Include="Services\UsuarioService.cs" />
@@ -184,10 +207,13 @@
       <DependentUpon>202604011414241_AddTelefoneEnderecoCliente.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Cargo.cs" />
+    <Compile Include="Models\CargoPermissao.cs" />
     <Compile Include="Models\Cliente.cs" />
     <Compile Include="Models\ContaReceber.cs" />
     <Compile Include="Models\Empresa.cs" />
     <Compile Include="Models\Fornecedor.cs" />
+    <Compile Include="Models\Permissao.cs" />
     <Compile Include="Models\Produto.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Models\Venda.cs" />
@@ -215,6 +241,7 @@
     <Content Include="Content\images\logos\atlas_erp_diamante.svg" />
     <Content Include="Content\images\logos\Logo_atlas.png" />
     <Content Include="Content\images\logos\test-logo.png" />
+    <Content Include="Content\images\produtos\WhatsApp Image 2026-04-27 at 20.50.30.jpeg" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -224,6 +251,7 @@
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Content\images\produtos\.gitkeep" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -257,7 +285,12 @@
     <Content Include="Views\Empresa\Cadastro.cshtml" />
     <Content Include="Views\SuperAdmin\Index.cshtml" />
     <Content Include="Views\Cliente\Index.cshtml" />
+    <Content Include="Views\Cargo\Create.cshtml" />
+    <Content Include="Views\Cargo\Edit.cshtml" />
+    <Content Include="Views\Cargo\Index.cshtml" />
+    <Content Include="Views\Cargo\Permissoes.cshtml" />
     <Content Include="Views\Cliente\Create.cshtml" />
+    <Content Include="Views\Produto\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -313,6 +346,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202604080036475_AddEstoqueAtualRemoverFilial.resx">
       <DependentUpon>202604080036475_AddEstoqueAtualRemoverFilial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202604280040504_AddPaginaCreateProdutos.resx">
+      <DependentUpon>202604280040504_AddPaginaCreateProdutos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202604282250250_AddFotoProduto.resx">
+      <DependentUpon>202604282250250_AddFotoProduto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\20260429202512_AddCargoAndPermissoes.resx">
+      <DependentUpon>20260429202512_AddCargoAndPermissoes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\20260429203000_UpdateCargoPermissaoKey.resx">
+      <DependentUpon>20260429203000_UpdateCargoPermissaoKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\20260429204000_FinalCargoPermissaoSync.resx">
+      <DependentUpon>20260429204000_FinalCargoPermissaoSync.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
