@@ -1,0 +1,330 @@
+@model ATLAS_ERP.Models.Cargo
+@{
+    ViewBag.Title = "Permissoes do Cargo - Atlas ERP";
+    Layout = null;
+    var permissoesCargo = ViewBag.PermissoesCargo as List<ATLAS_ERP.Models.Permissao> ?? new List<ATLAS_ERP.Models.Permissao>();
+    var permissaoPorCategoria = ViewBag.PermissaoPorCategoria as Dictionary<string, List<ATLAS_ERP.Models.Permissao>> ?? new Dictionary<string, List<ATLAS_ERP.Models.Permissao>>();
+    var idsPermissaoCargo = permissoesCargo.Select(p => p.PermissaoId).ToHashSet();
+}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Permissoes - @Model.Nome - Atlas ERP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #050d1a;
+            --panel: #0b1525;
+            --card: #0f1e35;
+            --card-hover: #132540;
+            --border: rgba(100,160,255,0.15);
+            --accent: #3b82f6;
+            --accent-soft: rgba(59,130,246,0.12);
+            --text: #e8f0fe;
+            --muted: #7a9cc8;
+            --faint: #3d5270;
+            --green: #34d399;
+            --sidebar-w: 280px;
+            --radius: 16px;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+
+        .sidebar {
+            width: var(--sidebar-w);
+            height: 100vh;
+            background: linear-gradient(135deg, var(--panel) 0%, #0a0f1e 100%);
+            border-right: 1px solid var(--border);
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            padding: 32px 16px;
+            z-index: 100;
+            overflow-y: auto;
+        }
+
+        .sidebar-logo { display: flex; align-items: center; justify-content: center; margin-bottom: 48px; }
+        .sidebar-logo img { width: 280px; max-width: 100%; }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 11px 14px;
+            border-radius: 10px;
+            transition: all 0.25s;
+        }
+        .menu-item:hover {
+            background: rgba(59,130,246,0.1);
+            color: var(--accent);
+            transform: translateX(4px);
+        }
+
+        .main {
+            flex: 1;
+            margin-left: var(--sidebar-w);
+            padding: 48px 40px;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(135deg, #050d1a 0%, #0a1428 100%);
+        }
+        .content { max-width: 1200px; margin: 0 auto; }
+
+        .header { margin-bottom: 40px; }
+        .header h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #e8f0fe 0%, #60a5fa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header p { color: var(--faint); font-size: 15px; margin-top: 12px; }
+
+        .info-box {
+            background: linear-gradient(135deg, var(--card) 0%, #0d2139 100%);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px 28px;
+            margin-bottom: 48px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .info-box-icon { font-size: 40px; }
+        .info-box-content h3 {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--faint);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 4px;
+        }
+        .info-box-content p { font-size: 18px; font-weight: 700; color: var(--text); }
+
+        .section { margin-bottom: 48px; }
+        .section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--border);
+            color: var(--text);
+        }
+
+        .permission-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+
+        .permission-card {
+            background: linear-gradient(135deg, var(--card) 0%, #0d2139 100%);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .permission-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59,130,246,0.3), transparent);
+        }
+        .permission-card:hover {
+            border-color: rgba(59,130,246,0.3);
+            background: linear-gradient(135deg, #132540 0%, #1a3a52 100%);
+            box-shadow: 0 8px 30px rgba(59,130,246,0.15);
+            transform: translateY(-4px);
+        }
+        .permission-card.active {
+            background: linear-gradient(135deg, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0.05) 100%);
+            border-color: var(--accent);
+            box-shadow: inset 0 0 0 1px var(--accent);
+        }
+
+        .permission-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: var(--panel);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2px;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+        .permission-checkbox:hover { border-color: var(--accent); }
+        .permission-card.active .permission-checkbox {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+        .permission-checkbox svg { width: 15px; height: 15px; color: white; display: none; }
+        .permission-card.active .permission-checkbox svg { display: block; }
+
+        .permission-info { flex: 1; }
+        .permission-name { font-weight: 600; font-size: 15px; margin-bottom: 4px; color: var(--text); }
+        .permission-desc { font-size: 12px; color: var(--faint); line-height: 1.5; }
+
+        .form-actions { display: flex; gap: 12px; margin-top: 40px; }
+        .btn {
+            padding: 13px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover {
+            background: rgba(59,130,246,0.1);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .empty-state { text-align: center; padding: 60px 40px; color: var(--faint); }
+
+        .form-button {
+            flex: 1;
+            padding: 20px;
+            border: none;
+            background: transparent;
+            text-align: left;
+            cursor: pointer;
+            width: 100%;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const button = form.querySelector('button[type="submit"]');
+                    const formAction = button.formAction;
+                    const tokenInput = form.querySelector('[name="__RequestVerificationToken"]');
+
+                    const formData = new FormData();
+                    formData.append('__RequestVerificationToken', tokenInput.value);
+
+                    try {
+                        const response = await fetch(formAction, {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        if (response.ok) {
+                            const permissionCard = form.querySelector('.permission-card');
+                            permissionCard.classList.toggle('active');
+                        }
+                    } catch (error) {
+                        console.error('Erro ao atualizar permissao:', error);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <a href="/"><img src="~/Content/images/logos/atlas_erp_diamante.svg" alt="Atlas ERP" /></a>
+        </div>
+        <a href="/Cargo" class="menu-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;">
+                <line x1="19" y1="12" x2="5" y2="12" />
+                <polyline points="12 19 5 12 12 5" />
+            </svg>
+            Voltar
+        </a>
+    </aside>
+
+    <main class="main">
+        <div class="content">
+            <div class="header">
+                <h1>Permissoes</h1>
+                <p>Defina quais funções este cargo terá acesso no sistema</p>
+            </div>
+
+            <div class="info-box">
+                <div class="info-box-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 28px; height: 28px;">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                </div>
+                <div class="info-box-content">
+                    <h3>Cargo Selecionado</h3>
+                    <p>@Model.Nome</p>
+                </div>
+            </div>
+
+            @if (permissaoPorCategoria.Count == 0)
+            {
+                <div class="empty-state">
+                    <p>Nenhuma permissão disponível no sistema.</p>
+                </div>
+            }
+            else
+            {
+                foreach (var categoria in permissaoPorCategoria.OrderBy(x => x.Key))
+                {
+                    <div class="section">
+                        <div class="section-title">@categoria.Key</div>
+                        <div class="permission-grid">
+                            @foreach (var permissao in categoria.Value.OrderBy(p => p.Nome))
+                            {
+                                var isChecked = idsPermissaoCargo.Contains(permissao.PermissaoId);
+                                <form method="POST" style="width: 100%;">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit"
+                                            formaction="@(isChecked ? $"/Cargo/RemoverPermissao?cargoId={Model.CargoId}&permissaoId={permissao.PermissaoId}" : $"/Cargo/AdicionarPermissao?cargoId={Model.CargoId}&permissaoId={permissao.PermissaoId}")"
+                                            class="permission-card form-button @(isChecked ? "active" : "")">
+                                        <div class="permission-checkbox">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                            </svg>
+                                        </div>
+                                        <div class="permission-info">
+                                            <div class="permission-name">@permissao.Nome</div>
+                                            <div class="permission-desc">@permissao.Descricao</div>
+                                        </div>
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+
+            <div class="form-actions">
+                <a href="/Cargo" class="btn">Voltar</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
