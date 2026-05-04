@@ -142,6 +142,7 @@
     <Compile Include="Filters\GlobalExceptionFilter.cs" />
     <Compile Include="Filters\RolerFilters.cs" />
     <Compile Include="Helpers\PasswordHelper.cs" />
+    <Compile Include="Helpers\PermissaoHelper.cs" />
     <Compile Include="Infrastructure\AppConstants.cs" />
     <Compile Include="Migrations\202604080036475_AddEstoqueAtualRemoverFilial.cs" />
     <Compile Include="Migrations\202604080036475_AddEstoqueAtualRemoverFilial.Designer.cs">
