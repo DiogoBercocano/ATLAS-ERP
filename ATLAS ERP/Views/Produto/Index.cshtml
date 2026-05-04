@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<ATLAS_ERP.Models.Produto>
+@using ATLAS_ERP.Helpers
 @{
     ViewBag.Title = "Produtos - Atlas ERP";
     Layout = null;
@@ -572,13 +573,16 @@
         </svg>Funcionários
     </a>
 
-    <a href="/Cargo" class="menu-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-            <circle cx="12" cy="7" r="4" />
-        </svg>
-        Cargos
-    </a>
+    @if (PermissaoHelper.UsuarioTemPermissao("cargos_manage"))
+    {
+        <a href="/Cargo" class="menu-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+            </svg>
+            Cargos
+        </a>
+    }
 
     <div class="sidebar-divider"></div>
     <span class="menu-label">Sistema</span>

@@ -1,3 +1,4 @@
+@using ATLAS_ERP.Helpers
 ﻿@model ATLAS_ERP.Models.Usuario
 @{
     ViewBag.Title = "Novo Funcionário - Atlas ERP";
@@ -407,6 +408,7 @@
             <a href="/Admin/Dashboard">
                 <img src="~/Content/images/logos/atlas_erp_diamante.svg" alt="Atlas ERP" />
             </a>
+    }
         </div>
 
         <span class="menu-label">Principal</span>
@@ -423,6 +425,7 @@
             </svg>
             Dashboard
         </a>
+    }
 
         <a href="/Venda" class="menu-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -432,6 +435,7 @@
             </svg>
             Vendas
         </a>
+    }
 
         <a href="/Produto" class="menu-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -439,6 +443,7 @@
             </svg>
             Produtos
         </a>
+    }
 
         <a href="/Cliente" class="menu-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -449,6 +454,7 @@
             </svg>
             Clientes
         </a>
+    }
 
         <a href="/Fornecedor" class="menu-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -458,6 +464,7 @@
             </svg>
             Fornecedores
         </a>
+    }
 
         <a href="/Usuario" class="menu-item active">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -468,6 +475,7 @@
             </svg>
             Funcionários
         </a>
+    }
 
         <a href="/Cargo" class="menu-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -476,6 +484,7 @@
             </svg>
             Cargos
         </a>
+    }
 
         <div class="sidebar-divider"></div>
         <span class="menu-label">Sistema</span>
@@ -496,6 +505,7 @@
             </svg>
             Sair
         </a>
+    }
 
         <div class="sidebar-spacer"></div>
 
@@ -520,8 +530,10 @@
             <div>
                 <div class="breadcrumb">
                     <a href="/Admin/Dashboard">Dashboard</a>
+    }
                     <span class="breadcrumb-sep">/</span>
                     <a href="/Usuario">Funcionários</a>
+    }
                     <span class="breadcrumb-sep">/</span>
                     <span class="breadcrumb-current">Novo</span>
                 </div>
@@ -535,6 +547,7 @@
                 </svg>
                 Voltar
             </a>
+    }
         </div>
 
         @using (Html.BeginForm("Create", "Usuario", FormMethod.Post, new { id = "formUsuario" }))
@@ -709,6 +722,7 @@
                 <div class="action-hint"><span>*</span> Campos obrigatórios</div>
                 <div class="action-btns">
                     <a href="/Usuario" class="btn-cancel">Cancelar</a>
+    }
                     <button type="submit" class="btn-submit">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
