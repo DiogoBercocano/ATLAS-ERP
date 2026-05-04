@@ -1,4 +1,3 @@
-@using ATLAS_ERP.Helpers
 ﻿@model List<ATLAS_ERP.Models.Usuario>
 @{
     ViewBag.Title = "Funcionários - Atlas ERP";
@@ -824,7 +823,6 @@
             <a href="/Admin/Dashboard">
                 <img src="~/Content/images/logos/atlas_erp_diamante.svg" alt="Atlas ERP" />
             </a>
-    }
         </div>
 
         <span class="menu-label">Principal</span>
@@ -841,7 +839,6 @@
             </svg>
             Dashboard
         </a>
-    }
 
         <a href="/Venda" class="menu-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -851,7 +848,6 @@
             </svg>
             Vendas
         </a>
-    }
 
         <a href="/Produto" class="menu-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -859,7 +855,6 @@
             </svg>
             Produtos
         </a>
-    }
 
         <a href="/Cliente" class="menu-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -870,7 +865,6 @@
             </svg>
             Clientes
         </a>
-    }
 
         <a href="/Fornecedor" class="menu-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -880,7 +874,6 @@
             </svg>
             Fornecedores
         </a>
-    }
 
         <a href="/Usuario" class="menu-item active">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -891,16 +884,17 @@
             </svg>
             Funcionários
         </a>
-    }
 
-        <a href="/Cargo" class="menu-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-            </svg>
-            Cargos
-        </a>
-    }
+        @if (PermissaoHelper.UsuarioTemPermissao("cargos_manage"))
+        {
+            <a href="/Cargo" class="menu-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </svg>
+                Cargos
+            </a>
+        }
 
         <div class="sidebar-divider"></div>
         <span class="menu-label">Sistema</span>
@@ -921,7 +915,6 @@
             </svg>
             Sair
         </a>
-    }
 
         <div class="sidebar-spacer"></div>
 
@@ -954,7 +947,6 @@
                 </svg>
                 Novo Funcionário
             </a>
-    }
         </div>
 
         <div class="table-card">
