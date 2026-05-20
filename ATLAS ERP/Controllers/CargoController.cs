@@ -142,12 +142,14 @@ namespace ATLAS_ERP.Controllers
                 if (cargo != null)
                 {
                     _cargoService.AdicionarPermissao(cargoId, permissaoId);
+                    PermissaoCache.InvalidarGlobal();
+                    AppLogger.Audit("permissao_adicionada cargoId={0} permissaoId={1}", cargoId, permissaoId);
                 }
                 return RedirectToAction("Permissoes", new { id = cargoId });
             }
             catch (Exception ex)
             {
-                Trace.TraceError("CargoController.AdicionarPermissao: {0}", ex);
+                AppLogger.Error(ex, "CargoController.AdicionarPermissao cargoId={0} permissaoId={1}", cargoId, permissaoId);
                 return RedirectToAction("Permissoes", new { id = cargoId });
             }
         }
@@ -162,12 +164,14 @@ namespace ATLAS_ERP.Controllers
                 if (cargo != null)
                 {
                     _cargoService.RemoverPermissao(cargoId, permissaoId);
+                    PermissaoCache.InvalidarGlobal();
+                    AppLogger.Audit("permissao_removida cargoId={0} permissaoId={1}", cargoId, permissaoId);
                 }
                 return RedirectToAction("Permissoes", new { id = cargoId });
             }
             catch (Exception ex)
             {
-                Trace.TraceError("CargoController.RemoverPermissao: {0}", ex);
+                AppLogger.Error(ex, "CargoController.RemoverPermissao cargoId={0} permissaoId={1}", cargoId, permissaoId);
                 return RedirectToAction("Permissoes", new { id = cargoId });
             }
         }
@@ -183,13 +187,21 @@ namespace ATLAS_ERP.Controllers
                     return RedirectToAction("Index");
 
                 _cargoService.Excluir(id, EmpresaId);
+                PermissaoCache.InvalidarGlobal();
+                AppLogger.Audit("cargo_excluido cargoId={0} nome={1}", id, cargo.Nome);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                Trace.TraceError("CargoController.Delete: {0}", ex);
+                AppLogger.Error(ex, "CargoController.Delete id={0}", id);
                 return RedirectToAction("Index");
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) db?.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

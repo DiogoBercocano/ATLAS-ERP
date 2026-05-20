@@ -111,6 +111,34 @@ namespace ATLAS_ERP.Migrations
                 context.SaveChanges();
             }
 
+            // ATRIBUIR PERMISSÕES OPERACIONAIS AO GERENTE (sem delete, sem cargos_manage, sem settings)
+            var gerenteCargo = context.Cargos.FirstOrDefault(c => c.Nome == "Gerente");
+            if (gerenteCargo != null)
+            {
+                var chavesGerente = new[]
+                {
+                    "dashboard_view",
+                    "vendas_view", "vendas_create", "vendas_edit",
+                    "produtos_view", "produtos_create", "produtos_edit",
+                    "clientes_view", "clientes_create", "clientes_edit",
+                    "fornecedores_view", "fornecedores_create", "fornecedores_edit",
+                    "usuarios_view"
+                };
+                var permissoesGerente = context.Permissoes.Where(p => chavesGerente.Contains(p.Chave)).ToList();
+                foreach (var perm in permissoesGerente)
+                {
+                    if (!context.CargoPermissoes.Any(cp => cp.CargoId == gerenteCargo.CargoId && cp.PermissaoId == perm.PermissaoId))
+                    {
+                        context.CargoPermissoes.Add(new CargoPermissao
+                        {
+                            CargoId = gerenteCargo.CargoId,
+                            PermissaoId = perm.PermissaoId
+                        });
+                    }
+                }
+                context.SaveChanges();
+            }
+
             // CRIAR CARGO SUPERADMIN (SEM EMPRESA)
             if (!context.Cargos.Any(c => c.Nome == "SuperAdmin"))
             {

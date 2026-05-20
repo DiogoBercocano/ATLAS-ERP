@@ -1,0 +1,133 @@
+@model ATLAS_ERP.Models.Cliente
+@using ATLAS_ERP.Infrastructure
+@{
+    ViewBag.Title = "Editar Cliente - Atlas ERP";
+    var docFormatado = string.IsNullOrEmpty(Model.Documento) ? "" : DocumentoValidator.Formatar(Model.Documento);
+}
+
+@section styles {
+<style>
+    .main { padding:32px 40px; }
+    .page-header { padding:0 0 18px; margin-bottom:28px; background:none; backdrop-filter:none; position:static; }
+    .checkbox-row label { font-size:14px; color:var(--text); cursor:pointer; }
+</style>
+}
+
+<main class="main">
+    <div class="page-header">
+        <div>
+            <div class="page-title">Editar Cliente</div>
+            <div class="page-subtitle">@Model.Nome</div>
+        </div>
+        <a href="/Cliente" class="btn-back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            Voltar
+        </a>
+    </div>
+
+    @if (ViewBag.Erro != null)
+    {
+        <div class="alert-erro">@ViewBag.Erro</div>
+    }
+
+    <div class="form-card">
+        <form method="post" action="/Cliente/Edit" id="formEdit">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="ClienteId" value="@Model.ClienteId" />
+
+            <div class="form-section">
+                <div class="section-title">Identificação</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="Nome">Nome *</label>
+                        <input class="form-control" id="Nome" name="Nome" value="@Model.Nome" required maxlength="200" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="Documento">CPF / CNPJ</label>
+                        <input class="form-control" id="Documento" name="Documento" value="@docFormatado" oninput="onDocInput(this)" maxlength="18" />
+                        <div class="input-help" id="docHelp">Apenas números, ou com formatação. Validação automática.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-title">Contato</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="Email">E-mail</label>
+                        <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" maxlength="200" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="Telefone">Telefone</label>
+                        <input class="form-control" id="Telefone" name="Telefone" value="@Model.Telefone" oninput="this.value=maskTel(this.value)" maxlength="15" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="Endereco">Endereço</label>
+                    <textarea class="form-control" id="Endereco" name="Endereco" maxlength="400">@Model.Endereco</textarea>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-title">Comercial</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="LimiteCredito">Limite de Crédito (R$)</label>
+                        <input type="number" step="0.01" min="0" class="form-control" id="LimiteCredito" name="LimiteCredito" value="@Model.LimiteCredito.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <div class="checkbox-row" style="margin-top:8px;">
+                            <input type="checkbox" id="AtivoCheck" @(Model.Ativo ? "checked" : "") onchange="document.getElementById('Ativo').value=this.checked?'true':'false'" />
+                            <label for="AtivoCheck">
+                                <span class="badge-status @(Model.Ativo ? "badge-ativo" : "badge-inativo")" id="badgeAtivo">
+                                    @(Model.Ativo ? "Ativo" : "Inativo")
+                                </span>
+                            </label>
+                            <input type="hidden" id="Ativo" name="Ativo" value="@(Model.Ativo ? "true" : "false")" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <a href="/Cliente" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Salvar alterações</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+@section scripts {
+<script>
+    function maskCPF(v){v=v.replace(/\D/g,'').slice(0,11);v=v.replace(/(\d{3})(\d)/,'$1.$2');v=v.replace(/(\d{3})(\d)/,'$1.$2');v=v.replace(/(\d{3})(\d{1,2})$/,'$1-$2');return v;}
+    function maskCNPJ(v){v=v.replace(/\D/g,'').slice(0,14);v=v.replace(/^(\d{2})(\d)/,'$1.$2');v=v.replace(/^(\d{2})\.(\d{3})(\d)/,'$1.$2.$3');v=v.replace(/\.(\d{3})(\d)/,'.$1/$2');v=v.replace(/(\d{4})(\d)/,'$1-$2');return v;}
+    function maskTel(v){v=v.replace(/\D/g,'').slice(0,11);v=v.replace(/^(\d{2})(\d)/,'($1) $2');v=v.replace(/(\d{5})(\d)/,'$1-$2');return v;}
+
+    function onDocInput(el){
+        var d=el.value.replace(/\D/g,'');
+        if(d.length<=11)el.value=maskCPF(el.value);else el.value=maskCNPJ(el.value);
+        var help=document.getElementById('docHelp');
+        if(d.length===0){help.textContent='Opcional. Validação automática.';help.style.color='var(--faint)';return;}
+        if(d.length===11){help.textContent=validarCPF(d)?'✓ CPF válido':'✗ CPF inválido';help.style.color=validarCPF(d)?'var(--green)':'var(--red)';}
+        else if(d.length===14){help.textContent=validarCNPJ(d)?'✓ CNPJ válido':'✗ CNPJ inválido';help.style.color=validarCNPJ(d)?'var(--green)':'var(--red)';}
+        else{help.textContent='Documento incompleto ('+d.length+' dígitos)';help.style.color='var(--gold)';}
+    }
+
+    function validarCPF(cpf){cpf=cpf.replace(/\D/g,'');if(cpf.length!==11||/^(\d)\1{10}$/.test(cpf))return false;var s=0;for(var i=0;i<9;i++)s+=parseInt(cpf[i])*(10-i);var r=(s*10)%11;if(r===10||r===11)r=0;if(r!==parseInt(cpf[9]))return false;s=0;for(i=0;i<10;i++)s+=parseInt(cpf[i])*(11-i);r=(s*10)%11;if(r===10||r===11)r=0;return r===parseInt(cpf[10]);}
+    function validarCNPJ(cnpj){cnpj=cnpj.replace(/\D/g,'');if(cnpj.length!==14||/^(\d)\1{13}$/.test(cnpj))return false;var p1=[5,4,3,2,9,8,7,6,5,4,3,2],p2=[6,5,4,3,2,9,8,7,6,5,4,3,2];var s=0;for(var i=0;i<12;i++)s+=parseInt(cnpj[i])*p1[i];var r=s%11,dv1=r<2?0:11-r;if(dv1!==parseInt(cnpj[12]))return false;s=0;for(i=0;i<13;i++)s+=parseInt(cnpj[i])*p2[i];r=s%11;var dv2=r<2?0:11-r;return dv2===parseInt(cnpj[13]);}
+
+    document.getElementById('AtivoCheck').addEventListener('change', function() {
+        var badge=document.getElementById('badgeAtivo');
+        badge.textContent=this.checked?'Ativo':'Inativo';
+        badge.className='badge-status '+(this.checked?'badge-ativo':'badge-inativo');
+    });
+
+    document.getElementById('formEdit').addEventListener('submit', function(e){
+        var doc=document.getElementById('Documento').value.replace(/\D/g,'');
+        if(doc.length>0&&doc.length!==11&&doc.length!==14){e.preventDefault();alert('Documento deve ter 11 (CPF) ou 14 (CNPJ) dígitos.');return;}
+        if(doc.length===11&&!validarCPF(doc)){e.preventDefault();alert('CPF inválido.');return;}
+        if(doc.length===14&&!validarCNPJ(doc)){e.preventDefault();alert('CNPJ inválido.');return;}
+    });
+</script>
+}

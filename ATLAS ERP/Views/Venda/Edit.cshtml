@@ -1,0 +1,237 @@
+@model ATLAS_ERP.Models.Venda
+@{
+    ViewBag.Title = "Editar Venda - Atlas ERP";
+    var clientes = ViewBag.Clientes as List<ATLAS_ERP.Models.Cliente> ?? new List<ATLAS_ERP.Models.Cliente>();
+    var produtos = ViewBag.Produtos as List<ATLAS_ERP.Models.Produto> ?? new List<ATLAS_ERP.Models.Produto>();
+    var conta    = Model.ContasReceber != null
+                    ? Model.ContasReceber.OrderByDescending(c => c.ContaReceberId).FirstOrDefault()
+                    : null;
+    var vencimento = conta != null ? conta.DataVencimento : DateTime.Today;
+}
+
+@section styles {
+<style>
+    .main { padding:32px 40px; }
+    .page-header { padding:0 0 18px; margin-bottom:28px; background:none; backdrop-filter:none; position:static; }
+    .layout { display:grid; grid-template-columns:1fr 340px; gap:20px; align-items:start; }
+    @@media (max-width:1100px) { .layout { grid-template-columns:1fr; } }
+    .form-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:24px; }
+    .summary-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:22px; position:sticky; top:24px; }
+    .item-grid { display:grid; grid-template-columns:1fr 100px 130px 130px 36px; gap:8px; align-items:center; margin-bottom:8px; }
+    .item-grid .form-control { height:38px; padding:0 10px; font-size:13px; }
+    .item-grid .form-control[readonly] { color:var(--muted); }
+    .item-header { display:grid; grid-template-columns:1fr 100px 130px 130px 36px; gap:8px; padding:0 0 8px; font-size:10px; text-transform:uppercase; color:var(--faint); letter-spacing:.05em; }
+    .btn-remove { width:36px; height:36px; border-radius:8px; background:var(--red-soft); color:var(--red); border:1px solid rgba(248,113,113,0.20); cursor:pointer; display:flex; align-items:center; justify-content:center; }
+    .btn-remove:hover { background:rgba(248,113,113,0.20); }
+    .btn-add { display:inline-flex; align-items:center; gap:6px; background:var(--accent-soft); color:var(--accent-light); border:1px dashed rgba(59,130,246,0.4); padding:10px 18px; border-radius:10px; font-size:13px; cursor:pointer; margin-top:10px; }
+    .btn-add:hover { background:rgba(59,130,246,0.15); }
+    .summary-row { display:flex; justify-content:space-between; padding:8px 0; font-size:13px; color:var(--muted); border-bottom:1px dashed var(--border); }
+    .summary-row.total { font-size:18px; font-weight:700; color:var(--accent-light); padding-top:14px; border-bottom:none; font-family:'Syne',sans-serif; }
+    select.form-control { padding-right:30px; -webkit-appearance:none; appearance:none; background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%237a9cc8" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>'); background-repeat:no-repeat; background-position:right 10px center; background-size:14px; }
+    .info-banner { background:var(--accent-soft); border:1px solid rgba(59,130,246,0.20); padding:10px 14px; border-radius:10px; font-size:12px; color:var(--accent-light); margin-bottom:18px; }
+</style>
+}
+
+<main class="main">
+    <div class="page-header">
+        <div>
+            <div class="page-title">Editar Venda #@Model.VendaId</div>
+            <div class="page-subtitle">@Model.DataVenda.ToString("dd/MM/yyyy HH:mm")</div>
+        </div>
+        <a href="/Venda" class="btn-back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            Voltar
+        </a>
+    </div>
+
+    @if (ViewBag.Erro != null)
+    {
+        <div class="alert-erro">@ViewBag.Erro</div>
+    }
+
+    <div class="info-banner">
+        Editar a venda recalcula estoque e atualiza a conta a receber não paga.
+        Vendas canceladas ou com pagamento já registrado não podem ser editadas.
+    </div>
+
+    <form method="post" action="/Venda/Edit" id="formEdit">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="vendaId" value="@Model.VendaId" />
+
+        <div class="layout">
+            <div class="form-card">
+                <div class="section-title">Cliente e Vencimento</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="clienteId">Cliente *</label>
+                        <select class="form-control" id="clienteId" name="clienteId" required>
+                            @foreach (var c in clientes)
+                            {
+                                if (c.ClienteId == Model.ClienteId)
+                                {
+                                    <option value="@c.ClienteId" selected>@c.Nome</option>
+                                }
+                                else
+                                {
+                                    <option value="@c.ClienteId">@c.Nome</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="vencimento">Vencimento *</label>
+                        <input type="date" class="form-control" id="vencimento" name="vencimento" value="@vencimento.ToString("yyyy-MM-dd")" required />
+                    </div>
+                </div>
+
+                <div class="section-title" style="margin-top:18px;">Itens</div>
+                <div class="item-header">
+                    <span>Produto</span>
+                    <span>Qtde</span>
+                    <span>Preço Unit.</span>
+                    <span>Subtotal</span>
+                    <span></span>
+                </div>
+                <div id="itens-container">
+                    @{ var idx = 0; }
+                    @foreach (var item in Model.Itens)
+                    {
+                        <div class="item-grid item-row" data-idx="@idx">
+                            <select class="form-control prod-select" name="produtoIds[]" required onchange="onProdChange(this)">
+                                @foreach (var p in produtos)
+                                {
+                                    if (p.ProdutoId == item.ProdutoId)
+                                    {
+                                        <option value="@p.ProdutoId" data-preco="@p.PrecoVenda.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)" selected>@p.Nome</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@p.ProdutoId" data-preco="@p.PrecoVenda.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)">@p.Nome</option>
+                                    }
+                                }
+                                @if (!produtos.Any(p => p.ProdutoId == item.ProdutoId))
+                                {
+                                    <option value="@item.ProdutoId" selected>@(item.Produto != null ? item.Produto.Nome : "Produto removido")</option>
+                                }
+                            </select>
+                            <input type="number" min="1" class="form-control qtd-input" name="quantidades[]" value="@item.Quantidade" required oninput="recalc()" />
+                            <input type="number" step="0.01" min="0" class="form-control preco-input" name="precos[]" value="@item.PrecoUnitario.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)" required oninput="recalc()" />
+                            <input type="text" class="form-control sub-display" readonly value="@item.Subtotal.ToString("N2", new System.Globalization.CultureInfo("pt-BR"))" />
+                            <button type="button" class="btn-remove" onclick="removeRow(this)" title="Remover">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+                            </button>
+                        </div>
+                        idx++;
+                    }
+                </div>
+
+                <button type="button" class="btn-add" onclick="addRow()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Adicionar item
+                </button>
+            </div>
+
+            <aside class="summary-card">
+                <div class="section-title">Resumo</div>
+                <div class="summary-row">
+                    <span>Total original</span>
+                    <span>R$ @Model.Total.ToString("N2", new System.Globalization.CultureInfo("pt-BR"))</span>
+                </div>
+                <div class="summary-row">
+                    <span>Itens (atual)</span>
+                    <span id="qtdItens">@Model.Itens.Count</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Novo total</span>
+                    <span id="novoTotal">R$ 0,00</span>
+                </div>
+
+                <div style="margin-top:18px;display:flex;flex-direction:column;gap:10px;">
+                    <button type="submit" class="btn btn-primary">Salvar alterações</button>
+                    <a href="/Venda" class="btn btn-secondary" style="justify-content:center;">Cancelar</a>
+                </div>
+            </aside>
+        </div>
+    </form>
+</main>
+
+<div id="produtos-data" style="display:none"
+     data-json="@Newtonsoft.Json.JsonConvert.SerializeObject(produtos.Select(p => new { id = p.ProdutoId, nome = p.Nome, preco = p.PrecoVenda.ToString("F2", System.Globalization.CultureInfo.InvariantCulture) }))"></div>
+
+@section scripts {
+<script>
+    var produtosData = JSON.parse(document.getElementById('produtos-data').dataset.json);
+
+    function recalc() {
+        var rows = document.querySelectorAll('.item-row');
+        var total = 0;
+        rows.forEach(function (row) {
+            var q = parseFloat(row.querySelector('.qtd-input').value) || 0;
+            var p = parseFloat((row.querySelector('.preco-input').value || '').replace(',', '.')) || 0;
+            var sub = q * p;
+            row.querySelector('.sub-display').value = sub.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            total += sub;
+        });
+        document.getElementById('novoTotal').textContent = 'R$ ' + total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        document.getElementById('qtdItens').textContent = rows.length;
+    }
+
+    function onProdChange(sel) {
+        var opt = sel.options[sel.selectedIndex];
+        var preco = opt.getAttribute('data-preco');
+        if (preco) {
+            var row = sel.closest('.item-row');
+            row.querySelector('.preco-input').value = preco;
+            recalc();
+        }
+    }
+
+    function addRow() {
+        var container = document.getElementById('itens-container');
+        var row = document.createElement('div');
+        row.className = 'item-grid item-row';
+        var options = '<option value="">— selecionar —</option>';
+        for (var i = 0; i < produtosData.length; i++) {
+            var p = produtosData[i];
+            options += '<option value="' + p.id + '" data-preco="' + p.preco + '">' + escapeHtml(p.nome) + '</option>';
+        }
+        row.innerHTML =
+            '<select class="form-control prod-select" name="produtoIds[]" required onchange="onProdChange(this)">' + options + '</select>' +
+            '<input type="number" min="1" class="form-control qtd-input" name="quantidades[]" value="1" required oninput="recalc()" />' +
+            '<input type="number" step="0.01" min="0" class="form-control preco-input" name="precos[]" value="0.00" required oninput="recalc()" />' +
+            '<input type="text" class="form-control sub-display" readonly value="0,00" />' +
+            '<button type="button" class="btn-remove" onclick="removeRow(this)" title="Remover">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>' +
+            '</button>';
+        container.appendChild(row);
+        recalc();
+    }
+
+    function removeRow(btn) {
+        var row = btn.closest('.item-row');
+        if (document.querySelectorAll('.item-row').length <= 1) {
+            alert('A venda deve conter pelo menos um item.');
+            return;
+        }
+        row.remove();
+        recalc();
+    }
+
+    function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, function (c) {
+            return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+        });
+    }
+
+    document.getElementById('formEdit').addEventListener('submit', function (e) {
+        var rows = document.querySelectorAll('.item-row');
+        if (rows.length === 0) {
+            e.preventDefault();
+            alert('Adicione ao menos um item.');
+            return;
+        }
+    });
+
+    recalc();
+</script>
+}

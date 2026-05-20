@@ -1,18 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Web.Mvc;
 using ATLAS_ERP.Data;
 using ATLAS_ERP.Filters;
+using ATLAS_ERP.Infrastructure;
 using ATLAS_ERP.Services;
 
 namespace ATLAS_ERP.Controllers
 {
     public class VendaController : Controller
     {
-        private readonly VendaService    _vendaService;
-        private readonly ClienteService  _clienteService;
-        private readonly ProdutoService  _produtoService;
+        private readonly AtlasContext     _db;
+        private readonly VendaService     _vendaService;
+        private readonly ClienteService   _clienteService;
+        private readonly ProdutoService   _produtoService;
         private readonly RelatorioService _relatorioService;
 
         private int EmpresaId  => (int)Session[Infrastructure.SessionKeys.EmpresaId];
@@ -20,25 +23,31 @@ namespace ATLAS_ERP.Controllers
 
         public VendaController()
         {
-            var db = new AtlasContext();
-            _vendaService     = new VendaService(db);
-            _clienteService   = new ClienteService(db);
-            _produtoService   = new ProdutoService(db);
-            _relatorioService = new RelatorioService(db);
+            _db               = new AtlasContext();
+            _vendaService     = new VendaService(_db);
+            _clienteService   = new ClienteService(_db);
+            _produtoService   = new ProdutoService(_db);
+            _relatorioService = new RelatorioService(_db);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) _db?.Dispose();
+            base.Dispose(disposing);
         }
 
         [PermissaoFilter("vendas_view")]
-        public ActionResult Index()
+        public ActionResult Index(int page = 1, int pageSize = PagingDefaults.PageSize, string search = null)
         {
             try
             {
-                return View(_vendaService.ListarPorEmpresa(EmpresaId));
+                return View(_vendaService.ListarPaginado(EmpresaId, page, pageSize, search));
             }
             catch (Exception ex)
             {
                 Trace.TraceError("VendaController.Index: {0}", ex);
                 ViewBag.Erro = "Erro ao carregar vendas.";
-                return View(new List<Models.Venda>());
+                return View(PagedResult<Models.Venda>.Empty(pageSize));
             }
         }
 
@@ -58,29 +67,115 @@ namespace ATLAS_ERP.Controllers
         {
             try
             {
-                if (produtoIds == null || produtoIds.Length == 0)
+                if (produtoIds == null || quantidades == null || precos == null
+                    || produtoIds.Length == 0
+                    || produtoIds.Length != quantidades.Length
+                    || produtoIds.Length != precos.Length)
                 {
-                    ViewBag.Erro     = "Adicione ao menos um produto à venda.";
-                    ViewBag.Clientes = _clienteService.ListarPorEmpresa(EmpresaId);
-                    ViewBag.Produtos = _produtoService.ListarAtivos(EmpresaId);
-                    return View();
+                    return ErroCreate("Dados da venda incompletos ou inconsistentes.");
                 }
 
-                var itens = new List<Services.VendaItemDto>();
+                var itens = new List<Services.VendaItemDto>(produtoIds.Length);
                 for (int i = 0; i < produtoIds.Length; i++)
                     itens.Add(new Services.VendaItemDto { ProdutoId = produtoIds[i], Quantidade = quantidades[i], Preco = precos[i] });
 
                 var venda = _vendaService.Criar(EmpresaId, clienteId, UsuarioId, vencimento, itens);
+                AppLogger.Audit("venda_criada vendaId={0} clienteId={1} total={2} itens={3}",
+                                venda.VendaId, clienteId, venda.Total, itens.Count);
                 return RedirectToAction("Nota", new { id = venda.VendaId });
+            }
+            catch (DomainException dex)
+            {
+                return ErroCreate(dex.Message);
             }
             catch (Exception ex)
             {
-                Trace.TraceError("VendaController.Create: {0}", ex);
-                ViewBag.Erro     = "Erro ao registrar venda. Tente novamente.";
-                ViewBag.Clientes = _clienteService.ListarPorEmpresa(EmpresaId);
-                ViewBag.Produtos = _produtoService.ListarAtivos(EmpresaId);
-                return View();
+                AppLogger.Error(ex, "VendaController.Create clienteId={0}", clienteId);
+                return ErroCreate("Erro ao registrar venda. Tente novamente.");
             }
+        }
+
+        private ActionResult ErroCreate(string mensagem)
+        {
+            ViewBag.Erro     = mensagem;
+            ViewBag.Clientes = _clienteService.ListarPorEmpresa(EmpresaId);
+            ViewBag.Produtos = _produtoService.ListarAtivos(EmpresaId);
+            return View();
+        }
+
+        [PermissaoFilter("vendas_edit")]
+        public ActionResult Edit(int id)
+        {
+            var venda = _vendaService.BuscarComItens(id, EmpresaId);
+            if (venda == null)
+            {
+                TempData["Erro"] = "Venda não encontrada.";
+                return RedirectToAction("Index");
+            }
+            if (venda.Status == Infrastructure.VendaStatus.Cancelada)
+            {
+                TempData["Erro"] = "Venda cancelada não pode ser editada.";
+                return RedirectToAction("Index");
+            }
+            if (venda.ContasReceber != null && venda.ContasReceber.Any(c => c.Pago))
+            {
+                TempData["Erro"] = "Venda com pagamento registrado não pode ser editada.";
+                return RedirectToAction("Index");
+            }
+            ViewBag.Clientes = _clienteService.ListarPorEmpresa(EmpresaId);
+            ViewBag.Produtos = _produtoService.ListarAtivos(EmpresaId);
+            return View(venda);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [PermissaoFilter("vendas_edit")]
+        public ActionResult Edit(int vendaId, int clienteId, DateTime vencimento,
+                                 int[] produtoIds, int[] quantidades, decimal[] precos)
+        {
+            try
+            {
+                if (produtoIds == null || quantidades == null || precos == null
+                    || produtoIds.Length == 0
+                    || produtoIds.Length != quantidades.Length
+                    || produtoIds.Length != precos.Length)
+                {
+                    return ErroEdit(vendaId, "Dados da venda incompletos ou inconsistentes.");
+                }
+
+                var itens = new List<Services.VendaItemDto>(produtoIds.Length);
+                for (int i = 0; i < produtoIds.Length; i++)
+                    itens.Add(new Services.VendaItemDto { ProdutoId = produtoIds[i], Quantidade = quantidades[i], Preco = precos[i] });
+
+                _vendaService.Editar(vendaId, EmpresaId, clienteId, vencimento, itens);
+                AppLogger.Audit("venda_editada vendaId={0} clienteId={1} itens={2}",
+                                vendaId, clienteId, itens.Count);
+                TempData["Sucesso"] = "Venda atualizada com sucesso.";
+                return RedirectToAction("Nota", new { id = vendaId });
+            }
+            catch (DomainException dex)
+            {
+                return ErroEdit(vendaId, dex.Message);
+            }
+            catch (Exception ex)
+            {
+                AppLogger.Error(ex, "VendaController.Edit vendaId={0}", vendaId);
+                return ErroEdit(vendaId, "Erro ao editar venda. Tente novamente.");
+            }
+        }
+
+        private ActionResult ErroEdit(int vendaId, string mensagem)
+        {
+            var venda = _vendaService.BuscarComItens(vendaId, EmpresaId);
+            if (venda == null)
+            {
+                TempData["Erro"] = mensagem;
+                return RedirectToAction("Index");
+            }
+            ViewBag.Erro     = mensagem;
+            ViewBag.Clientes = _clienteService.ListarPorEmpresa(EmpresaId);
+            ViewBag.Produtos = _produtoService.ListarAtivos(EmpresaId);
+            return View(venda);
         }
 
         [HttpPost]
@@ -90,12 +185,21 @@ namespace ATLAS_ERP.Controllers
         {
             try
             {
-                _vendaService.Cancelar(vendaId, EmpresaId);
+                if (_vendaService.Cancelar(vendaId, EmpresaId))
+                    AppLogger.Audit("venda_cancelada vendaId={0}", vendaId);
+                else
+                    TempData["Erro"] = "Não foi possível cancelar a venda.";
+                return RedirectToAction("Index");
+            }
+            catch (DomainException dex)
+            {
+                TempData["Erro"] = dex.Message;
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                Trace.TraceError("VendaController.Cancelar: {0}", ex);
+                AppLogger.Error(ex, "VendaController.Cancelar vendaId={0}", vendaId);
+                TempData["Erro"] = "Erro ao cancelar venda.";
                 return RedirectToAction("Index");
             }
         }
@@ -107,12 +211,16 @@ namespace ATLAS_ERP.Controllers
         {
             try
             {
-                _vendaService.RegistrarPagamento(contaId, EmpresaId);
+                if (_vendaService.RegistrarPagamento(contaId, EmpresaId))
+                    AppLogger.Audit("pagamento_registrado contaId={0}", contaId);
+                else
+                    TempData["Erro"] = "Conta não encontrada ou já paga.";
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                Trace.TraceError("VendaController.RegistrarPagamento: {0}", ex);
+                AppLogger.Error(ex, "VendaController.RegistrarPagamento contaId={0}", contaId);
+                TempData["Erro"] = "Erro ao registrar pagamento.";
                 return RedirectToAction("Index");
             }
         }

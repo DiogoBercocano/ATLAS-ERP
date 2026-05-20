@@ -1,143 +1,44 @@
 @using ATLAS_ERP.Helpers
 @{
     ViewBag.Title = "Nova Venda - Atlas ERP";
-    Layout = null;
     var clientes = ViewBag.Clientes as List<ATLAS_ERP.Models.Cliente>;
     var produtos  = ViewBag.Produtos  as List<ATLAS_ERP.Models.Produto>;
 }
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Atlas ERP – Nova Venda</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-    <style>
-        :root{--bg:#050d1a;--panel:#0b1525;--card:#0f1e35;--card-hover:#132540;--border:rgba(100,160,255,0.10);--border-md:rgba(100,160,255,0.18);--accent:#3b82f6;--accent-soft:rgba(59,130,246,0.12);--accent-glow:rgba(59,130,246,0.20);--accent-light:#60a5fa;--green:#34d399;--green-soft:rgba(52,211,153,0.10);--red:#f87171;--red-soft:rgba(248,113,113,0.10);--text:#e8f0fe;--muted:#7a9cc8;--faint:#3d5270;--sidebar-w:320px;--radius:14px;}
-        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}html,body{height:100%;}
-        body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;}
-        .bg-layer{position:fixed;inset:0;pointer-events:none;z-index:0;}
-        .bg-dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(59,130,246,.10) 1px,transparent 1px);background-size:36px 36px;mask-image:radial-gradient(ellipse 70% 70% at 60% 40%,black,transparent);}
-        .sidebar{width:var(--sidebar-w);height:100vh;background:var(--panel);border-right:1px solid var(--border);position:fixed;top:0;left:0;display:flex;flex-direction:column;padding:28px 16px;z-index:100;}
-        .sidebar-logo{display:flex;align-items:center;justify-content:center;margin-bottom:36px;}
-        .sidebar-logo a{display:flex;align-items:center;justify-content:center;width:100%;}
-        .sidebar-logo img{width:300px;max-width:100%;}
-        .sidebar-divider{height:1px;background:var(--border);margin:8px 0 16px;}
-        .menu-label{font-size:10px;font-weight:500;color:var(--faint);text-transform:uppercase;letter-spacing:.10em;padding:0 12px;margin-bottom:6px;}
-        .menu-item{display:flex;align-items:center;gap:10px;color:var(--muted);text-decoration:none;font-size:14px;padding:10px 12px;border-radius:10px;margin-bottom:2px;transition:background .18s,color .18s;position:relative;}
-        .menu-item svg{width:16px;height:16px;flex-shrink:0;opacity:.7;}
-        .menu-item:hover{background:var(--card);color:var(--text);}
-        .menu-item.active{background:var(--accent-soft);color:var(--accent-light);font-weight:500;}
-        .menu-item.active::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:3px;background:var(--accent);border-radius:0 3px 3px 0;}
-        .menu-item.danger{color:var(--red);}
-        .menu-item.danger:hover{background:var(--red-soft);}
-        .sidebar-spacer{flex:1;}
-        .sidebar-user{display:flex;align-items:center;gap:10px;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--card);}
-        .user-avatar{width:34px;height:34px;border-radius:50%;background:var(--accent-soft);border:1px solid var(--border-md);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--accent-light);flex-shrink:0;}
-        .user-name{font-size:13px;font-weight:500;color:var(--text);}
-        .user-role{font-size:11px;color:var(--faint);}
-        .main{margin-left:var(--sidebar-w);flex:1;padding:32px 40px;position:relative;z-index:1;}
-        .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;}
-        .page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;}
-        .page-subtitle{font-size:13px;color:var(--muted);margin-top:2px;}
-        .btn-back{display:inline-flex;align-items:center;gap:7px;color:var(--muted);text-decoration:none;font-size:13px;background:var(--card);border:1px solid var(--border);padding:9px 16px;border-radius:10px;transition:background .18s,color .18s;}
-        .btn-back:hover{background:var(--card-hover);color:var(--text);}
-        .btn-back svg{width:14px;height:14px;}
-        .layout{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start;}
-        .form-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 32px;animation:fadeUp .5s ease both;}
-        .section-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);}
-        .form-group{margin-bottom:16px;}
-        .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-        .form-label{display:block;font-size:11px;font-weight:500;color:var(--muted);margin-bottom:7px;text-transform:uppercase;letter-spacing:.05em;}
-        .form-control{width:100%;height:44px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:0 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .2s;}
-        .form-control:focus{border-color:var(--accent);}
-        select.form-control{cursor:pointer;}
-        /* add produto */
-        .add-produto-row{display:grid;grid-template-columns:1fr 80px 120px auto;gap:10px;align-items:end;margin-bottom:12px;}
-        .btn-add-item{height:44px;padding:0 16px;background:var(--accent-soft);border:1px solid rgba(59,130,246,.25);border-radius:10px;color:var(--accent-light);font-size:13px;font-weight:500;cursor:pointer;transition:background .15s;white-space:nowrap;}
-        .btn-add-item:hover{background:rgba(59,130,246,.2);}
-        /* itens table */
-        .itens-table{width:100%;border-collapse:collapse;margin-top:4px;}
-        .itens-table th{font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;font-weight:500;padding:8px 10px;text-align:left;background:rgba(0,0,0,.15);border-radius:8px 8px 0 0;}
-        .itens-table td{padding:10px;font-size:13px;border-top:1px solid var(--border);}
-        .btn-remove{background:none;border:none;color:var(--red);cursor:pointer;padding:4px;display:flex;}
-        .btn-remove svg{width:14px;height:14px;}
-        /* resumo */
-        .resumo-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;animation:fadeUp .5s ease .1s both;position:sticky;top:24px;}
-        .resumo-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:16px;}
-        .resumo-row{display:flex;justify-content:space-between;font-size:14px;margin-bottom:10px;color:var(--muted);}
-        .resumo-total{display:flex;justify-content:space-between;font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-top:16px;padding-top:16px;border-top:1px solid var(--border);}
-        .btn-submit{width:100%;height:50px;background:var(--accent);border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:white;cursor:pointer;margin-top:16px;transition:background .2s,transform .15s;box-shadow:0 4px 20px rgba(59,130,246,.3);}
-        .btn-submit:hover{background:#2563eb;transform:translateY(-1px);}
-        .alert-error{background:var(--red-soft);border:1px solid rgba(248,113,113,.2);border-radius:10px;padding:12px 16px;font-size:13px;color:var(--red);margin-bottom:16px;}
-        @@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-        /* MODAL CONFIGURACOES */
-        .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;display:none;align-items:center;justify-content:center;}
-        .modal-overlay.open{display:flex;}
-        .modal{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;max-width:500px;width:90%;max-height:90vh;overflow-y:auto;animation:slideUp .3s ease;}
-        .modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);cursor:pointer;padding:8px;display:flex;align-items:center;justify-content:center;transition:color .2s;}
-        .modal-close:hover{color:var(--text);}
-        .modal-close svg{width:20px;height:20px;}
-        .modal-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:4px;}
-        .modal-sub{font-size:13px;color:var(--muted);margin-bottom:16px;}
-        .modal-divider{height:1px;background:var(--border);margin-bottom:20px;}
-        .modal-form-group{margin-bottom:18px;}
-        .modal-form-label{display:block;font-size:11px;font-weight:500;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em;}
-        .modal-input{width:100%;height:44px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:0 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .2s;}
-        .modal-input:focus{border-color:var(--accent);}
-        /* UPLOAD */
-        .upload-area{position:relative;border:2px dashed var(--border);border-radius:10px;padding:28px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(59,130,246,.05);}
-        .upload-area:hover{border-color:var(--accent);background:rgba(59,130,246,.1);}
-        .upload-area input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;}
-        .upload-icon{display:flex;align-items:center;justify-content:center;margin-bottom:12px;}
-        .upload-icon svg{width:40px;height:40px;color:var(--accent);}
-        .upload-text{font-size:14px;font-weight:500;color:var(--text);margin-bottom:4px;}
-        .upload-hint{font-size:12px;color:var(--faint);}
-        .upload-preview{display:none;margin-top:16px;padding:12px;background:var(--panel);border:1px solid var(--border);border-radius:10px;align-items:center;gap:12px;}
-        .upload-preview.visible{display:flex;}
-        .upload-preview img{width:48px;height:48px;border-radius:6px;object-fit:cover;}
-        .upload-preview-name{flex:1;text-align:left;font-size:12px;color:var(--text);word-break:break-all;}
-        .upload-preview-remove{background:none;border:none;color:var(--red);cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;transition:color .2s;}
-        .upload-preview-remove:hover{color:#ff6b6b;}
-        .upload-preview-remove svg{width:16px;height:16px;}
-        /* MODAL ACTIONS */
-        .modal-actions{display:flex;gap:12px;margin-top:24px;}
-        .modal-btn-cancel{flex:1;height:44px;background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;}
-        .modal-btn-cancel:hover{background:var(--panel);color:var(--text);}
-        .modal-btn-submit{flex:1;height:44px;background:var(--accent);border:none;border-radius:10px;color:white;font-size:14px;font-weight:600;cursor:pointer;transition:background .2s;}
-        .modal-btn-submit:hover{background:#2563eb;}
-        @@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-        @@media(max-width:900px){.sidebar{display:none}.main{margin-left:0;padding:20px}.layout{grid-template-columns:1fr}.add-produto-row{grid-template-columns:1fr 80px 120px auto}}
-    </style>
-</head>
-<body>
-<div class="bg-layer"><div class="bg-dots"></div></div>
 
-<aside class="sidebar">
-    <div class="sidebar-logo">
-        <a href="/Admin/Dashboard"><img src="~/Content/images/logos/atlas_erp_diamante.svg" alt="Atlas ERP" /></a>
-    </div>
-    <span class="menu-label">Principal</span>
-    <a href="/Admin/Dashboard" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
-    <a href="/Venda" class="menu-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Vendas</a>
-    <a href="/Produto" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Produtos</a>
-    <a href="/Cliente" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clientes</a>
-    <a href="/Fornecedor" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Fornecedores</a>
-    <a href="/Usuario" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>Funcionários</a>
-    @if (PermissaoHelper.UsuarioTemPermissao("cargos_manage"))
-    {
-        <a href="/Cargo" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Cargos</a>
-    }
-    <div class="sidebar-divider"></div>
-    <span class="menu-label">Sistema</span>
-    <button class="menu-item" onclick="abrirConfig()" style="background: none; border: none; cursor: pointer; width: 100%; text-align: left;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>Configurações</button>
-    <a href="/Auth/Logout" class="menu-item danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sair</a>
-    <div class="sidebar-spacer"></div>
-    <div class="sidebar-user">
-        @{ var nm = Session["UsuarioLogado"]?.ToString() ?? "Usuário"; }
-        <div class="user-avatar">@(nm.Length > 0 ? nm[0].ToString().ToUpper() : "U")</div>
-        <div><div class="user-name">@nm</div><div class="user-role">@(Session["CargoNome"]?.ToString())</div></div>
-    </div>
-</aside>
+@section styles {
+<style>
+    .main { padding:32px 40px; }
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;}
+    .btn-back{display:inline-flex;align-items:center;gap:7px;color:var(--muted);text-decoration:none;font-size:13px;background:var(--card);border:1px solid var(--border);padding:9px 16px;border-radius:10px;transition:background .18s,color .18s;}
+    .btn-back:hover{background:var(--card-hover);color:var(--text);}
+    .btn-back svg{width:14px;height:14px;}
+    .layout{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start;}
+    .form-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 32px;animation:fadeUp .5s ease both;}
+    .section-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+    .form-group{margin-bottom:16px;}
+    .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    .form-label{display:block;font-size:11px;font-weight:500;color:var(--muted);margin-bottom:7px;text-transform:uppercase;letter-spacing:.05em;}
+    .form-control{width:100%;height:44px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:0 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .2s;}
+    .form-control:focus{border-color:var(--accent);}
+    select.form-control{cursor:pointer;}
+    .add-produto-row{display:grid;grid-template-columns:1fr 80px 120px auto;gap:10px;align-items:end;margin-bottom:12px;}
+    .btn-add-item{height:44px;padding:0 16px;background:var(--accent-soft);border:1px solid rgba(59,130,246,.25);border-radius:10px;color:var(--accent-light);font-size:13px;font-weight:500;cursor:pointer;transition:background .15s;white-space:nowrap;}
+    .btn-add-item:hover{background:rgba(59,130,246,.2);}
+    .itens-table{width:100%;border-collapse:collapse;margin-top:4px;}
+    .itens-table th{font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;font-weight:500;padding:8px 10px;text-align:left;background:rgba(0,0,0,.15);border-radius:8px 8px 0 0;}
+    .itens-table td{padding:10px;font-size:13px;border-top:1px solid var(--border);}
+    .btn-remove{background:none;border:none;color:var(--red);cursor:pointer;padding:4px;display:flex;}
+    .btn-remove svg{width:14px;height:14px;}
+    .resumo-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;animation:fadeUp .5s ease .1s both;position:sticky;top:24px;}
+    .resumo-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:16px;}
+    .resumo-row{display:flex;justify-content:space-between;font-size:14px;margin-bottom:10px;color:var(--muted);}
+    .resumo-total{display:flex;justify-content:space-between;font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-top:16px;padding-top:16px;border-top:1px solid var(--border);}
+    .btn-submit{width:100%;height:50px;background:var(--accent);border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:white;cursor:pointer;margin-top:16px;transition:background .2s,transform .15s;box-shadow:0 4px 20px rgba(59,130,246,.3);}
+    .btn-submit:hover{background:#2563eb;transform:translateY(-1px);}
+    .alert-error{background:var(--red-soft);border:1px solid rgba(248,113,113,.2);border-radius:10px;padding:12px 16px;font-size:13px;color:var(--red);margin-bottom:16px;}
+    @@media(max-width:900px){.main{margin-left:0;padding:20px}.layout{grid-template-columns:1fr}.add-produto-row{grid-template-columns:1fr 80px 120px auto}}
+</style>
+}
 
 <main class="main">
     <div class="topbar">
@@ -233,6 +134,7 @@
     </form>
 </main>
 
+@section scripts {
 <script>
     var itens = [];
 
@@ -290,95 +192,5 @@
     document.getElementById('formVenda').addEventListener('submit', function(e) {
         if (itens.length === 0) { e.preventDefault(); alert('Adicione ao menos um item antes de confirmar.'); }
     });
-        function abrirConfig() {
-            document.getElementById('modalConfig').classList.add('open');
-        }
-
-        function fecharConfig() {
-            document.getElementById('modalConfig').classList.remove('open');
-        }
-
-        function fecharFora(e) {
-            if (e.target === document.getElementById('modalConfig')) fecharConfig();
-        }
-
-        function previewLogo(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('previewImg').src = e.target.result;
-                    document.getElementById('previewName').textContent = input.files[0].name;
-                    document.getElementById('uploadPreview').classList.add('visible');
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        function removerLogo() {
-            document.getElementById('logoInput').value = '';
-            document.getElementById('uploadPreview').classList.remove('visible');
-        }
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') fecharConfig();
-        });
-    </script>
-
-    <!-- MODAL CONFIGURACOES -->
-    <div class="modal-overlay" id="modalConfig" onclick="fecharFora(event)">
-        <div class="modal">
-            <button class="modal-close" onclick="fecharConfig()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="18" y1="6" x2="6" y2="18" />
-                    <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-            </button>
-
-            <div class="modal-title">Configurações da Empresa</div>
-            <div class="modal-sub">Atualize as informações da sua empresa</div>
-            <div class="modal-divider"></div>
-
-            <form method="POST" action="/Empresa/Configuracoes" enctype="multipart/form-data">
-                @Html.AntiForgeryToken()
-
-                <div class="modal-form-group">
-                    <label class="modal-form-label">E-mail da Empresa</label>
-                    <input type="email" name="Email" class="modal-input" placeholder="contato@suaempresa.com" />
-                </div>
-
-                <div class="modal-form-group">
-                    <label class="modal-form-label">Logo da Empresa</label>
-                    <div class="upload-area" id="uploadArea">
-                        <input type="file" name="Logo" accept="image/*" id="logoInput" onchange="previewLogo(this)" />
-                        <div class="upload-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                <polyline points="17 8 12 3 7 8" />
-                                <line x1="12" y1="3" x2="12" y2="15" />
-                            </svg>
-                        </div>
-                        <div class="upload-text">Clique para selecionar uma imagem</div>
-                        <div class="upload-hint">PNG, JPG ou SVG — máx. 2MB</div>
-                    </div>
-                    <div class="upload-preview" id="uploadPreview">
-                        <img id="previewImg" src="" alt="preview" />
-                        <span class="upload-preview-name" id="previewName"></span>
-                        <button type="button" class="upload-preview-remove" onclick="removerLogo()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="18" y1="6" x2="6" y2="18" />
-                                <line x1="6" y1="6" x2="18" y2="18" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="modal-actions">
-                    <button type="button" class="modal-btn-cancel" onclick="fecharConfig()">Cancelar</button>
-                    <button type="submit" class="modal-btn-submit">Salvar alterações</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-</body>
-</html>
+</script>
+}

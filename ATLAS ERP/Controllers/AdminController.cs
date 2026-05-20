@@ -9,6 +9,7 @@ using ATLAS_ERP.Infrastructure;
 
 namespace ATLAS_ERP.Controllers
 {
+    [PermissaoFilter("dashboard_view")]
     public class AdminController : Controller
     {
         private readonly AtlasContext db = new AtlasContext();
@@ -17,7 +18,13 @@ namespace ATLAS_ERP.Controllers
         {
             try
             {
-                int empresaId = (int)Session[SessionKeys.EmpresaId];
+                var empresaIdObj = Session[SessionKeys.EmpresaId] as int?;
+                if (!empresaIdObj.HasValue)
+                {
+                    return RedirectToAction("Login", "Auth");
+                }
+
+                int empresaId = empresaIdObj.Value;
                 var hoje      = DateTime.Today;
 
                 ViewBag.VendasHoje     = db.Vendas.AsNoTracking().Where(v => v.EmpresaId == empresaId && v.DataVenda >= hoje && v.Status != VendaStatus.Cancelada).Sum(v => (decimal?)v.Total) ?? 0;
@@ -34,6 +41,15 @@ namespace ATLAS_ERP.Controllers
                 Trace.TraceError("AdminController.Dashboard: {0}", ex);
                 return RedirectToAction("Error", "Home");
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db?.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

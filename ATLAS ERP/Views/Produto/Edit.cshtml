@@ -1,0 +1,134 @@
+@model ATLAS_ERP.Models.Produto
+@{
+    ViewBag.Title = "Editar Produto - Atlas ERP";
+    var precoStr = Model.PrecoVenda.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+}
+
+@section styles {
+<style>
+    .main { padding:32px 40px; }
+    .page-header { padding:0 0 18px; margin-bottom:28px; background:none; backdrop-filter:none; position:static; }
+    .foto-current { display:flex; align-items:center; gap:14px; padding:14px; background:var(--panel); border:1px solid var(--border); border-radius:10px; margin-bottom:12px; }
+    .foto-current img { width:64px; height:64px; border-radius:8px; object-fit:cover; border:1px solid var(--border-md); }
+    .foto-info { flex:1; font-size:13px; color:var(--muted); }
+    .foto-info strong { color:var(--text); display:block; margin-bottom:2px; }
+    .estoque-info { padding:10px 14px; background:var(--panel); border:1px solid var(--border); border-radius:10px; font-size:12px; color:var(--muted); }
+    .estoque-info strong { color:var(--accent-light); font-family:'Syne',sans-serif; font-size:14px; }
+</style>
+}
+
+<main class="main">
+    <div class="page-header">
+        <div>
+            <div class="page-title">Editar Produto</div>
+            <div class="page-subtitle">@Model.Nome</div>
+        </div>
+        <a href="/Produto" class="btn-back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            Voltar
+        </a>
+    </div>
+
+    @if (ViewBag.Erro != null)
+    {
+        <div class="alert-erro">@ViewBag.Erro</div>
+    }
+
+    <div class="form-card">
+        <form method="post" action="/Produto/Edit" id="formEdit" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="ProdutoId" value="@Model.ProdutoId" />
+
+            <div class="form-section">
+                <div class="section-title">Informações Básicas</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="Nome">Nome *</label>
+                        <input class="form-control" id="Nome" name="Nome" value="@Model.Nome" required maxlength="200" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="Categoria">Categoria</label>
+                        <input class="form-control" id="Categoria" name="Categoria" value="@(Model.Categoria ?? "")" maxlength="100" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-title">Comercial</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="PrecoVenda">Preço de Venda (R$) *</label>
+                        <input class="form-control" id="PrecoVenda" name="PrecoVenda" value="@precoStr" required pattern="[0-9]+([\.,][0-9]+)?" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="EstoqueMinimo">Estoque Mínimo</label>
+                        <input type="number" min="0" class="form-control" id="EstoqueMinimo" name="EstoqueMinimo" value="@Model.EstoqueMinimo" />
+                    </div>
+                </div>
+                <div class="estoque-info">
+                    Estoque atual no sistema: <strong>@Model.EstoqueAtual unidade(s)</strong>
+                    — alterações de estoque devem ser feitas via lançamento de venda ou ajuste manual.
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-title">Foto e Status</div>
+                @if (!string.IsNullOrEmpty(Model.FotoUrl))
+                {
+                    <div class="foto-current">
+                        <img src="@Model.FotoUrl" alt="Foto atual" />
+                        <div class="foto-info">
+                            <strong>Foto atual</strong>
+                            Para substituir, selecione um novo arquivo abaixo.
+                        </div>
+                    </div>
+                }
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="foto">@(string.IsNullOrEmpty(Model.FotoUrl) ? "Adicionar foto" : "Substituir foto")</label>
+                        <input type="file" class="form-control" id="foto" name="foto" accept=".jpg,.jpeg,.png,.webp,.gif" style="height:auto;padding:10px 14px;" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <div class="checkbox-row" style="margin-top:8px;">
+                            <input type="checkbox" id="AtivoCheck" @(Model.Ativo ? "checked" : "") onchange="document.getElementById('Ativo').value=this.checked?'true':'false'; updateBadge();" />
+                            <label for="AtivoCheck">
+                                <span class="badge-status @(Model.Ativo ? "badge-ativo" : "badge-inativo")" id="badgeAtivo">
+                                    @(Model.Ativo ? "Ativo" : "Inativo")
+                                </span>
+                            </label>
+                            <input type="hidden" id="Ativo" name="Ativo" value="@(Model.Ativo ? "true" : "false")" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <a href="/Produto" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Salvar alterações</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+@section scripts {
+<script>
+    function updateBadge() {
+        var checked = document.getElementById('AtivoCheck').checked;
+        var badge = document.getElementById('badgeAtivo');
+        badge.textContent = checked ? 'Ativo' : 'Inativo';
+        badge.className = 'badge-status ' + (checked ? 'badge-ativo' : 'badge-inativo');
+    }
+
+    document.getElementById('formEdit').addEventListener('submit', function(e){
+        var p = document.getElementById('PrecoVenda').value.replace(',', '.');
+        var n = parseFloat(p);
+        if (isNaN(n) || n < 0) {
+            e.preventDefault();
+            alert('Preço de venda inválido.');
+            return;
+        }
+        document.getElementById('PrecoVenda').value = p;
+    });
+</script>
+}

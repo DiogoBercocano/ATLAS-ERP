@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using ATLAS_ERP.Data;
 using ATLAS_ERP.Helpers;
+using ATLAS_ERP.Infrastructure;
 using ATLAS_ERP.Models;
 
 namespace ATLAS_ERP.Services
@@ -14,9 +16,28 @@ namespace ATLAS_ERP.Services
 
         public List<Usuario> ListarPorEmpresa(int empresaId)
             => _db.Usuarios.AsNoTracking()
+                  .Include(u => u.Cargo)
                   .Where(u => u.EmpresaId == empresaId)
                   .OrderBy(u => u.Name)
                   .ToList();
+
+        public PagedResult<Usuario> ListarPaginado(int empresaId, int page, int pageSize, string search = null)
+        {
+            var q = _db.Usuarios.AsNoTracking()
+                .Include(u => u.Cargo)
+                .Where(u => u.EmpresaId == empresaId);
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var term = search.Trim();
+                q = q.Where(u => u.Name.Contains(term)
+                              || (u.Email != null && u.Email.Contains(term)));
+            }
+
+            return q.OrderBy(u => u.Name)
+                    .ThenBy(u => u.UsuarioId)
+                    .ToPagedResult(page, pageSize, search);
+        }
 
         public Usuario BuscarPorId(int id, int empresaId)
             => _db.Usuarios.AsNoTracking()

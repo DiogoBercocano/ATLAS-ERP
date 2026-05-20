@@ -932,11 +932,19 @@
             return v;
         }
 
-        // --- Badge helpers ---
+        // --- Badge helpers (XSS-safe: textContent + createElement) ---
         function badge(id, state, msg) {
             var el = document.getElementById(id);
             el.className = 'api-badge show ' + state;
-            el.innerHTML = state === 'loading' ? '<span class="spinner"></span> ' + msg : msg;
+            el.textContent = '';
+            if (state === 'loading') {
+                var sp = document.createElement('span');
+                sp.className = 'spinner';
+                el.appendChild(sp);
+                el.appendChild(document.createTextNode(' ' + (msg || '')));
+            } else {
+                el.textContent = msg || '';
+            }
         }
         function hideBadge(id) { document.getElementById(id).className = 'api-badge'; }
 
@@ -954,7 +962,7 @@
         // --- Busca CNPJ (BrasilAPI) ---
         function buscarCNPJ(digits) {
             badge('cnpjBadge', 'loading', 'Consultando...');
-            fetch('https://brasilapi.com.br/api/cnpj/v1/' + digits)
+            fetch('/Consulta/Cnpj?cnpj=' + digits)
                 .then(function(r) { return r.ok ? r.json() : Promise.reject('CNPJ não encontrado'); })
                 .then(function(d) {
                     var nome = d.razao_social || d.nome_fantasia || '';
@@ -978,7 +986,7 @@
         // --- Busca CEP (BrasilAPI) ---
         function buscarCEP(digits) {
             badge('cepBadge', 'loading', 'Buscando...');
-            fetch('https://brasilapi.com.br/api/cep/v2/' + digits)
+            fetch('/Consulta/Cep?cep=' + digits)
                 .then(function(r) { return r.ok ? r.json() : Promise.reject('CEP não encontrado'); })
                 .then(function(d) {
                     var end = [d.street, d.neighborhood, d.city, d.state].filter(Boolean).join(', ');

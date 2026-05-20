@@ -2,6 +2,7 @@
 using System.Web;
 using System.Web.Mvc;
 using ATLAS_ERP.Data;
+using ATLAS_ERP.Infrastructure;
 
 namespace ATLAS_ERP.Filters
 {
@@ -67,35 +68,15 @@ namespace ATLAS_ERP.Filters
                 return;
 
             var cargoId = (int?)session["CargoId"];
-            var cargoNome = session["CargoNome"]?.ToString();
-
             if (!cargoId.HasValue)
             {
                 filterContext.Result = new RedirectResult("/Auth/Login");
                 return;
             }
 
-            try
+            if (!PermissaoCache.TemAlguma(cargoId.Value, permissoes))
             {
-                using (var db = new AtlasContext())
-                {
-                    var usuarioPermissoes = db.CargoPermissoes
-                        .Where(cp => cp.CargoId == cargoId.Value)
-                        .Select(cp => cp.Permissao.Chave)
-                        .ToList();
-
-                    var temPermissao = usuarioPermissoes.Any(chave => permissoes.Contains(chave));
-
-                    if (!temPermissao)
-                    {
-                        filterContext.Result = new RedirectResult("/");
-                        return;
-                    }
-                }
-            }
-            catch (System.Exception)
-            {
-                filterContext.Result = new RedirectResult("/Auth/Login");
+                filterContext.Result = new RedirectResult("/");
                 return;
             }
         }

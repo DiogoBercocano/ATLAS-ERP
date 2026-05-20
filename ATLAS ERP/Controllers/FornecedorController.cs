@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Web.Mvc;
 using ATLAS_ERP.Data;
 using ATLAS_ERP.Filters;
+using ATLAS_ERP.Infrastructure;
 using ATLAS_ERP.Models;
 using ATLAS_ERP.Services;
 
@@ -10,33 +11,53 @@ namespace ATLAS_ERP.Controllers
 {
     public class FornecedorController : Controller
     {
+        private readonly AtlasContext      _db;
         private readonly FornecedorService _service;
         private int EmpresaId => (int)Session[Infrastructure.SessionKeys.EmpresaId];
 
         public FornecedorController()
         {
-            _service = new FornecedorService(new AtlasContext());
+            _db      = new AtlasContext();
+            _service = new FornecedorService(_db);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) _db?.Dispose();
+            base.Dispose(disposing);
         }
 
         [PermissaoFilter("fornecedores_view")]
-        public ActionResult Index()
+        public ActionResult Index(int page = 1, int pageSize = PagingDefaults.PageSize, string search = null)
         {
             if (Session[Infrastructure.SessionKeys.UsuarioLogado] == null)
                 return RedirectToAction("Login", "Auth");
             try
             {
-                return View(_service.ListarPorEmpresa(EmpresaId));
+                return View(_service.ListarPaginado(EmpresaId, page, pageSize, search));
             }
             catch (System.Exception ex)
             {
                 Trace.TraceError("FornecedorController.Index: {0}", ex);
                 ViewBag.Erro = "Erro ao carregar fornecedores.";
-                return View(new List<Fornecedor>());
+                return View(PagedResult<Fornecedor>.Empty(pageSize));
             }
         }
 
         [PermissaoFilter("fornecedores_create")]
         public ActionResult Create() => View();
+
+        [PermissaoFilter("fornecedores_edit")]
+        public ActionResult Edit(int id)
+        {
+            var fornecedor = _service.BuscarPorId(id, EmpresaId);
+            if (fornecedor == null)
+            {
+                TempData["Erro"] = "Fornecedor não encontrado.";
+                return RedirectToAction("Index");
+            }
+            return View(fornecedor);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -51,6 +72,11 @@ namespace ATLAS_ERP.Controllers
                     _service.Criar(fornecedor);
                     return RedirectToAction("Index");
                 }
+                return View(fornecedor);
+            }
+            catch (DomainException dex)
+            {
+                ViewBag.Erro = dex.Message;
                 return View(fornecedor);
             }
             catch (System.Exception ex)
@@ -71,9 +97,15 @@ namespace ATLAS_ERP.Controllers
                 _service.Editar(FornecedorId, EmpresaId, Nome, CNPJ, Telefone, Email);
                 return RedirectToAction("Index");
             }
+            catch (DomainException dex)
+            {
+                TempData["Erro"] = dex.Message;
+                return RedirectToAction("Index");
+            }
             catch (System.Exception ex)
             {
                 Trace.TraceError("FornecedorController.Edit: {0}", ex);
+                TempData["Erro"] = "Erro ao editar fornecedor.";
                 return RedirectToAction("Index");
             }
         }

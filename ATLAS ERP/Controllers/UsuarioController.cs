@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Web.Mvc;
 using ATLAS_ERP.Data;
 using ATLAS_ERP.Filters;
+using ATLAS_ERP.Infrastructure;
 using ATLAS_ERP.Models;
 using ATLAS_ERP.Services;
 
@@ -9,30 +10,36 @@ namespace ATLAS_ERP.Controllers
 {
     public class UsuarioController : Controller
     {
+        private readonly AtlasContext   _db;
         private readonly UsuarioService _service;
-        private readonly CargoService _cargoService;
+        private readonly CargoService   _cargoService;
         private int EmpresaId => (int)Session[Infrastructure.SessionKeys.EmpresaId];
 
         public UsuarioController()
         {
-            var context = new AtlasContext();
-            _service = new UsuarioService(context);
-            _cargoService = new CargoService(context);
+            _db           = new AtlasContext();
+            _service      = new UsuarioService(_db);
+            _cargoService = new CargoService(_db);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) _db?.Dispose();
+            base.Dispose(disposing);
         }
 
         [PermissaoFilter("usuarios_view")]
-        public ActionResult Index()
+        public ActionResult Index(int page = 1, int pageSize = PagingDefaults.PageSize, string search = null)
         {
             try
             {
-                var usuarios = _service.ListarPorEmpresa(EmpresaId);
-                return View(usuarios);
+                return View(_service.ListarPaginado(EmpresaId, page, pageSize, search));
             }
             catch (System.Exception ex)
             {
                 Trace.TraceError("UsuarioController.Index: {0}", ex);
-                ViewBag.Erro = $"Erro ao carregar funcionários: {ex.Message}";
-                return View(new System.Collections.Generic.List<Usuario>());
+                ViewBag.Erro = "Erro ao carregar funcionários.";
+                return View(PagedResult<Usuario>.Empty(pageSize));
             }
         }
 
@@ -90,7 +97,15 @@ namespace ATLAS_ERP.Controllers
             {
                 var resultado = _service.Editar(UsuarioId, EmpresaId, Name, Email, CargoId, Ativo == "true");
                 if (resultado)
+                {
+                    var usuarioLogadoId = Session[Infrastructure.SessionKeys.UsuarioId] as int?;
+                    if (usuarioLogadoId.HasValue && usuarioLogadoId.Value == UsuarioId)
+                    {
+                        Session[Infrastructure.SessionKeys.CargoId] = CargoId;
+                        PermissaoCache.InvalidarSessao(Session);
+                    }
                     return RedirectToAction("Index");
+                }
                 else
                 {
                     ViewBag.Erro = "Funcionário não encontrado.";

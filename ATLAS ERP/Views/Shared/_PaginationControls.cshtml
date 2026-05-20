@@ -1,0 +1,78 @@
+@using ATLAS_ERP.Infrastructure
+@model IPagedResult
+@{
+    if (Model == null) { return; }
+    int totalItems  = Model.TotalItems;
+    int totalPages  = Model.TotalPages;
+    int currentPage = Model.Page;
+    int pageSize    = Model.PageSize;
+    int firstItem   = Model.FirstItem;
+    int lastItem    = Model.LastItem;
+    var search      = Model.Search ?? "";
+    int windowStart = System.Math.Max(1, currentPage - 2);
+    int windowEnd   = System.Math.Min(totalPages, currentPage + 2);
+}
+@if (totalItems > 0)
+{
+    <style>
+        .pagination-bar { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; padding:14px 18px; margin-top:16px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:10px; font-size:13px; color:var(--muted, #b5b5b5); }
+        .pagination-info { font-size:12px; }
+        .pagination-controls { display:flex; gap:6px; align-items:center; }
+        .pagination-controls a, .pagination-controls span.page-current, .pagination-controls span.page-disabled { display:inline-flex; align-items:center; justify-content:center; min-width:32px; height:32px; padding:0 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.08); color:var(--muted, #b5b5b5); text-decoration:none; font-size:12px; font-weight:500; transition:all .15s; }
+        .pagination-controls a:hover { background:rgba(255,255,255,0.05); color:#fff; border-color:rgba(255,255,255,0.15); }
+        .pagination-controls .page-current { background:var(--accent, #6366f1); color:#fff; border-color:var(--accent, #6366f1); }
+        .pagination-controls .page-disabled { opacity:.35; cursor:not-allowed; }
+        .pagination-controls .ellipsis { padding:0 4px; opacity:.5; }
+    </style>
+    <div class="pagination-bar">
+        <div class="pagination-info">
+            <span>Mostrando @firstItem–@lastItem de @totalItems</span>
+        </div>
+        @if (totalPages > 1)
+        {
+            <div class="pagination-controls">
+                @if (Model.HasPrevious)
+                {
+                    <a href="?page=@(currentPage - 1)&pageSize=@pageSize&search=@System.Net.WebUtility.UrlEncode(search)" title="Página anterior">‹</a>
+                }
+                else
+                {
+                    <span class="page-disabled">‹</span>
+                }
+
+                @if (windowStart > 1)
+                {
+                    <a href="?page=1&pageSize=@pageSize&search=@System.Net.WebUtility.UrlEncode(search)">1</a>
+                    if (windowStart > 2) { <span class="ellipsis">…</span> }
+                }
+
+                @for (int i = windowStart; i <= windowEnd; i++)
+                {
+                    if (i == currentPage)
+                    {
+                        <span class="page-current">@i</span>
+                    }
+                    else
+                    {
+                        <a href="?page=@i&pageSize=@pageSize&search=@System.Net.WebUtility.UrlEncode(search)">@i</a>
+                    }
+                }
+
+                @if (windowEnd < totalPages)
+                {
+                    if (windowEnd < totalPages - 1) { <span class="ellipsis">…</span> }
+                    <a href="?page=@totalPages&pageSize=@pageSize&search=@System.Net.WebUtility.UrlEncode(search)">@totalPages</a>
+                }
+
+                @if (Model.HasNext)
+                {
+                    <a href="?page=@(currentPage + 1)&pageSize=@pageSize&search=@System.Net.WebUtility.UrlEncode(search)" title="Próxima página">›</a>
+                }
+                else
+                {
+                    <span class="page-disabled">›</span>
+                }
+            </div>
+        }
+    </div>
+}

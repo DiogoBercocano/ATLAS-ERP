@@ -21,6 +21,9 @@ namespace ATLAS_ERP.Data
         public DbSet<Venda> Vendas { get; set; }
         public DbSet<VendaItem> VendaItens { get; set; }
         public DbSet<ContaReceber> ContasReceber { get; set; }
+        public DbSet<Cargo> Cargos { get; set; }
+        public DbSet<Permissao> Permissoes { get; set; }
+        public DbSet<CargoPermissao> CargoPermissoes { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
