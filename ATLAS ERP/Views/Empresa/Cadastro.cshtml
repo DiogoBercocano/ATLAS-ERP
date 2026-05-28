@@ -9,7 +9,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Atlas ERP – Cadastro de Empresa</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
     <style>
         :root {
             --bg: #050d1a;
@@ -27,7 +28,7 @@
             --red-soft: rgba(248,113,113,0.08);
             --text: #e8f0fe;
             --muted: #7a9cc8;
-            --faint: #3d5270;
+            --faint: #5e7ea0;
             --radius: 14px;
         }
 
@@ -110,7 +111,7 @@
         }
 
         .brand-headline {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 30px;
             font-weight: 800;
             color: var(--text);
@@ -215,7 +216,7 @@
         }
 
         .form-title {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 22px;
             font-weight: 700;
             color: var(--text);
@@ -327,7 +328,7 @@
             }
 
         .section-title {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 13px;
             font-weight: 700;
             color: var(--text);
@@ -485,7 +486,7 @@
             background: var(--accent);
             border: none;
             border-radius: 12px;
-            font-family: 'Syne', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 15px;
             font-weight: 700;
             color: white;
@@ -580,15 +581,21 @@
                 padding: 18px;
             }
         }
+
+        :focus-visible { outline: 2px solid var(--accent-light, #60a5fa); outline-offset: 3px; border-radius: 6px; }
+        .form-control:focus-visible { outline: none; }
+        .skip-link { position:absolute; top:-200%; left:16px; background:var(--accent,#3b82f6); color:#fff; padding:10px 20px; border-radius:0 0 10px 10px; font-size:14px; font-weight:700; text-decoration:none; z-index:9999; transition:top .15s; }
+        .skip-link:focus-visible { top:0; }
     </style>
 </head>
 <body>
+    <a href="#cadastro-form" class="skip-link">Ir para o formulário</a>
 
     <!-- LADO ESQUERDO -->
     <div class="left-panel">
-        <div class="left-bg-dots"></div>
-        <div class="left-glow" style="width:300px;height:300px;top:-80px;right:-60px;background:rgba(30,60,130,0.22);"></div>
-        <div class="left-glow" style="width:200px;height:200px;bottom:-40px;left:-40px;background:rgba(15,40,100,0.18);"></div>
+        <div class="left-bg-dots" aria-hidden="true"></div>
+        <div class="left-glow" aria-hidden="true" style="width:300px;height:300px;top:-80px;right:-60px;background:rgba(30,60,130,0.22);"></div>
+        <div class="left-glow" aria-hidden="true" style="width:200px;height:200px;bottom:-40px;left:-40px;background:rgba(15,40,100,0.18);"></div>
 
         <div class="brand">
             <a href="/">
@@ -604,7 +611,7 @@
 
         <div class="brand-features">
             <div class="feature-item">
-                <div class="feature-icon">
+                <div class="feature-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                     </svg>
@@ -615,7 +622,7 @@
                 </div>
             </div>
             <div class="feature-item">
-                <div class="feature-icon">
+                <div class="feature-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
                     </svg>
@@ -626,7 +633,7 @@
                 </div>
             </div>
             <div class="feature-item">
-                <div class="feature-icon">
+                <div class="feature-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                         <circle cx="9" cy="7" r="4" />
@@ -643,9 +650,9 @@
     </div>
 
     <!-- LADO DIREITO -->
-    <div class="right-panel">
-        <div class="right-bg-dots"></div>
-        <div class="right-glow" style="width:400px;height:400px;top:-100px;right:-80px;background:rgba(20,50,120,0.15);"></div>
+    <div class="right-panel" role="main">
+        <div class="right-bg-dots" aria-hidden="true"></div>
+        <div class="right-glow" aria-hidden="true" style="width:400px;height:400px;top:-100px;right:-80px;background:rgba(20,50,120,0.15);"></div>
 
         <div class="form-wrapper">
 
@@ -674,8 +681,8 @@
 
             @if (ViewBag.Erro != null)
             {
-                <div class="alert alert-error">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <div class="alert alert-error" role="alert">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
                         <circle cx="12" cy="12" r="10" />
                         <line x1="12" y1="8" x2="12" y2="12" />
                         <line x1="12" y1="16" x2="12.01" y2="16" />
@@ -686,21 +693,21 @@
 
             @if (ViewBag.Sucesso != null)
             {
-                <div class="alert alert-success">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <div class="alert alert-success" role="alert">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
                         <polyline points="20 6 9 17 4 12" />
                     </svg>
                     @ViewBag.Sucesso
                 </div>
             }
 
-            <form method="POST" action="/Empresa/Cadastro">
+            <form method="POST" action="/Empresa/Cadastro" id="cadastro-form">
                 @Html.AntiForgeryToken()
 
                 <!-- SECAO 1: DADOS DA EMPRESA -->
                 <div class="form-section">
                     <div class="section-header">
-                        <div class="section-icon blue">
+                        <div class="section-icon blue" aria-hidden="true">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                                 <polyline points="9 22 9 12 15 12 15 22" />
@@ -713,11 +720,11 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">CNPJ <span id="cnpjBadge" class="api-badge"></span></label>
+                        <label class="form-label" for="cnpjInput">CNPJ <span id="cnpjBadge" class="api-badge"></span></label>
                         <div class="input-wrap">
                             <input type="text" name="CNPJ" id="cnpjInput" class="form-control form-control-lookup"
                                    placeholder="00.000.000/0000-00" maxlength="18" required autocomplete="off" />
-                            <span class="input-icon">
+                            <span class="input-icon" aria-hidden="true">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                                     <polyline points="14 2 14 8 20 8" />
@@ -727,11 +734,11 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Razão Social</label>
+                        <label class="form-label" for="nomeEmpresaInput">Razão Social</label>
                         <div class="input-wrap">
                             <input type="text" name="NomeEmpresa" id="nomeEmpresaInput" class="form-control"
                                    placeholder="Preenchida automaticamente pelo CNPJ" required />
-                            <span class="input-icon">
+                            <span class="input-icon" aria-hidden="true">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <rect x="2" y="7" width="20" height="14" rx="2" />
                                     <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
@@ -742,9 +749,9 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label">Segmento</label>
+                            <label class="form-label" for="segmentoInput">Segmento</label>
                             <div class="input-wrap">
-                                <select name="Segmento" class="form-control">
+                                <select name="Segmento" id="segmentoInput" class="form-control">
                                     <option value="">Selecione...</option>
                                     <option value="Varejo">Varejo</option>
                                     <option value="Atacado">Atacado</option>
@@ -753,7 +760,7 @@
                                     <option value="Tecnologia">Tecnologia</option>
                                     <option value="Outro">Outro</option>
                                 </select>
-                                <span class="input-icon">
+                                <span class="input-icon" aria-hidden="true">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <circle cx="12" cy="12" r="10" />
                                         <path d="M12 8v4l3 3" />
@@ -762,11 +769,11 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Telefone</label>
+                            <label class="form-label" for="telEmpresaInput">Telefone</label>
                             <div class="input-wrap">
                                 <input type="text" name="Telefone" id="telEmpresaInput" class="form-control"
                                        placeholder="(00) 00000-0000" maxlength="15" />
-                                <span class="input-icon">
+                                <span class="input-icon" aria-hidden="true">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6.29 6.29l.95-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
                                     </svg>
@@ -777,11 +784,11 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label">CEP <span id="cepBadge" class="api-badge"></span></label>
+                            <label class="form-label" for="cepInput">CEP <span id="cepBadge" class="api-badge"></span></label>
                             <div class="input-wrap">
                                 <input type="text" id="cepInput" class="form-control form-control-lookup"
                                        placeholder="00000-000" maxlength="9" autocomplete="off" />
-                                <span class="input-icon">
+                                <span class="input-icon" aria-hidden="true">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
                                     </svg>
@@ -789,11 +796,11 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">E-mail Corporativo</label>
+                            <label class="form-label" for="emailEmpresaInput">E-mail Corporativo</label>
                             <div class="input-wrap">
                                 <input type="email" name="EmailEmpresa" id="emailEmpresaInput" class="form-control"
                                        placeholder="contato@suaempresa.com.br" />
-                                <span class="input-icon">
+                                <span class="input-icon" aria-hidden="true">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <rect x="2" y="4" width="20" height="16" rx="2" />
                                         <path d="m2 7 10 7L22 7" />
@@ -804,11 +811,11 @@
                     </div>
 
                     <div class="form-group" style="margin-bottom:0;">
-                        <label class="form-label">Endereço</label>
+                        <label class="form-label" for="enderecoEmpresaInput">Endereço</label>
                         <div class="input-wrap">
                             <input type="text" name="Endereco" id="enderecoEmpresaInput" class="form-control"
                                    placeholder="Preenchido pelo CEP ou digitar manualmente" />
-                            <span class="input-icon">
+                            <span class="input-icon" aria-hidden="true">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
                                 </svg>
@@ -820,7 +827,7 @@
                 <!-- SECAO 2: DADOS DO ADMINISTRADOR -->
                 <div class="form-section">
                     <div class="section-header">
-                        <div class="section-icon gold">
+                        <div class="section-icon gold" aria-hidden="true">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                                 <circle cx="12" cy="7" r="4" />
@@ -833,11 +840,11 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Nome Completo</label>
+                        <label class="form-label" for="nomeAdminInput">Nome Completo</label>
                         <div class="input-wrap">
-                            <input type="text" name="NomeAdmin" class="form-control"
+                            <input type="text" name="NomeAdmin" id="nomeAdminInput" class="form-control"
                                    placeholder="Nome do responsável" required />
-                            <span class="input-icon">
+                            <span class="input-icon" aria-hidden="true">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                                     <circle cx="12" cy="7" r="4" />
@@ -848,11 +855,11 @@
 
                     <div class="form-row">
                         <div class="form-group" style="margin-bottom:0;">
-                            <label class="form-label">E-mail de Acesso</label>
+                            <label class="form-label" for="emailAdminInput">E-mail de Acesso</label>
                             <div class="input-wrap">
-                                <input type="email" name="EmailAdmin" class="form-control"
+                                <input type="email" name="EmailAdmin" id="emailAdminInput" class="form-control"
                                        placeholder="admin@suaempresa.com" required />
-                                <span class="input-icon">
+                                <span class="input-icon" aria-hidden="true">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <rect x="2" y="4" width="20" height="16" rx="2" />
                                         <path d="m2 7 10 7L22 7" />
@@ -861,18 +868,18 @@
                             </div>
                         </div>
                         <div class="form-group" style="margin-bottom:0;">
-                            <label class="form-label">Senha</label>
+                            <label class="form-label" for="senhaInput">Senha</label>
                             <div class="input-wrap">
                                 <input type="password" name="Senha" id="senhaInput" class="form-control pass-input"
                                        placeholder="••••••••" required />
-                                <span class="input-icon">
+                                <span class="input-icon" aria-hidden="true">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <rect x="3" y="11" width="18" height="11" rx="2" />
                                         <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                                     </svg>
                                 </span>
-                                <button type="button" class="toggle-pass" onclick="toggleSenha()">
-                                    <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <button type="button" class="toggle-pass" onclick="toggleSenha()" aria-label="Mostrar ou ocultar senha">
+                                    <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
                                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                                         <circle cx="12" cy="12" r="3" />
                                     </svg>
@@ -897,7 +904,10 @@
         </div>
     </div>
 
-    <script>
+    <script nonce="@Html.CspNonce()">
+        // --- Font loader ---
+        (function(){var at=String.fromCharCode(64);var l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Inter:wght'+at+'400;500;600;700;800&family=DM+Sans:wght'+at+'300;400;500&display=swap';document.head.appendChild(l);}());
+
         // --- Toggle senha ---
         function toggleSenha() {
             var input = document.getElementById('senhaInput');
@@ -967,11 +977,13 @@
                 .then(function(d) {
                     var nome = d.razao_social || d.nome_fantasia || '';
                     var tel  = d.ddd_telefone_1 ? d.ddd_telefone_1.replace(/\D/g,'') : '';
+                    var cep  = d.cep ? d.cep.replace(/\D/g,'') : '';
                     var end  = [d.logradouro, d.numero, d.bairro, d.municipio, d.uf].filter(Boolean).join(', ');
 
                     if (nome) document.getElementById('nomeEmpresaInput').value = nome;
                     if (tel)  document.getElementById('telEmpresaInput').value  = maskTel(tel);
                     if (d.email) document.getElementById('emailEmpresaInput').value = d.email;
+                    if (cep)  document.getElementById('cepInput').value         = maskCEP(cep);
                     if (end)  document.getElementById('enderecoEmpresaInput').value = end;
 
                     badge('cnpjBadge', 'ok', '✓ Dados preenchidos');
@@ -989,7 +1001,7 @@
             fetch('/Consulta/Cep?cep=' + digits)
                 .then(function(r) { return r.ok ? r.json() : Promise.reject('CEP não encontrado'); })
                 .then(function(d) {
-                    var end = [d.street, d.neighborhood, d.city, d.state].filter(Boolean).join(', ');
+                    var end = [d.logradouro, d.bairro, d.localidade, d.uf].filter(Boolean).join(', ');
                     if (end) document.getElementById('enderecoEmpresaInput').value = end;
                     badge('cepBadge', 'ok', '✓ Endereço preenchido');
                     setTimeout(function(){ hideBadge('cepBadge'); }, 3000);

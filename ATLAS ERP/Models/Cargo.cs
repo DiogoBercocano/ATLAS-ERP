@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ATLAS_ERP.Models
 {
+    [Table("Cargos")]
     public class Cargo
     {
         public int CargoId { get; set; }

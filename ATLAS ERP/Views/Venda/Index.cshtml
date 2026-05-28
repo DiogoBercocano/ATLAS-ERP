@@ -1,4 +1,4 @@
-@model ATLAS_ERP.Infrastructure.PagedResult<ATLAS_ERP.Models.Venda>
+﻿@model ATLAS_ERP.Infrastructure.PagedResult<ATLAS_ERP.Models.Venda>
 @{
     ViewBag.Title = "Vendas - Atlas ERP";
     var paged = Model ?? ATLAS_ERP.Infrastructure.PagedResult<ATLAS_ERP.Models.Venda>.Empty(20);
@@ -163,7 +163,7 @@
 </div>
 
 @section scripts {
-<script>
+<script nonce="@Html.CspNonce()">
     function abrirCancelar(id) { document.getElementById('cancelarId').value = id; document.getElementById('modalCancelar').classList.add('open'); }
     function fechar() { document.getElementById('modalCancelar').classList.remove('open'); }
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') fechar(); });

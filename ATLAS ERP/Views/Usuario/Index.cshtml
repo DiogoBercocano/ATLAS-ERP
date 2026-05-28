@@ -1,4 +1,4 @@
-@model ATLAS_ERP.Infrastructure.PagedResult<ATLAS_ERP.Models.Usuario>
+﻿@model ATLAS_ERP.Infrastructure.PagedResult<ATLAS_ERP.Models.Usuario>
 @{
     ViewBag.Title = "Funcionários - Atlas ERP";
     var paged = Model ?? ATLAS_ERP.Infrastructure.PagedResult<ATLAS_ERP.Models.Usuario>.Empty(20);
@@ -333,7 +333,7 @@
 </div>
 
 @section scripts {
-<script>
+<script nonce="@Html.CspNonce()">
     function toggleRow(rowId, expId) {
         var row = document.getElementById(rowId);
         var exp = document.getElementById(expId);

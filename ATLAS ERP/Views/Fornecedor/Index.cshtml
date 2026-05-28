@@ -1,4 +1,4 @@
-@model ATLAS_ERP.Infrastructure.PagedResult<ATLAS_ERP.Models.Fornecedor>
+﻿@model ATLAS_ERP.Infrastructure.PagedResult<ATLAS_ERP.Models.Fornecedor>
 @{
     ViewBag.Title = "Fornecedores - Atlas ERP";
     var paged = Model ?? ATLAS_ERP.Infrastructure.PagedResult<ATLAS_ERP.Models.Fornecedor>.Empty(20);
@@ -184,7 +184,7 @@
 </div>
 
 @section scripts {
-<script>
+<script nonce="@Html.CspNonce()">
     function abrirEditar(btn) {
         document.getElementById('editId').value       = btn.dataset.id;
         document.getElementById('editNome').value     = btn.dataset.nome;

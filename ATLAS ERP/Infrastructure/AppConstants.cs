@@ -28,6 +28,7 @@ namespace ATLAS_ERP.Infrastructure
         public const string Role          = "Role";
         public const string CargoId       = "CargoId";
         public const string CargoNome     = "CargoNome";
-        public const string EmpresaId     = "EmpresaId";
+        public const string EmpresaId          = "EmpresaId";
+        public const string MustChangePassword  = "MustChangePassword";
     }
 }

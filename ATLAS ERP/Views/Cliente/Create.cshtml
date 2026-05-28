@@ -1,4 +1,4 @@
-@model ATLAS_ERP.Models.Cliente
+﻿@model ATLAS_ERP.Models.Cliente
 @{
     ViewBag.Title = "Novo Cliente - Atlas ERP";
 }
@@ -275,7 +275,7 @@
 }
 
 @section scripts {
-<script>
+<script nonce="@Html.CspNonce()">
     function maskCPF(v){v=v.replace(/\D/g,'').slice(0,11);v=v.replace(/(\d{3})(\d)/,'$1.$2');v=v.replace(/(\d{3})(\d)/,'$1.$2');v=v.replace(/(\d{3})(\d{1,2})$/,'$1-$2');return v;}
     function maskCNPJ(v){v=v.replace(/\D/g,'').slice(0,14);v=v.replace(/^(\d{2})(\d)/,'$1.$2');v=v.replace(/^(\d{2})\.(\d{3})(\d)/,'$1.$2.$3');v=v.replace(/\.(\d{3})(\d)/,'.$1/$2');v=v.replace(/(\d{4})(\d)/,'$1-$2');return v;}
     function maskTel(v){v=v.replace(/\D/g,'').slice(0,11);v=v.replace(/^(\d{2})(\d)/,'($1) $2');v=v.replace(/(\d{5})(\d)/,'$1-$2');return v;}
@@ -319,15 +319,15 @@
     function buscarCNPJ(digits){
         badge('docBadge','loading','Consultando CNPJ...');
         fetch('/Consulta/Cnpj?cnpj='+digits).then(function(r){return r.ok?r.json():Promise.reject('CNPJ não encontrado');}).then(function(d){
-            var nome=d.razao_social||d.nome_fantasia||'';var tel=d.ddd_telefone_1?d.ddd_telefone_1.replace(/\D/g,''):'';var end=[d.logradouro,d.numero,d.bairro,d.municipio,d.uf].filter(Boolean).join(', ');
-            if(nome)document.getElementById('nomeInput').value=nome;if(tel)document.getElementById('telInput').value=maskTel(tel);if(d.email)document.getElementById('emailInput').value=d.email;if(end)document.getElementById('enderecoInput').value=end;updatePreview();badge('docBadge','ok','✓ Dados preenchidos');setTimeout(function(){hideBadge('docBadge');},3000);
+            var nome=d.razao_social||d.nome_fantasia||'';var tel=d.ddd_telefone_1?d.ddd_telefone_1.replace(/\D/g,''):'';var cep=d.cep?d.cep.replace(/\D/g,''):'';var end=[d.logradouro,d.numero,d.bairro,d.municipio,d.uf].filter(Boolean).join(', ');
+            if(nome)document.getElementById('nomeInput').value=nome;if(tel)document.getElementById('telInput').value=maskTel(tel);if(d.email)document.getElementById('emailInput').value=d.email;if(cep)document.getElementById('cepInput').value=maskCEP(cep);if(end)document.getElementById('enderecoInput').value=end;updatePreview();badge('docBadge','ok','✓ Dados preenchidos');setTimeout(function(){hideBadge('docBadge');},3000);
         }).catch(function(err){badge('docBadge','err','✗ '+(typeof err==='string'?err:'Erro'));setTimeout(function(){hideBadge('docBadge');},4000);});
     }
 
     function buscarCEP(digits){
         badge('cepBadge','loading','Buscando...');
         fetch('/Consulta/Cep?cep='+digits).then(function(r){return r.ok?r.json():Promise.reject('CEP não encontrado');}).then(function(d){
-            var end=[d.street,d.neighborhood,d.city,d.state].filter(Boolean).join(', ');if(end){document.getElementById('enderecoInput').value=end;updatePreview();}badge('cepBadge','ok','✓ Preenchido');setTimeout(function(){hideBadge('cepBadge');},3000);
+            var end=[d.logradouro,d.bairro,d.localidade,d.uf].filter(Boolean).join(', ');if(end){document.getElementById('enderecoInput').value=end;updatePreview();}badge('cepBadge','ok','✓ Preenchido');setTimeout(function(){hideBadge('cepBadge');},3000);
         }).catch(function(err){badge('cepBadge','err','✗ '+(typeof err==='string'?err:'Inválido'));setTimeout(function(){hideBadge('cepBadge');},4000);});
     }
 </script>

@@ -1,4 +1,4 @@
-@model ATLAS_ERP.Models.Produto
+﻿@model ATLAS_ERP.Models.Produto
 @{
     ViewBag.Title = "Novo Produto - Atlas ERP";
     var role = Session["CargoNome"]?.ToString() ?? "";
@@ -389,7 +389,7 @@
 </main>
 
 @section scripts {
-<script>
+<script nonce="@Html.CspNonce()">
 function onFormSubmit(event) {
     var displayVal = document.getElementById('precoInput').value.trim();
     if (displayVal) {

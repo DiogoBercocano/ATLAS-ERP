@@ -1,10 +1,11 @@
+using System;
 using System.Data.Entity;
-using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using ATLAS_ERP.Data;
 using ATLAS_ERP.Filters;
 using ATLAS_ERP.Infrastructure;
+using ATLAS_ERP.Models;
 
 namespace ATLAS_ERP.Controllers
 {
@@ -27,7 +28,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("SuperAdminController.Index: {0}", ex);
+                AppLogger.Error(ex, "SuperAdminController.Index");
                 return View(new System.Collections.Generic.List<Models.Empresa>());
             }
         }
@@ -45,9 +46,39 @@ namespace ATLAS_ERP.Controllers
                     empresa.Ativa  = true;
                     db.Entry(empresa).State = EntityState.Modified;
 
+                    // Garante que a empresa tem cargo "Admin" — cria se ainda não existir
+                    // (cobre empresas registradas antes do fix de criação automática de cargo)
+                    var cargoAdmin = db.Cargos.FirstOrDefault(c => c.EmpresaId == empresaId && c.Nome == "Admin");
+                    if (cargoAdmin == null)
+                    {
+                        cargoAdmin = new Cargo
+                        {
+                            Nome        = "Admin",
+                            Descricao   = "Administrador da empresa",
+                            Ativo       = true,
+                            EmpresaId   = empresaId,
+                            DataCriacao = DateTime.Now
+                        };
+                        db.Cargos.Add(cargoAdmin);
+                        db.SaveChanges();
+
+                        foreach (var perm in db.Permissoes.ToList())
+                        {
+                            db.CargoPermissoes.Add(new CargoPermissao
+                            {
+                                CargoId     = cargoAdmin.CargoId,
+                                PermissaoId = perm.PermissaoId
+                            });
+                        }
+                        db.SaveChanges();
+                    }
+
+                    // Ativa usuários e corrige CargoId nulo
                     foreach (var u in db.Usuarios.Where(u => u.EmpresaId == empresaId))
                     {
                         u.Ativo = true;
+                        if (u.CargoId == null)
+                            u.CargoId = cargoAdmin.CargoId;
                         db.Entry(u).State = EntityState.Modified;
                     }
                     db.SaveChanges();
@@ -56,7 +87,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("SuperAdminController.Aprovar: {0}", ex);
+                AppLogger.Error(ex, "SuperAdminController.Aprovar");
                 return RedirectToAction("Index");
             }
         }
@@ -85,7 +116,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("SuperAdminController.Rejeitar: {0}", ex);
+                AppLogger.Error(ex, "SuperAdminController.Rejeitar");
                 return RedirectToAction("Index");
             }
         }
@@ -107,7 +138,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("SuperAdminController.Excluir: {0}", ex);
+                AppLogger.Error(ex, "SuperAdminController.Excluir");
                 return RedirectToAction("Index");
             }
         }

@@ -4,22 +4,37 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@(ViewBag.Title ?? "Atlas ERP")</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
     <link href="/Content/atlas.css" rel="stylesheet" />
     @RenderSection("styles", required: false)
 </head>
 <body>
 
-    <div class="bg-layer">
+    <a href="#conteudo-principal" class="skip-link">Ir para o conteúdo principal</a>
+
+    <div class="bg-layer" aria-hidden="true">
         <div class="bg-dots"></div>
         @RenderSection("bgGlows", required: false)
     </div>
 
     @Html.Partial("_SidebarPartial")
 
-    @RenderBody()
+    <main id="conteudo-principal" class="main">
+        @RenderBody()
+    </main>
 
     @Html.Partial("_ConfigModal")
+
+    <script>
+        (function () {
+            var at = String.fromCharCode(64);
+            var l = document.createElement('link');
+            l.rel = 'stylesheet';
+            l.href = 'https://fonts.googleapis.com/css2?family=Inter:wght' + at + '400;500;600;700;800;900&family=DM+Sans:wght' + at + '300;400;500&display=swap';
+            document.head.appendChild(l);
+        }());
+    </script>
 
     @RenderSection("scripts", required: false)
 

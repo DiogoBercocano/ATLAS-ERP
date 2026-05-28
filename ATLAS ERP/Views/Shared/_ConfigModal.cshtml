@@ -1,4 +1,4 @@
-@{
+﻿@{
     var empresa = ViewBag.Empresa as ATLAS_ERP.Models.Empresa;
 }
 
@@ -23,6 +23,14 @@
                     <polyline points="20 6 9 17 4 12" />
                 </svg>
                 @ViewBag.ConfigSucesso
+            </div>
+        }
+
+        @if (ViewBag.ConfigErro != null)
+        {
+            <div style="display:flex;align-items:center;gap:8px;background:rgba(248,113,113,.10);border:1px solid rgba(248,113,113,.22);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--red);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                @ViewBag.ConfigErro
             </div>
         }
 
@@ -85,7 +93,7 @@
     </div>
 </div>
 
-<script>
+<script nonce="@Html.CspNonce()">
     function abrirConfig() { document.getElementById('modalConfig').classList.add('open'); document.body.style.overflow = 'hidden'; }
     function fecharConfig() { document.getElementById('modalConfig').classList.remove('open'); document.body.style.overflow = ''; }
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') fecharConfig(); });
@@ -104,7 +112,7 @@
         document.getElementById('configLogoInput').value = '';
         document.getElementById('configUploadPreview').classList.remove('visible');
     }
-    @if (ViewBag.ConfigSucesso != null)
+    @if (ViewBag.ConfigSucesso != null || ViewBag.ConfigErro != null)
     {
         <text>window.addEventListener('load', function () { abrirConfig(); });</text>
     }

@@ -1,4 +1,4 @@
-@model ATLAS_ERP.Models.Venda
+﻿@model ATLAS_ERP.Models.Venda
 @{
     ViewBag.Title = "Editar Venda - Atlas ERP";
     var clientes = ViewBag.Clientes as List<ATLAS_ERP.Models.Cliente> ?? new List<ATLAS_ERP.Models.Cliente>();
@@ -159,7 +159,7 @@
      data-json="@Newtonsoft.Json.JsonConvert.SerializeObject(produtos.Select(p => new { id = p.ProdutoId, nome = p.Nome, preco = p.PrecoVenda.ToString("F2", System.Globalization.CultureInfo.InvariantCulture) }))"></div>
 
 @section scripts {
-<script>
+<script nonce="@Html.CspNonce()">
     var produtosData = JSON.parse(document.getElementById('produtos-data').dataset.json);
 
     function recalc() {

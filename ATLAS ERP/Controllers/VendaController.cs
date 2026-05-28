@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using ATLAS_ERP.Data;
@@ -45,7 +44,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (Exception ex)
             {
-                Trace.TraceError("VendaController.Index: {0}", ex);
+                AppLogger.Error(ex, "VendaController.Index");
                 ViewBag.Erro = "Erro ao carregar vendas.";
                 return View(PagedResult<Models.Venda>.Empty(pageSize));
             }
@@ -236,7 +235,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (Exception ex)
             {
-                Trace.TraceError("VendaController.Nota: {0}", ex);
+                AppLogger.Error(ex, "VendaController.Nota");
                 return RedirectToAction("Index");
             }
         }
@@ -251,7 +250,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (Exception ex)
             {
-                Trace.TraceError("VendaController.Financeiro: {0}", ex);
+                AppLogger.Error(ex, "VendaController.Financeiro");
                 return RedirectToAction("Index");
             }
         }

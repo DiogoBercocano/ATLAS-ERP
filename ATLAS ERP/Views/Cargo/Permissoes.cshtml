@@ -1,4 +1,4 @@
-@model ATLAS_ERP.Models.Cargo
+﻿@model ATLAS_ERP.Models.Cargo
 @{
     ViewBag.Title = "Permissoes do Cargo - Atlas ERP";
     var permissoesCargo = ViewBag.PermissoesCargo as List<ATLAS_ERP.Models.Permissao> ?? new List<ATLAS_ERP.Models.Permissao>();
@@ -55,7 +55,7 @@
 }
 
 @section scripts {
-<script>
+<script nonce="@Html.CspNonce()">
     document.addEventListener('DOMContentLoaded', function() {
         const forms = document.querySelectorAll('form');
         forms.forEach(form => {

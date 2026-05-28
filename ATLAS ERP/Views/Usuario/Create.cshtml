@@ -1,4 +1,4 @@
-@model ATLAS_ERP.Models.Usuario
+﻿@model ATLAS_ERP.Models.Usuario
 @{
     ViewBag.Title = "Novo Funcionário - Atlas ERP";
 }
@@ -274,7 +274,7 @@
 </main>
 
 @section scripts {
-<script>
+<script nonce="@Html.CspNonce()">
     var nomeInput  = document.getElementById('nomeInput');
     var emailInput = document.getElementById('emailInput');
     var senhaInput = document.getElementById('senhaInput');

@@ -1,4 +1,4 @@
-@model List<ATLAS_ERP.Models.Empresa>
+﻿@model List<ATLAS_ERP.Models.Empresa>
 @{
     ViewBag.Title = "Super Admin - Atlas ERP";
     Layout = null;
@@ -254,7 +254,7 @@
         </div>
     </div>
 
-    <script>
+    <script nonce="@Html.CspNonce()">
         function abrirExcluir(id, nome) {
             document.getElementById('excluirId').value         = id;
             document.getElementById('excluirNome').textContent = nome;

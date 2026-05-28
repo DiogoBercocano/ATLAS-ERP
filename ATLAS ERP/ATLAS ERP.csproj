@@ -141,6 +141,7 @@
     <Compile Include="Infrastructure\LoginRateLimiter.cs" />
     <Compile Include="Infrastructure\PagedResult.cs" />
     <Compile Include="Infrastructure\PermissaoCache.cs" />
+    <Compile Include="Infrastructure\CspHtmlHelper.cs" />
     <Compile Include="Infrastructure\SecurityHeadersModule.cs" />
     <Compile Include="Infrastructure\UploadValidator.cs" />
     <Compile Include="Migrations\202604080036475_AddEstoqueAtualRemoverFilial.cs" />
@@ -155,21 +156,21 @@
     <Compile Include="Migrations\202604282250250_AddFotoProduto.Designer.cs">
       <DependentUpon>202604282250250_AddFotoProduto.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\20260429202512_AddCargoAndPermissoes.cs" />
-    <Compile Include="Migrations\20260429202512_AddCargoAndPermissoes.Designer.cs">
-      <DependentUpon>20260429202512_AddCargoAndPermissoes.cs</DependentUpon>
+    <Compile Include="Migrations\202605272310245_AddCargoPermissaoSystem.cs" />
+    <Compile Include="Migrations\202605272310245_AddCargoPermissaoSystem.Designer.cs">
+      <DependentUpon>202605272310245_AddCargoPermissaoSystem.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\20260429203000_UpdateCargoPermissaoKey.cs" />
-    <Compile Include="Migrations\20260429203000_UpdateCargoPermissaoKey.Designer.cs">
-      <DependentUpon>20260429203000_UpdateCargoPermissaoKey.cs</DependentUpon>
+    <Compile Include="Migrations\20260525001000_AddPerformanceIndexes.cs" />
+    <Compile Include="Migrations\20260525001000_AddPerformanceIndexes.Designer.cs">
+      <DependentUpon>20260525001000_AddPerformanceIndexes.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\20260429204000_FinalCargoPermissaoSync.cs" />
-    <Compile Include="Migrations\20260429204000_FinalCargoPermissaoSync.Designer.cs">
-      <DependentUpon>20260429204000_FinalCargoPermissaoSync.cs</DependentUpon>
+    <Compile Include="Migrations\20260525002000_NormalizarDocumentos.cs" />
+    <Compile Include="Migrations\20260525002000_NormalizarDocumentos.Designer.cs">
+      <DependentUpon>20260525002000_NormalizarDocumentos.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\20260430_AddDefaultPermissoes.cs" />
-    <Compile Include="Migrations\20260430_AddDefaultPermissoes.Designer.cs">
-      <DependentUpon>20260430_AddDefaultPermissoes.cs</DependentUpon>
+    <Compile Include="Migrations\20260525003000_AddSecurityConstraints.cs" />
+    <Compile Include="Migrations\20260525003000_AddSecurityConstraints.Designer.cs">
+      <DependentUpon>20260525003000_AddSecurityConstraints.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\CargoService.cs" />
     <Compile Include="Services\ClienteService.cs" />
@@ -311,17 +312,17 @@
     <EmbeddedResource Include="Migrations\202604282250250_AddFotoProduto.resx">
       <DependentUpon>202604282250250_AddFotoProduto.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\20260429202512_AddCargoAndPermissoes.resx">
-      <DependentUpon>20260429202512_AddCargoAndPermissoes.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202605272310245_AddCargoPermissaoSystem.resx">
+      <DependentUpon>202605272310245_AddCargoPermissaoSystem.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\20260429203000_UpdateCargoPermissaoKey.resx">
-      <DependentUpon>20260429203000_UpdateCargoPermissaoKey.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\20260525001000_AddPerformanceIndexes.resx">
+      <DependentUpon>20260525001000_AddPerformanceIndexes.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\20260429204000_FinalCargoPermissaoSync.resx">
-      <DependentUpon>20260429204000_FinalCargoPermissaoSync.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\20260525002000_NormalizarDocumentos.resx">
+      <DependentUpon>20260525002000_NormalizarDocumentos.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\20260430_AddDefaultPermissoes.resx">
-      <DependentUpon>20260430_AddDefaultPermissoes.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\20260525003000_AddSecurityConstraints.resx">
+      <DependentUpon>20260525003000_AddSecurityConstraints.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

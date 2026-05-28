@@ -1,4 +1,4 @@
-@model ATLAS_ERP.Models.Cliente
+﻿@model ATLAS_ERP.Models.Cliente
 @using ATLAS_ERP.Infrastructure
 @{
     ViewBag.Title = "Editar Cliente - Atlas ERP";
@@ -99,7 +99,7 @@
 </main>
 
 @section scripts {
-<script>
+<script nonce="@Html.CspNonce()">
     function maskCPF(v){v=v.replace(/\D/g,'').slice(0,11);v=v.replace(/(\d{3})(\d)/,'$1.$2');v=v.replace(/(\d{3})(\d)/,'$1.$2');v=v.replace(/(\d{3})(\d{1,2})$/,'$1-$2');return v;}
     function maskCNPJ(v){v=v.replace(/\D/g,'').slice(0,14);v=v.replace(/^(\d{2})(\d)/,'$1.$2');v=v.replace(/^(\d{2})\.(\d{3})(\d)/,'$1.$2.$3');v=v.replace(/\.(\d{3})(\d)/,'.$1/$2');v=v.replace(/(\d{4})(\d)/,'$1-$2');return v;}
     function maskTel(v){v=v.replace(/\D/g,'').slice(0,11);v=v.replace(/^(\d{2})(\d)/,'($1) $2');v=v.replace(/(\d{5})(\d)/,'$1-$2');return v;}

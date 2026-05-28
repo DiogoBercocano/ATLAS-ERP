@@ -1,4 +1,4 @@
-@using ATLAS_ERP.Helpers
+﻿@using ATLAS_ERP.Helpers
 @{
     ViewBag.Title = "Dashboard - Atlas ERP";
 
@@ -94,6 +94,21 @@
             </a>
         </div>
     </div>
+
+    @if (ViewBag.UploadAviso != null)
+    {
+        <div style="display:flex;align-items:center;gap:10px;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.25);border-radius:10px;padding:12px 18px;margin-bottom:20px;font-size:13px;color:var(--gold);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;flex-shrink:0;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            @ViewBag.UploadAviso
+        </div>
+    }
+    @if (ViewBag.ConfigErro != null)
+    {
+        <div style="display:flex;align-items:center;gap:10px;background:rgba(248,113,113,.10);border:1px solid rgba(248,113,113,.22);border-radius:10px;padding:12px 18px;margin-bottom:20px;font-size:13px;color:var(--red);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            @ViewBag.ConfigErro
+        </div>
+    }
 
     <!-- METRICAS -->
     <div class="metrics-grid">
@@ -231,7 +246,7 @@
 </main>
 
 @section scripts {
-<script>
+<script nonce="@Html.CspNonce()">
     var d = new Date();
     var opts = { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' };
     document.getElementById('dataAtual').textContent = d.toLocaleDateString('pt-BR', opts);

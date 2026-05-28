@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using ATLAS_ERP.Data;
 using ATLAS_ERP.Infrastructure;
+using ATLAS_ERP.Migrations;
 
 namespace ATLAS_ERP
 {
@@ -14,6 +17,17 @@ namespace ATLAS_ERP
     {
         protected void Application_Start()
         {
+            // Garante TLS 1.2 para chamadas HttpClient a APIs externas (ViaCEP, BrasilAPI, ReceitaWS).
+            // Deve ser definido ANTES do primeiro uso de HttpClient para ter efeito.
+            System.Net.ServicePointManager.SecurityProtocol =
+                System.Net.SecurityProtocolType.Tls12 |
+                System.Net.SecurityProtocolType.Tls11;
+
+            // Aplica automaticamente migrations pendentes ao iniciar o app.
+            // Substitui o inicializador padrão (CreateDatabaseIfNotExists) que criava tabelas
+            // sem registrar no __MigrationHistory, causando conflito com o PM Console.
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<AtlasContext, Configuration>());
+
             // Remove "X-AspNetMvc-Version" do response (fingerprint da stack).
             // "X-AspNet-Version" já é controlado por <httpRuntime enableVersionHeader="false">.
             MvcHandler.DisableMvcResponseHeader = true;

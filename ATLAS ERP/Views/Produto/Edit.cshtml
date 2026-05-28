@@ -1,4 +1,4 @@
-@model ATLAS_ERP.Models.Produto
+﻿@model ATLAS_ERP.Models.Produto
 @{
     ViewBag.Title = "Editar Produto - Atlas ERP";
     var precoStr = Model.PrecoVenda.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
@@ -112,7 +112,7 @@
 </main>
 
 @section scripts {
-<script>
+<script nonce="@Html.CspNonce()">
     function updateBadge() {
         var checked = document.getElementById('AtivoCheck').checked;
         var badge = document.getElementById('badgeAtivo');

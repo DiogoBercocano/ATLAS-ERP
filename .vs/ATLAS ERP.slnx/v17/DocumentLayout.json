@@ -1,7 +1,12 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|c:\\users\\dgber\\documents\\github\\atlas erp\\atlas erp\\controllers\\consultacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B725B726-8ADA-418D-8E9B-AB729C952295}|ATLAS ERP\\ATLAS ERP.csproj|solutionrelative:atlas erp\\controllers\\consultacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,7 +14,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -18,6 +23,19 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ConsultaController.cs",
+              "DocumentMoniker": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Controllers\\ConsultaController.cs",
+              "RelativeDocumentMoniker": "ATLAS ERP\\Controllers\\ConsultaController.cs",
+              "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Controllers\\ConsultaController.cs",
+              "RelativeToolTip": "ATLAS ERP\\Controllers\\ConsultaController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-25T22:59:33.709Z",
+              "EditorCaption": ""
             }
           ]
         }

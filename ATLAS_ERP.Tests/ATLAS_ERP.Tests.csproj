@@ -1,0 +1,55 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <!-- Suppress EF6 model cache warning when there is no DB in test context -->
+    <Nowarn>$(NoWarn);CS0618</Nowarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="Moq" Version="4.20.72" />
+    <PackageReference Include="MSTest" Version="3.6.4" />
+  </ItemGroup>
+
+  <!-- System.Web needed for HttpSessionStateBase (PermissaoCache) -->
+  <ItemGroup>
+    <Reference Include="System.Web" />
+  </ItemGroup>
+
+  <!-- Source links from main project — compiled directly, no web-app project reference needed -->
+  <ItemGroup>
+    <!-- Pure infrastructure (no external deps) -->
+    <Compile Include="..\ATLAS ERP\Helpers\PasswordHelper.cs"              Link="Src\Helpers\PasswordHelper.cs" />
+    <Compile Include="..\ATLAS ERP\Infrastructure\DocumentoValidator.cs"   Link="Src\Infrastructure\DocumentoValidator.cs" />
+    <Compile Include="..\ATLAS ERP\Infrastructure\DomainException.cs"      Link="Src\Infrastructure\DomainException.cs" />
+    <Compile Include="..\ATLAS ERP\Infrastructure\AppConstants.cs"         Link="Src\Infrastructure\AppConstants.cs" />
+    <Compile Include="..\ATLAS ERP\Infrastructure\PagedResult.cs"          Link="Src\Infrastructure\PagedResult.cs" />
+    <Compile Include="..\ATLAS ERP\Infrastructure\PermissaoCache.cs"       Link="Src\Infrastructure\PermissaoCache.cs" />
+    <!-- Models -->
+    <Compile Include="..\ATLAS ERP\Models\Cargo.cs"                        Link="Src\Models\Cargo.cs" />
+    <Compile Include="..\ATLAS ERP\Models\CargoPermissao.cs"               Link="Src\Models\CargoPermissao.cs" />
+    <Compile Include="..\ATLAS ERP\Models\Cliente.cs"                      Link="Src\Models\Cliente.cs" />
+    <Compile Include="..\ATLAS ERP\Models\ContaReceber.cs"                 Link="Src\Models\ContaReceber.cs" />
+    <Compile Include="..\ATLAS ERP\Models\Empresa.cs"                      Link="Src\Models\Empresa.cs" />
+    <Compile Include="..\ATLAS ERP\Models\Fornecedor.cs"                   Link="Src\Models\Fornecedor.cs" />
+    <Compile Include="..\ATLAS ERP\Models\Permissao.cs"                    Link="Src\Models\Permissao.cs" />
+    <Compile Include="..\ATLAS ERP\Models\Produto.cs"                      Link="Src\Models\Produto.cs" />
+    <Compile Include="..\ATLAS ERP\Models\Usuario.cs"                      Link="Src\Models\Usuario.cs" />
+    <Compile Include="..\ATLAS ERP\Models\Venda.cs"                        Link="Src\Models\Venda.cs" />
+    <Compile Include="..\ATLAS ERP\Models\VendaItem.cs"                    Link="Src\Models\VendaItem.cs" />
+    <!-- Data -->
+    <Compile Include="..\ATLAS ERP\Data\AtlasContext.cs"                   Link="Src\Data\AtlasContext.cs" />
+    <!-- Service under test -->
+    <Compile Include="..\ATLAS ERP\Services\VendaService.cs"               Link="Src\Services\VendaService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+  </ItemGroup>
+
+</Project>

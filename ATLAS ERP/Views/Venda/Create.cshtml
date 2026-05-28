@@ -1,4 +1,4 @@
-@using ATLAS_ERP.Helpers
+﻿@using ATLAS_ERP.Helpers
 @{
     ViewBag.Title = "Nova Venda - Atlas ERP";
     var clientes = ViewBag.Clientes as List<ATLAS_ERP.Models.Cliente>;
@@ -135,7 +135,7 @@
 </main>
 
 @section scripts {
-<script>
+<script nonce="@Html.CspNonce()">
     var itens = [];
 
     function adicionarItem() {

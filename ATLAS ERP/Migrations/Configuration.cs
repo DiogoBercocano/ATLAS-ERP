@@ -164,7 +164,8 @@ namespace ATLAS_ERP.Migrations
                     SenhaHash = PasswordHelper.HashSenha("Atlas@2026"),
                     CargoId = 1,
                     Ativo = true,
-                    EmpresaId = 1
+                    EmpresaId = 1,
+                    MustChangePassword = true
                 }
             );
 
@@ -178,7 +179,8 @@ namespace ATLAS_ERP.Migrations
                     SenhaHash = PasswordHelper.HashSenha("SuperAtlas@2026"),
                     CargoId = 3,
                     Ativo = true,
-                    EmpresaId = null
+                    EmpresaId = null,
+                    MustChangePassword = true
                 }
             );
 
