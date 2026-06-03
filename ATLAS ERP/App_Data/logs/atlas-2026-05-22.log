@@ -1,0 +1,3 @@
+﻿{"timestamp":"2026-05-22T00:38:01.4886212Z","level":"INFO","message":"application_start version=1.0.0.0","thread":1,"requestId":"73b5942775c7","properties":{"arg0":"1.0.0.0"}}
+{"timestamp":"2026-05-22T00:38:11.7360981Z","level":"AUDIT","message":"login_sucesso usuarioId=2 email=superadmin@atlas.com cargo=SuperAdmin","thread":7,"requestId":"8d7c419fcd91","path":"/Auth/Login","method":"POST","properties":{"arg0":"2","arg1":"superadmin@atlas.com","arg2":"SuperAdmin"}}
+{"timestamp":"2026-05-22T00:38:24.4215200Z","level":"AUDIT","message":"login_sucesso usuarioId=1 email=admin@atlas.com cargo=Admin","thread":7,"requestId":"1648050ef0d7","usuarioId":2,"cargo":"SuperAdmin","path":"/Auth/Login","method":"POST","properties":{"arg0":"1","arg1":"admin@atlas.com","arg2":"Admin"}}

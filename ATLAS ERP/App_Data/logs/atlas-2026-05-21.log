@@ -1,0 +1,2 @@
+﻿{"timestamp":"2026-05-21T00:20:27.3088276Z","level":"INFO","message":"application_start version=1.0.0.0","thread":1,"requestId":"a76f49ff1851","properties":{"arg0":"1.0.0.0"}}
+{"timestamp":"2026-05-21T00:23:53.7448183Z","level":"AUDIT","message":"login_sucesso usuarioId=2 email=superadmin@atlas.com cargo=SuperAdmin","thread":10,"requestId":"8f77fcc74313","path":"/Auth/Login","method":"POST","properties":{"arg0":"2","arg1":"superadmin@atlas.com","arg2":"SuperAdmin"}}
