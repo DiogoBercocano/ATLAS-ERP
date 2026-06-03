@@ -44,7 +44,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="Documento">CPF / CNPJ</label>
-                        <input class="form-control" id="Documento" name="Documento" value="@docFormatado" oninput="onDocInput(this)" maxlength="18" />
+                        <input class="form-control" id="Documento" name="Documento" value="@docFormatado" maxlength="18" />
                         <div class="input-help" id="docHelp">Apenas números, ou com formatação. Validação automática.</div>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="Telefone">Telefone</label>
-                        <input class="form-control" id="Telefone" name="Telefone" value="@Model.Telefone" oninput="this.value=maskTel(this.value)" maxlength="15" />
+                        <input class="form-control" id="Telefone" name="Telefone" value="@Model.Telefone" maxlength="15" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -78,7 +78,7 @@
                     <div class="form-group">
                         <label class="form-label">Status</label>
                         <div class="checkbox-row" style="margin-top:8px;">
-                            <input type="checkbox" id="AtivoCheck" @(Model.Ativo ? "checked" : "") onchange="document.getElementById('Ativo').value=this.checked?'true':'false'" />
+                            <input type="checkbox" id="AtivoCheck" @(Model.Ativo ? "checked" : "") />
                             <label for="AtivoCheck">
                                 <span class="badge-status @(Model.Ativo ? "badge-ativo" : "badge-inativo")" id="badgeAtivo">
                                     @(Model.Ativo ? "Ativo" : "Inativo")
@@ -117,7 +117,10 @@
     function validarCPF(cpf){cpf=cpf.replace(/\D/g,'');if(cpf.length!==11||/^(\d)\1{10}$/.test(cpf))return false;var s=0;for(var i=0;i<9;i++)s+=parseInt(cpf[i])*(10-i);var r=(s*10)%11;if(r===10||r===11)r=0;if(r!==parseInt(cpf[9]))return false;s=0;for(i=0;i<10;i++)s+=parseInt(cpf[i])*(11-i);r=(s*10)%11;if(r===10||r===11)r=0;return r===parseInt(cpf[10]);}
     function validarCNPJ(cnpj){cnpj=cnpj.replace(/\D/g,'');if(cnpj.length!==14||/^(\d)\1{13}$/.test(cnpj))return false;var p1=[5,4,3,2,9,8,7,6,5,4,3,2],p2=[6,5,4,3,2,9,8,7,6,5,4,3,2];var s=0;for(var i=0;i<12;i++)s+=parseInt(cnpj[i])*p1[i];var r=s%11,dv1=r<2?0:11-r;if(dv1!==parseInt(cnpj[12]))return false;s=0;for(i=0;i<13;i++)s+=parseInt(cnpj[i])*p2[i];r=s%11;var dv2=r<2?0:11-r;return dv2===parseInt(cnpj[13]);}
 
+    document.getElementById('Documento').addEventListener('input', function() { onDocInput(this); });
+    document.getElementById('Telefone').addEventListener('input', function() { this.value = maskTel(this.value); });
     document.getElementById('AtivoCheck').addEventListener('change', function() {
+        document.getElementById('Ativo').value = this.checked ? 'true' : 'false';
         var badge=document.getElementById('badgeAtivo');
         badge.textContent=this.checked?'Ativo':'Inativo';
         badge.className='badge-status '+(this.checked?'badge-ativo':'badge-inativo');

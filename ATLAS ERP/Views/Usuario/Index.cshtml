@@ -8,6 +8,7 @@
 @section styles {
 <style>
     .main { padding:32px 40px; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:14px; }
     .btn-primary {
         display: inline-flex; align-items: center; gap: 8px;
         background: var(--accent); color: white; text-decoration: none;
@@ -86,7 +87,14 @@
     .modal-danger-icon svg { width: 20px; height: 20px; }
     .modal-btn-delete { flex: 1; height: 44px; background: var(--red); border: none; border-radius: 9px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; color: white; cursor: pointer; transition: background 0.2s, transform 0.15s; }
     .modal-btn-delete:hover { background: #ef4444; transform: translateY(-1px); }
-    @@media (max-width: 700px) { .expand-panel { flex-direction: column; padding: 16px; } .expand-details { gap: 16px; } }
+    @@media (max-width: 700px) {
+        .main { padding: 16px; }
+        .topbar { flex-direction: column; align-items: flex-start; }
+        .btn-primary { width: 100%; justify-content: center; }
+        .expand-panel { flex-direction: column; padding: 16px; }
+        .expand-details { gap: 16px; }
+        thead th:nth-child(3), thead th:nth-child(4), td:nth-child(3), td:nth-child(4) { display: none; }
+    }
 </style>
 }
 
@@ -141,7 +149,7 @@
                         var rowId = "row-" + u.UsuarioId;
                         var expId = "exp-" + u.UsuarioId;
 
-                        <tr class="tr-main" id="@rowId" onclick="toggleRow('@rowId','@expId')">
+                        <tr class="tr-main" id="@rowId">
                             <td style="padding-left:20px;">
                                 <div class="expand-chevron">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -248,9 +256,9 @@
 </main>
 
 <!-- MODAL EDITAR -->
-<div class="modal-overlay" id="modalEditar" onclick="fecharFora(event,'modalEditar')">
+<div class="modal-overlay" id="modalEditar">
     <div class="modal">
-        <button class="modal-close" onclick="fechar('modalEditar')">
+        <button class="modal-close" id="editarClose">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="18" y1="6" x2="6" y2="18" />
                 <line x1="6" y1="6" x2="18" y2="18" />
@@ -294,7 +302,7 @@
             </div>
 
             <div class="modal-actions">
-                <button type="button" class="modal-btn-cancel" onclick="fechar('modalEditar')">Cancelar</button>
+                <button type="button" class="modal-btn-cancel" id="editarCancel">Cancelar</button>
                 <button type="submit" class="modal-btn-submit">Salvar alterações</button>
             </div>
         </form>
@@ -302,9 +310,9 @@
 </div>
 
 <!-- MODAL EXCLUIR -->
-<div class="modal-overlay" id="modalExcluir" onclick="fecharFora(event,'modalExcluir')">
+<div class="modal-overlay" id="modalExcluir">
     <div class="modal" style="max-width:380px;text-align:center;">
-        <button class="modal-close" onclick="fechar('modalExcluir')">
+        <button class="modal-close" id="excluirClose">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="18" y1="6" x2="6" y2="18" />
                 <line x1="6" y1="6" x2="18" y2="18" />
@@ -325,7 +333,7 @@
             @Html.AntiForgeryToken()
             <input type="hidden" id="excluirId" name="usuarioId" value="" />
             <div class="modal-actions">
-                <button type="button" class="modal-btn-cancel" onclick="fechar('modalExcluir')">Cancelar</button>
+                <button type="button" class="modal-btn-cancel" id="excluirCancel">Cancelar</button>
                 <button type="submit" class="modal-btn-delete">Sim, excluir</button>
             </div>
         </form>
@@ -383,6 +391,20 @@
 
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') ['modalEditar', 'modalExcluir'].forEach(fechar);
+    });
+
+    document.getElementById('modalEditar').addEventListener('click', function(e) { fecharFora(e, 'modalEditar'); });
+    document.getElementById('modalExcluir').addEventListener('click', function(e) { fecharFora(e, 'modalExcluir'); });
+    document.getElementById('editarClose').addEventListener('click', function() { fechar('modalEditar'); });
+    document.getElementById('editarCancel').addEventListener('click', function() { fechar('modalEditar'); });
+    document.getElementById('excluirClose').addEventListener('click', function() { fechar('modalExcluir'); });
+    document.getElementById('excluirCancel').addEventListener('click', function() { fechar('modalExcluir'); });
+
+    document.querySelector('table').addEventListener('click', function(e) {
+        if (e.target.closest('.js-user-edit, .js-user-del, .js-toggle-senha')) return;
+        var row = e.target.closest('.tr-main');
+        if (!row) return;
+        toggleRow(row.id, row.id.replace('row-', 'exp-'));
     });
 
     document.addEventListener('click', function (e) {

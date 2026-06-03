@@ -91,7 +91,7 @@
                     <div class="form-group">
                         <label class="form-label">Status</label>
                         <div class="checkbox-row" style="margin-top:8px;">
-                            <input type="checkbox" id="AtivoCheck" @(Model.Ativo ? "checked" : "") onchange="document.getElementById('Ativo').value=this.checked?'true':'false'; updateBadge();" />
+                            <input type="checkbox" id="AtivoCheck" @(Model.Ativo ? "checked" : "") />
                             <label for="AtivoCheck">
                                 <span class="badge-status @(Model.Ativo ? "badge-ativo" : "badge-inativo")" id="badgeAtivo">
                                     @(Model.Ativo ? "Ativo" : "Inativo")
@@ -119,6 +119,11 @@
         badge.textContent = checked ? 'Ativo' : 'Inativo';
         badge.className = 'badge-status ' + (checked ? 'badge-ativo' : 'badge-inativo');
     }
+
+    document.getElementById('AtivoCheck').addEventListener('change', function() {
+        document.getElementById('Ativo').value = this.checked ? 'true' : 'false';
+        updateBadge();
+    });
 
     document.getElementById('formEdit').addEventListener('submit', function(e){
         var p = document.getElementById('PrecoVenda').value.replace(',', '.');

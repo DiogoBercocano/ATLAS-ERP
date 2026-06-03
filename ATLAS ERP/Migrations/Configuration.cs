@@ -165,7 +165,7 @@ namespace ATLAS_ERP.Migrations
                     CargoId = 1,
                     Ativo = true,
                     EmpresaId = 1,
-                    MustChangePassword = true
+                    MustChangePassword = false
                 }
             );
 
@@ -180,7 +180,7 @@ namespace ATLAS_ERP.Migrations
                     CargoId = 3,
                     Ativo = true,
                     EmpresaId = null,
-                    MustChangePassword = true
+                    MustChangePassword = false
                 }
             );
 

@@ -268,16 +268,16 @@
                         <div class="search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
                         <input type="text" class="search-input" id="searchInput" name="search"
                                value="@paged.Search"
-                               placeholder="Buscar produto (Enter para busca completa)..." oninput="applyFilters()" />
+                               placeholder="Buscar produto (Enter para busca completa)..." />
                     </div>
                 </form>
-                <select class="filter-select" id="filterCat" onchange="applyFilters()">
+                <select class="filter-select" id="filterCat">
                     <option value="">Todas as categorias</option>
                     @foreach (var cat in lista.Select(p => p.Categoria ?? "Sem categoria").Distinct().OrderBy(c => c)) {
                         <option value="@cat">@cat</option>
                     }
                 </select>
-                <select class="filter-select" id="filterStatus" onchange="applyFilters()" style="min-width:120px">
+                <select class="filter-select" id="filterStatus" style="min-width:120px">
                     <option value="">Todos</option>
                     <option value="ativo">Ativos</option>
                     <option value="inativo">Inativos</option>
@@ -285,10 +285,10 @@
                     <option value="zerado">Sem estoque</option>
                 </select>
                 <div class="view-toggle">
-                    <button class="view-btn active" id="btnGrid" onclick="setView('grid')" title="Grade">
+                    <button class="view-btn active" id="btnGrid" title="Grade">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
                     </button>
-                    <button class="view-btn" id="btnList" onclick="setView('list')" title="Lista">
+                    <button class="view-btn" id="btnList" title="Lista">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
                     </button>
                 </div>
@@ -449,14 +449,14 @@
 
 @if (podeEditar)
 {
-    <div class="modal-overlay" id="editOverlay" onclick="closeEditIfOutside(event)">
+    <div class="modal-overlay" id="editOverlay">
         <div class="modal">
             <div class="modal-header">
                 <div>
                     <div class="modal-title">Editar Produto</div>
                     <div class="modal-sub" id="editModalSub">—</div>
                 </div>
-                <button class="modal-close" onclick="closeEdit()">
+                <button class="modal-close" id="editCloseBtn">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                     </svg>
@@ -472,7 +472,7 @@
                         <div id="editFotoArea" style="display:flex;align-items:center;gap:12px;">
                             <img id="editFotoPreview" src="" alt="" style="display:none;width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid var(--border-md);" />
                             <label style="flex:1;cursor:pointer;">
-                                <input type="file" name="foto" id="editFotoInput" accept="image/jpeg,image/png,image/webp,image/gif" style="display:none" onchange="onEditFotoChange(this)" />
+                                <input type="file" name="foto" id="editFotoInput" accept="image/jpeg,image/png,image/webp,image/gif" style="display:none" />
                                 <div style="height:38px;border:1px dashed var(--border-md);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);gap:6px;transition:border-color .2s;padding:0 12px;">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
                                     <span id="editFotoLabel">Alterar foto&hellip;</span>
@@ -503,7 +503,7 @@
                             <div class="modal-toggle-title">Produto ativo</div>
                             <label class="toggle-switch">
                                 <input type="hidden" id="editAtivoHidden" name="Ativo" value="false" />
-                                <input type="checkbox" id="editAtivo" onchange="onEditAtivoChange(this)" />
+                                <input type="checkbox" id="editAtivo" />
                                 <span class="toggle-track"></span>
                                 <span class="toggle-thumb"></span>
                             </label>
@@ -512,13 +512,13 @@
                 }
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-modal-cancel" onclick="closeEdit()">Cancelar</button>
-                <button type="button" class="btn-modal-save" onclick="submitEdit()">Salvar alterações</button>
+                <button type="button" class="btn-modal-cancel" id="editCancelBtn">Cancelar</button>
+                <button type="button" class="btn-modal-save" id="editSaveBtn">Salvar alterações</button>
             </div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="delOverlay" onclick="closeDelIfOutside(event)">
+    <div class="modal-overlay" id="delOverlay">
         <div class="modal del-modal">
             <div class="modal-body" style="padding:28px">
                 <div class="del-icon-wrap">
@@ -530,7 +530,7 @@
                 <div class="del-sub">Você está prestes a excluir <span class="del-product-name" id="delProdNome"></span>. Esta ação não pode ser desfeita.</div>
             </div>
             <div class="modal-footer" style="padding-top:0">
-                <button type="button" class="btn-modal-cancel" onclick="closeDel()">Cancelar</button>
+                <button type="button" class="btn-modal-cancel" id="delCancelBtn">Cancelar</button>
                 @using (Html.BeginForm("Delete", "Produto", FormMethod.Post, new { id = "deleteForm" }))
                 {
                     @Html.AntiForgeryToken()
@@ -692,5 +692,30 @@ document.addEventListener('click', function(e) {
 });
 
 applyCardStyles();
+
+// Filtros e view toggle
+document.getElementById('searchInput').addEventListener('input', applyFilters);
+document.getElementById('filterCat').addEventListener('change', applyFilters);
+document.getElementById('filterStatus').addEventListener('change', applyFilters);
+document.getElementById('btnGrid').addEventListener('click', function() { setView('grid'); });
+document.getElementById('btnList').addEventListener('click', function() { setView('list'); });
+
+// Modal de edição
+var editOverlayEl = document.getElementById('editOverlay');
+if (editOverlayEl) {
+    editOverlayEl.addEventListener('click', closeEditIfOutside);
+    document.getElementById('editCloseBtn').addEventListener('click', closeEdit);
+    document.getElementById('editCancelBtn').addEventListener('click', closeEdit);
+    document.getElementById('editSaveBtn').addEventListener('click', submitEdit);
+    document.getElementById('editFotoInput').addEventListener('change', function() { onEditFotoChange(this); });
+    document.getElementById('editAtivo').addEventListener('change', function() { onEditAtivoChange(this); });
+}
+
+// Modal de exclusão
+var delOverlayEl = document.getElementById('delOverlay');
+if (delOverlayEl) {
+    delOverlayEl.addEventListener('click', closeDelIfOutside);
+    document.getElementById('delCancelBtn').addEventListener('click', closeDel);
+}
 </script>
 }

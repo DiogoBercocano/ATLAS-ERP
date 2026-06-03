@@ -24,7 +24,7 @@ namespace ATLAS_ERP.Controllers
                     if (cargoNome == "Admin" || cargoNome == "Gerente")
                         return RedirectToAction("Dashboard", "Admin");
                     if (!string.IsNullOrEmpty(cargoNome))
-                        return RedirectToAction("Index", "Produto");
+                        return RedirecionarPorPermissao((int?)Session[SessionKeys.CargoId] ?? 0);
                     // Cargo nulo/desconhecido: evita loop infinito forçando logout
                     Session.Clear();
                     Session.Abandon();
@@ -114,19 +114,13 @@ namespace ATLAS_ERP.Controllers
                 Session[SessionKeys.CargoNome]     = user.Cargo.Nome;
                 Session[SessionKeys.EmpresaId]     = user.EmpresaId.HasValue ? (object)user.EmpresaId.Value : null;
 
-                if (user.MustChangePassword)
-                {
-                    Session[SessionKeys.MustChangePassword] = true;
-                    return RedirectToAction("AlterarSenhaInicial");
-                }
-
                 var cargoNome = user.Cargo.Nome;
                 if (cargoNome == "SuperAdmin")
                     return RedirectToAction("Index", "SuperAdmin");
                 if (cargoNome == "Admin" || cargoNome == "Gerente")
                     return RedirectToAction("Dashboard", "Admin");
 
-                return RedirectToAction("Index", "Produto");
+                return RedirecionarPorPermissao(user.CargoId ?? 0);
             }
             catch (System.Exception ex)
             {
@@ -185,7 +179,7 @@ namespace ATLAS_ERP.Controllers
                 if (cargoNome == "Admin" || cargoNome == "Gerente")
                     return RedirectToAction("Dashboard", "Admin");
 
-                return RedirectToAction("Index", "Produto");
+                return RedirecionarPorPermissao((int?)Session[SessionKeys.CargoId] ?? 0);
             }
             catch (System.Exception ex)
             {
@@ -224,6 +218,27 @@ namespace ATLAS_ERP.Controllers
                 Path     = "/"
             };
             Response.Cookies.Add(cookie);
+        }
+
+        private ActionResult RedirecionarPorPermissao(int cargoId)
+        {
+            if (PermissaoCache.TemPermissao(cargoId, "dashboard_view"))
+                return RedirectToAction("Dashboard", "Admin");
+            if (PermissaoCache.TemPermissao(cargoId, "vendas_view"))
+                return RedirectToAction("Index", "Venda");
+            if (PermissaoCache.TemPermissao(cargoId, "produtos_view"))
+                return RedirectToAction("Index", "Produto");
+            if (PermissaoCache.TemPermissao(cargoId, "clientes_view"))
+                return RedirectToAction("Index", "Cliente");
+            if (PermissaoCache.TemPermissao(cargoId, "fornecedores_view"))
+                return RedirectToAction("Index", "Fornecedor");
+
+            // Cargo sem nenhuma permissão configurada
+            AppLogger.Audit("login_sem_permissoes cargoId={0}", cargoId);
+            Session.Clear();
+            Session.Abandon();
+            ViewBag.Erro = "Seu perfil de acesso não possui permissões configuradas. Contate o administrador.";
+            return View("Login");
         }
 
         private static string FormatarEspera(TimeSpan ts)

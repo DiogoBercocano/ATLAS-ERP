@@ -224,7 +224,7 @@
                                 <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                             </svg>
                         </span>
-                        <button type="button" class="toggle-pass" onclick="toggleSenha('novaSenha','eye1')" aria-label="Mostrar ou ocultar nova senha">
+                        <button type="button" class="toggle-pass" data-target="novaSenha" data-icon="eye1" aria-label="Mostrar ou ocultar nova senha">
                             <svg id="eye1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                                 <circle cx="12" cy="12" r="3" />
@@ -246,7 +246,7 @@
                                 <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                             </svg>
                         </span>
-                        <button type="button" class="toggle-pass" onclick="toggleSenha('confirmar','eye2')" aria-label="Mostrar ou ocultar confirmação de senha">
+                        <button type="button" class="toggle-pass" data-target="confirmar" data-icon="eye2" aria-label="Mostrar ou ocultar confirmação de senha">
                             <svg id="eye2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                                 <circle cx="12" cy="12" r="3" />
@@ -270,6 +270,12 @@
             l.href = 'https://fonts.googleapis.com/css2?family=Inter:wght' + at + '400;500;600;700;800&family=DM+Sans:wght' + at + '300;400;500&display=swap';
             document.head.appendChild(l);
         }());
+
+        document.querySelectorAll('.toggle-pass').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                toggleSenha(btn.getAttribute('data-target'), btn.getAttribute('data-icon'));
+            });
+        });
 
         function toggleSenha(inputId, iconId) {
             var input = document.getElementById(inputId);

@@ -14,7 +14,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -25,6 +25,10 @@
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "ConsultaController.cs",
@@ -32,7 +36,7 @@
               "RelativeDocumentMoniker": "ATLAS ERP\\Controllers\\ConsultaController.cs",
               "ToolTip": "C:\\Users\\dgber\\Documents\\GitHub\\ATLAS ERP\\ATLAS ERP\\Controllers\\ConsultaController.cs",
               "RelativeToolTip": "ATLAS ERP\\Controllers\\ConsultaController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAA5AAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABQAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-25T22:59:33.709Z",
               "EditorCaption": ""

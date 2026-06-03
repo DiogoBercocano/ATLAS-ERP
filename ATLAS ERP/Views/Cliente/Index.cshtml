@@ -86,8 +86,7 @@
             <div class="search-wrap">
                 <input type="text" class="search-input" id="searchInput" name="search"
                        value="@paged.Search"
-                       placeholder="Buscar (Enter para busca completa)..."
-                       onkeyup="filtrarTabela()" />
+                       placeholder="Buscar (Enter para busca completa)..." />
                 <span class="search-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
@@ -117,7 +116,7 @@
                         var cLimite = c.LimiteCredito.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
                         var cAtivo = c.Ativo ? "true" : "false";
 
-                        <tr class="tr-main" id="@rowId" onclick="toggleRow('@rowId','@expId')">
+                        <tr class="tr-main" id="@rowId">
                             <td style="padding-left:20px;">
                                 <div class="expand-chevron">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9" /></svg>
@@ -183,9 +182,9 @@
 </main>
 
 <!-- MODAL EDITAR -->
-<div class="modal-overlay" id="modalEditar" onclick="fecharFora(event,'modalEditar')">
+<div class="modal-overlay" id="modalEditar">
     <div class="modal">
-        <button class="modal-close" onclick="fechar('modalEditar')">
+        <button class="modal-close" id="editarClose">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
         <div class="modal-title">Editar Cliente</div>
@@ -230,7 +229,7 @@
                 </div>
             </div>
             <div class="modal-actions">
-                <button type="button" class="modal-btn-cancel" onclick="fechar('modalEditar')">Cancelar</button>
+                <button type="button" class="modal-btn-cancel" id="editarCancel">Cancelar</button>
                 <button type="submit" class="modal-btn-submit">Salvar alterações</button>
             </div>
         </form>
@@ -238,9 +237,9 @@
 </div>
 
 <!-- MODAL EXCLUIR -->
-<div class="modal-overlay" id="modalExcluir" onclick="fecharFora(event,'modalExcluir')">
+<div class="modal-overlay" id="modalExcluir">
     <div class="modal" style="max-width:380px;text-align:center;">
-        <button class="modal-close" onclick="fechar('modalExcluir')">
+        <button class="modal-close" id="excluirClose">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
         <div class="modal-danger-icon">
@@ -253,7 +252,7 @@
             @Html.AntiForgeryToken()
             <input type="hidden" id="excluirId" name="clienteId" value="" />
             <div class="modal-actions">
-                <button type="button" class="modal-btn-cancel" onclick="fechar('modalExcluir')">Cancelar</button>
+                <button type="button" class="modal-btn-cancel" id="excluirCancel">Cancelar</button>
                 <button type="submit" class="modal-btn-delete">Sim, excluir</button>
             </div>
         </form>
@@ -297,6 +296,23 @@
 
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') ['modalEditar','modalExcluir'].forEach(fechar);
+    });
+
+    document.getElementById('modalEditar').addEventListener('click', function(e) { fecharFora(e, 'modalEditar'); });
+    document.getElementById('modalExcluir').addEventListener('click', function(e) { fecharFora(e, 'modalExcluir'); });
+    document.getElementById('editarClose').addEventListener('click', function() { fechar('modalEditar'); });
+    document.getElementById('editarCancel').addEventListener('click', function() { fechar('modalEditar'); });
+    document.getElementById('excluirClose').addEventListener('click', function() { fechar('modalExcluir'); });
+    document.getElementById('excluirCancel').addEventListener('click', function() { fechar('modalExcluir'); });
+
+    document.getElementById('searchInput').addEventListener('input', filtrarTabela);
+
+    var tbl = document.getElementById('tabelaClientes');
+    if (tbl) tbl.addEventListener('click', function(e) {
+        if (e.target.closest('.js-cli-edit, .js-cli-del')) return;
+        var row = e.target.closest('.tr-main');
+        if (!row) return;
+        toggleRow(row.id, row.id.replace('row-', 'exp-'));
     });
 
     document.addEventListener('click', function(e) {

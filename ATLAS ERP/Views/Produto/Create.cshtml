@@ -6,7 +6,6 @@
 
 @section styles {
 <style>
-    .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-height: 100vh; position: relative; z-index: 1; }
     .page-header { position: sticky; top: 0; z-index: 50; background: rgba(5,13,26,0.92); backdrop-filter: blur(14px); border-bottom: 1px solid var(--border); padding: 16px 36px; display: flex; align-items: center; justify-content: space-between; }
     .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--faint); }
     .breadcrumb a { color: var(--faint); text-decoration: none; transition: color .15s; }
@@ -145,7 +144,7 @@
         </a>
     </div>
 
-    @using (Html.BeginForm("Create", "Produto", FormMethod.Post, new { id = "formProduto", enctype = "multipart/form-data", onsubmit = "onFormSubmit(event)" }))
+    @using (Html.BeginForm("Create", "Produto", FormMethod.Post, new { id = "formProduto", enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
 
@@ -175,9 +174,8 @@
                         </div>
                     </div>
 
-                    <div id="fotoDropArea" class="foto-drop" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
-                        <input type="file" name="foto" id="fotoInput" accept="image/jpeg,image/png,image/webp,image/gif"
-                               onchange="onFotoChange(this)" />
+                    <div id="fotoDropArea" class="foto-drop">
+                        <input type="file" name="foto" id="fotoInput" accept="image/jpeg,image/png,image/webp,image/gif" />
                         <div class="foto-drop-icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
@@ -192,7 +190,7 @@
 
                     <div class="foto-preview-wrap" id="fotoPreviewWrap">
                         <img id="fotoPreviewImg" class="foto-preview-img" src="" alt="Preview" />
-                        <button type="button" class="foto-remove-btn" onclick="removerFoto()" title="Remover foto">
+                        <button type="button" class="foto-remove-btn" id="fotoRemoveBtn" title="Remover foto">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                             </svg>
@@ -226,35 +224,34 @@
                     <div class="form-group">
                         <label class="form-label">Categoria</label>
                         <div class="cat-grid">
-                            <div class="cat-chip" data-cat="Eletronicos" data-label="Eletrônicos" onclick="selectCat(this)">
+                            <div class="cat-chip" data-cat="Eletronicos" data-label="Eletrônicos">
                                 <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="13" rx="1"></rect><path d="M3 17h18"></path></svg>Eletrônicos
                             </div>
-                            <div class="cat-chip" data-cat="Alimentos" data-label="Alimentos" onclick="selectCat(this)">
+                            <div class="cat-chip" data-cat="Alimentos" data-label="Alimentos">
                                 <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M12 5v4m0 4v4"></path></svg>Alimentos
                             </div>
-                            <div class="cat-chip" data-cat="Roupas" data-label="Roupas" onclick="selectCat(this)">
+                            <div class="cat-chip" data-cat="Roupas" data-label="Roupas">
                                 <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 5l3 2v9h6v-9l3 -2M9 7h6M6 14h12v6H6z"></path></svg>Roupas
                             </div>
-                            <div class="cat-chip" data-cat="Ferramentas" data-label="Ferramentas" onclick="selectCat(this)">
+                            <div class="cat-chip" data-cat="Ferramentas" data-label="Ferramentas">
                                 <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.4 14.4L9.6 9.6m8.8 2L14 5.2a2 2 0 0 0 -2.8 0l-7 7a2 2 0 0 0 0 2.8l7 7a2 2 0 0 0 2.8 0l7-7a2 2 0 0 0 0 -2.8z"></path></svg>Ferramentas
                             </div>
-                            <div class="cat-chip" data-cat="Servicos" data-label="Serviços" onclick="selectCat(this)">
+                            <div class="cat-chip" data-cat="Servicos" data-label="Serviços">
                                 <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m4.24-4.24l4.24-4.24"></path></svg>Serviços
                             </div>
-                            <div class="cat-chip" data-cat="Bebidas" data-label="Bebidas" onclick="selectCat(this)">
+                            <div class="cat-chip" data-cat="Bebidas" data-label="Bebidas">
                                 <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 4h10v8c0 2 -2 4 -5 4c-3 0 -5 -2 -5 -4z"></path><path d="M8 16h8M7 20h10"></path></svg>Bebidas
                             </div>
-                            <div class="cat-chip" data-cat="Limpeza" data-label="Limpeza" onclick="selectCat(this)">
+                            <div class="cat-chip" data-cat="Limpeza" data-label="Limpeza">
                                 <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l-2 3h-3l2 3H6l2 3H5l2 3H4l2 3H3l3 4h12l3 -4h-3l2 -3h-3l2 -3h-3l2 -3h-3l2 -3h-3z"></path><path d="M6 19h12"></path></svg>Limpeza
                             </div>
-                            <div class="cat-chip" data-cat="Outros" data-label="Outros" onclick="selectCat(this)">
+                            <div class="cat-chip" data-cat="Outros" data-label="Outros">
                                 <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>Outros
                             </div>
                         </div>
                         <div class="cat-custom-label">Ou digite uma categoria personalizada:</div>
                         <input type="text" id="catCustom" class="form-control no-icon"
                                placeholder="Ex: Papelaria, Moveis, Higiene..."
-                               oninput="onCatCustomInput(this)"
                                autocomplete="off" />
                         @Html.HiddenFor(m => m.Categoria, new { id = "categoriaHidden" })
                         @Html.ValidationMessageFor(m => m.Categoria, "", new { @class = "field-error" })
@@ -331,7 +328,7 @@
                                 <div class="toggle-sub" id="toggleSub">Este produto estará disponível para vendas</div>
                             </div>
                             <label class="toggle-switch">
-                                @Html.CheckBoxFor(m => m.Ativo, new { id = "ativoCheck", onchange = "onAtivoChange(this)" })
+                                @Html.CheckBoxFor(m => m.Ativo, new { id = "ativoCheck" })
                                 <span class="toggle-track"></span>
                                 <span class="toggle-thumb"></span>
                             </label>
@@ -390,17 +387,6 @@
 
 @section scripts {
 <script nonce="@Html.CspNonce()">
-function onFormSubmit(event) {
-    var displayVal = document.getElementById('precoInput').value.trim();
-    if (displayVal) {
-        var numVal = parseFloat(displayVal.replace(/\./g, '').replace(',', '.'));
-        document.getElementById('precoVendaHidden').value = numVal.toString();
-    }
-}
-
-function onFotoChange(input) {
-    if (input.files && input.files[0]) mostrarPreviewFoto(input.files[0]);
-}
 function onDragOver(e) { e.preventDefault(); document.getElementById('fotoDropArea').classList.add('drag-over'); }
 function onDragLeave(e) { document.getElementById('fotoDropArea').classList.remove('drag-over'); }
 function onDrop(e) {
@@ -580,6 +566,34 @@ precoInput.addEventListener('blur', function() {
     if (n > 0) this.value = n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     updatePreview();
 });
+
+// Substituindo todos os handlers inline (bloqueados por CSP) por addEventListener
+document.getElementById('formProduto').addEventListener('submit', function() {
+    var displayVal = precoInput.value.trim();
+    if (displayVal) {
+        var numVal = parseFloat(displayVal.replace(/\./g, '').replace(',', '.'));
+        document.getElementById('precoVendaHidden').value = numVal.toString();
+    }
+});
+
+document.getElementById('fotoInput').addEventListener('change', function() {
+    if (this.files && this.files[0]) mostrarPreviewFoto(this.files[0]);
+});
+
+var dropArea = document.getElementById('fotoDropArea');
+dropArea.addEventListener('dragover', onDragOver);
+dropArea.addEventListener('dragleave', onDragLeave);
+dropArea.addEventListener('drop', onDrop);
+
+document.getElementById('fotoRemoveBtn').addEventListener('click', removerFoto);
+
+document.querySelector('.cat-grid').addEventListener('click', function(e) {
+    var chip = e.target.closest('.cat-chip');
+    if (chip) selectCat(chip);
+});
+
+catCustom.addEventListener('input', function() { onCatCustomInput(this); });
+ativoCheck.addEventListener('change', function() { onAtivoChange(this); });
 
 onAtivoChange(ativoCheck);
 updatePreview();

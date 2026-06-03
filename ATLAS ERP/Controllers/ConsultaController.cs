@@ -10,7 +10,7 @@ namespace ATLAS_ERP.Controllers
 {
     public class ConsultaController : Controller
     {
-        // TLS 1.2 é garantido via ServicePointManager em Global.asax — não precisamos de handler customizado.
+        // TLS 1.2 é garantido via ServicePointManager em Global.asax.
         private static readonly HttpClient _http = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
 
         static ConsultaController()
@@ -18,7 +18,7 @@ namespace ATLAS_ERP.Controllers
             _http.DefaultRequestHeaders.Add("User-Agent", "ATLAS-ERP/1.0");
         }
 
-        // GET /Consulta/Cep?cep=01310100  →  proxy para https://viacep.com.br/ws/{cep}/json/
+        // GET /Consulta/Cep?cep=01310100  →  proxy para https://viacep.com.br/ws/{cep}/json//
         // Endpoint público: ViaCEP é API pública sem autenticação; também usada na página de cadastro.
         [HttpGet]
         public async Task<ActionResult> Cep(string cep)

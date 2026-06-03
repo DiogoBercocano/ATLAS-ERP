@@ -49,6 +49,11 @@ namespace ATLAS_ERP
 
         protected void Application_BeginRequest()
         {
+            // Força InvariantCulture em todos os requests para que o model binder
+            // aceite ponto como separador decimal (formato enviado pelo JavaScript).
+            System.Threading.Thread.CurrentThread.CurrentCulture   = System.Globalization.CultureInfo.InvariantCulture;
+            System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.InvariantCulture;
+
             if (HttpContext.Current != null && HttpContext.Current.Items["RequestId"] == null)
                 HttpContext.Current.Items["RequestId"] = Guid.NewGuid().ToString("N").Substring(0, 12);
         }

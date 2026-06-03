@@ -2,14 +2,14 @@
     var empresa = ViewBag.Empresa as ATLAS_ERP.Models.Empresa;
 }
 
-<div class="modal-overlay" id="modalConfig" onclick="if(event.target===this)fecharConfig()">
+<div class="modal-overlay" id="modalConfig">
     <div class="modal" style="max-width:480px">
         <div class="modal-header">
             <div>
                 <div class="modal-title">Configurações da Empresa</div>
                 <div class="modal-sub">Atualize as informações da sua empresa</div>
             </div>
-            <button class="modal-close" onclick="fecharConfig()">
+            <button class="modal-close" id="configModalClose">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
@@ -63,7 +63,7 @@
                 <label class="modal-form-label">Logo da Empresa</label>
                 <div class="upload-area" id="configUploadArea">
                     <input type="file" name="Logo" accept="image/jpeg,image/png,image/webp,image/gif"
-                           id="configLogoInput" onchange="previewConfigLogo(this)" />
+                           id="configLogoInput" />
                     <div class="upload-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -77,7 +77,7 @@
                 <div class="upload-preview" id="configUploadPreview">
                     <img id="configPreviewImg" src="" alt="preview" />
                     <span class="upload-preview-name" id="configPreviewName"></span>
-                    <button type="button" class="upload-preview-remove" onclick="removerConfigLogo()">
+                    <button type="button" class="upload-preview-remove" id="configLogoRemove">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
                         </svg>
@@ -86,7 +86,7 @@
             </div>
 
             <div class="modal-actions">
-                <button type="button" class="modal-btn-cancel" onclick="fecharConfig()">Cancelar</button>
+                <button type="button" class="modal-btn-cancel" id="configModalCancel">Cancelar</button>
                 <button type="submit" class="modal-btn-submit">Salvar alterações</button>
             </div>
         </form>
@@ -97,6 +97,13 @@
     function abrirConfig() { document.getElementById('modalConfig').classList.add('open'); document.body.style.overflow = 'hidden'; }
     function fecharConfig() { document.getElementById('modalConfig').classList.remove('open'); document.body.style.overflow = ''; }
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') fecharConfig(); });
+    document.getElementById('modalConfig').addEventListener('click', function(e) { if (e.target === this) fecharConfig(); });
+    document.getElementById('configModalClose').addEventListener('click', fecharConfig);
+    document.getElementById('configModalCancel').addEventListener('click', fecharConfig);
+    document.getElementById('configLogoInput').addEventListener('change', function() { previewConfigLogo(this); });
+    document.getElementById('configLogoRemove').addEventListener('click', removerConfigLogo);
+    var sidebarConfigBtn = document.getElementById('btnAbrirConfig');
+    if (sidebarConfigBtn) sidebarConfigBtn.addEventListener('click', abrirConfig);
     function previewConfigLogo(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();

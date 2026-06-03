@@ -225,9 +225,9 @@
     </div>
 
     <!-- MODAL EXCLUIR -->
-    <div class="modal-overlay" id="modalExcluir" onclick="fecharFora(event)">
+    <div class="modal-overlay" id="modalExcluir">
         <div class="modal">
-            <button class="modal-close" onclick="fechar()">
+            <button class="modal-close" id="modalClose">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="18" y1="6" x2="6" y2="18" />
                     <line x1="6" y1="6" x2="18" y2="18" />
@@ -247,7 +247,7 @@
                 @Html.AntiForgeryToken()
                 <input type="hidden" id="excluirId" name="empresaId" value="" />
                 <div class="modal-actions">
-                    <button type="button" class="modal-btn-cancel" onclick="fechar()">Cancelar</button>
+                    <button type="button" class="modal-btn-cancel" id="modalCancel">Cancelar</button>
                     <button type="submit" class="modal-btn-delete">Sim, excluir</button>
                 </div>
             </form>
@@ -272,6 +272,10 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') fechar();
         });
+
+        document.getElementById('modalExcluir').addEventListener('click', fecharFora);
+        document.getElementById('modalClose').addEventListener('click', fechar);
+        document.getElementById('modalCancel').addEventListener('click', fechar);
 
         document.addEventListener('click', function (e) {
             var btn = e.target.closest('.js-emp-del');

@@ -66,6 +66,15 @@ namespace ATLAS_ERP.Controllers
         {
             try
             {
+                decimal.TryParse(Request.Form["PrecoVenda"],
+                    System.Globalization.NumberStyles.Any,
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    out decimal preco);
+                produto.PrecoVenda = preco;
+                ModelState.Remove("PrecoVenda");
+                if (preco <= 0)
+                    ModelState.AddModelError("PrecoVenda", "Informe um preço de venda válido.");
+
                 if (ModelState.IsValid)
                 {
                     produto.EmpresaId = EmpresaId;

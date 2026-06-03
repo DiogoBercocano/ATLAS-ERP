@@ -43,7 +43,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="CNPJ">CNPJ *</label>
-                        <input class="form-control" id="CNPJ" name="CNPJ" value="@cnpjFormatado" oninput="onCnpjInput(this)" maxlength="18" required />
+                        <input class="form-control" id="CNPJ" name="CNPJ" value="@cnpjFormatado" maxlength="18" required />
                         <div class="input-help" id="cnpjHelp">Apenas números, ou com formatação. Validação automática.</div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="Telefone">Telefone</label>
-                        <input class="form-control" id="Telefone" name="Telefone" value="@Model.Telefone" oninput="this.value=maskTel(this.value)" maxlength="15" />
+                        <input class="form-control" id="Telefone" name="Telefone" value="@Model.Telefone" maxlength="15" />
                     </div>
                 </div>
             </div>
@@ -99,6 +99,9 @@
             help.style.color = 'var(--gold)';
         }
     }
+
+    document.getElementById('CNPJ').addEventListener('input', function() { onCnpjInput(this); });
+    document.getElementById('Telefone').addEventListener('input', function() { this.value = maskTel(this.value); });
 
     document.getElementById('formEdit').addEventListener('submit', function(e){
         var d = document.getElementById('CNPJ').value.replace(/\D/g,'');
