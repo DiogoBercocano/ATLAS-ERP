@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using ATLAS_ERP.Data;
@@ -45,7 +44,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (Exception ex)
             {
-                Trace.TraceError("VendaController.Index: {0}", ex);
+                AppLogger.Error(ex, "VendaController.Index");
                 ViewBag.Erro = "Erro ao carregar vendas.";
                 return View(PagedResult<Models.Venda>.Empty(pageSize));
             }
@@ -63,7 +62,7 @@ namespace ATLAS_ERP.Controllers
         [ValidateAntiForgeryToken]
         [PermissaoFilter("vendas_create")]
         public ActionResult Create(int clienteId, DateTime vencimento,
-                                   int[] produtoIds, int[] quantidades, decimal[] precos)
+                                   int[] produtoIds, int[] quantidades, string[] precos)
         {
             try
             {
@@ -77,7 +76,11 @@ namespace ATLAS_ERP.Controllers
 
                 var itens = new List<Services.VendaItemDto>(produtoIds.Length);
                 for (int i = 0; i < produtoIds.Length; i++)
-                    itens.Add(new Services.VendaItemDto { ProdutoId = produtoIds[i], Quantidade = quantidades[i], Preco = precos[i] });
+                {
+                    decimal.TryParse(precos[i], System.Globalization.NumberStyles.Any,
+                        System.Globalization.CultureInfo.InvariantCulture, out decimal preco);
+                    itens.Add(new Services.VendaItemDto { ProdutoId = produtoIds[i], Quantidade = quantidades[i], Preco = preco });
+                }
 
                 var venda = _vendaService.Criar(EmpresaId, clienteId, UsuarioId, vencimento, itens);
                 AppLogger.Audit("venda_criada vendaId={0} clienteId={1} total={2} itens={3}",
@@ -131,7 +134,7 @@ namespace ATLAS_ERP.Controllers
         [ValidateAntiForgeryToken]
         [PermissaoFilter("vendas_edit")]
         public ActionResult Edit(int vendaId, int clienteId, DateTime vencimento,
-                                 int[] produtoIds, int[] quantidades, decimal[] precos)
+                                 int[] produtoIds, int[] quantidades, string[] precos)
         {
             try
             {
@@ -145,7 +148,11 @@ namespace ATLAS_ERP.Controllers
 
                 var itens = new List<Services.VendaItemDto>(produtoIds.Length);
                 for (int i = 0; i < produtoIds.Length; i++)
-                    itens.Add(new Services.VendaItemDto { ProdutoId = produtoIds[i], Quantidade = quantidades[i], Preco = precos[i] });
+                {
+                    decimal.TryParse(precos[i], System.Globalization.NumberStyles.Any,
+                        System.Globalization.CultureInfo.InvariantCulture, out decimal preco);
+                    itens.Add(new Services.VendaItemDto { ProdutoId = produtoIds[i], Quantidade = quantidades[i], Preco = preco });
+                }
 
                 _vendaService.Editar(vendaId, EmpresaId, clienteId, vencimento, itens);
                 AppLogger.Audit("venda_editada vendaId={0} clienteId={1} itens={2}",
@@ -236,7 +243,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (Exception ex)
             {
-                Trace.TraceError("VendaController.Nota: {0}", ex);
+                AppLogger.Error(ex, "VendaController.Nota");
                 return RedirectToAction("Index");
             }
         }
@@ -251,7 +258,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (Exception ex)
             {
-                Trace.TraceError("VendaController.Financeiro: {0}", ex);
+                AppLogger.Error(ex, "VendaController.Financeiro");
                 return RedirectToAction("Index");
             }
         }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using ATLAS_ERP.Data;
@@ -37,7 +36,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (Exception ex)
             {
-                Trace.TraceError("CargoController.Index: {0}", ex);
+                AppLogger.Error(ex, "CargoController.Index");
                 ViewBag.Erro = $"Erro ao carregar cargos: {ex.Message}";
                 return View(new List<Cargo>());
             }
@@ -65,7 +64,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (Exception ex)
             {
-                Trace.TraceError("CargoController.Create POST: {0}", ex);
+                AppLogger.Error(ex, "CargoController.Create POST");
                 ViewBag.Erro = $"Erro ao criar cargo: {ex.Message}";
                 return View(cargo);
             }
@@ -83,7 +82,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (Exception ex)
             {
-                Trace.TraceError("CargoController.Edit GET: {0}", ex);
+                AppLogger.Error(ex, "CargoController.Edit GET");
                 return RedirectToAction("Index");
             }
         }
@@ -99,7 +98,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (Exception ex)
             {
-                Trace.TraceError("CargoController.Edit POST: {0}", ex);
+                AppLogger.Error(ex, "CargoController.Edit POST");
                 ViewBag.Erro = $"Erro ao editar cargo: {ex.Message}";
                 return RedirectToAction("Index");
             }
@@ -127,7 +126,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (Exception ex)
             {
-                Trace.TraceError("CargoController.Permissoes: {0}", ex);
+                AppLogger.Error(ex, "CargoController.Permissoes");
                 return RedirectToAction("Index");
             }
         }

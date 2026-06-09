@@ -1,4 +1,4 @@
-@model List<ATLAS_ERP.Models.Cargo>
+﻿@model List<ATLAS_ERP.Models.Cargo>
 @{
     ViewBag.Title = "Gerenciar Cargos - Atlas ERP";
 }
@@ -15,7 +15,6 @@
     }
 
     .main {
-        margin-left: var(--sidebar-w);
         padding: 48px 40px;
         background: linear-gradient(135deg, #050d1a 0%, #0a1428 100%);
     }
@@ -27,7 +26,13 @@
     .btn-new { background: linear-gradient(135deg, var(--accent) 0%, #2563eb 100%); color: white; border: none; padding: 13px 28px; border-radius: 12px; font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s; box-shadow: 0 4px 15px rgba(59,130,246,0.3); }
     .btn-new:hover { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(59,130,246,0.4); }
 
-    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
+    .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+    }
+    @@media (max-width: 1100px) { .cards-grid { grid-template-columns: repeat(2, 1fr); } }
+    @@media (max-width: 700px)  { .cards-grid { grid-template-columns: 1fr; } }
 
     .card { background: linear-gradient(135deg, var(--card) 0%, #0d2139 100%); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }
     .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(59,130,246,0.5), transparent); }
@@ -99,11 +104,11 @@
                         </div>
 
                         <div class="card-actions">
-                            <button class="btn-action" onclick="window.location.href='/Cargo/Permissoes/@cargo.CargoId'">Permissoes</button>
-                            <button class="btn-action" onclick="window.location.href='/Cargo/Edit/@cargo.CargoId'">Editar</button>
+                            <a href="/Cargo/Permissoes/@cargo.CargoId" class="btn-action" style="text-decoration:none">Permissoes</a>
+                            <a href="/Cargo/Edit/@cargo.CargoId" class="btn-action" style="text-decoration:none">Editar</a>
                             <form action="/Cargo/Delete/@cargo.CargoId" method="POST" style="flex: 1; margin: 0;">
                                 @Html.AntiForgeryToken()
-                                <button type="submit" class="btn-action danger" onclick="return confirm('Tem certeza que deseja deletar este cargo?')" style="width: 100%;">Deletar</button>
+                                <button type="submit" class="btn-action danger js-del-cargo" data-nome="@cargo.Nome" style="width: 100%;">Deletar</button>
                             </form>
                         </div>
                     </div>
@@ -112,3 +117,16 @@
         }
     </div>
 </main>
+
+@section scripts {
+<script nonce="@Html.CspNonce()">
+document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.js-del-cargo');
+    if (!btn) return;
+    var nome = btn.getAttribute('data-nome') || 'este cargo';
+    if (!confirm('Tem certeza que deseja deletar o cargo "' + nome + '"?')) {
+        e.preventDefault();
+    }
+});
+</script>
+}

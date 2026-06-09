@@ -141,6 +141,7 @@
     <Compile Include="Infrastructure\LoginRateLimiter.cs" />
     <Compile Include="Infrastructure\PagedResult.cs" />
     <Compile Include="Infrastructure\PermissaoCache.cs" />
+    <Compile Include="Infrastructure\CspHtmlHelper.cs" />
     <Compile Include="Infrastructure\SecurityHeadersModule.cs" />
     <Compile Include="Infrastructure\UploadValidator.cs" />
     <Compile Include="Migrations\202604080036475_AddEstoqueAtualRemoverFilial.cs" />
@@ -155,21 +156,21 @@
     <Compile Include="Migrations\202604282250250_AddFotoProduto.Designer.cs">
       <DependentUpon>202604282250250_AddFotoProduto.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\20260429202512_AddCargoAndPermissoes.cs" />
-    <Compile Include="Migrations\20260429202512_AddCargoAndPermissoes.Designer.cs">
-      <DependentUpon>20260429202512_AddCargoAndPermissoes.cs</DependentUpon>
+    <Compile Include="Migrations\202605272310245_AddCargoPermissaoSystem.cs" />
+    <Compile Include="Migrations\202605272310245_AddCargoPermissaoSystem.Designer.cs">
+      <DependentUpon>202605272310245_AddCargoPermissaoSystem.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\20260429203000_UpdateCargoPermissaoKey.cs" />
-    <Compile Include="Migrations\20260429203000_UpdateCargoPermissaoKey.Designer.cs">
-      <DependentUpon>20260429203000_UpdateCargoPermissaoKey.cs</DependentUpon>
+    <Compile Include="Migrations\20260525001000_AddPerformanceIndexes.cs" />
+    <Compile Include="Migrations\20260525001000_AddPerformanceIndexes.Designer.cs">
+      <DependentUpon>20260525001000_AddPerformanceIndexes.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\20260429204000_FinalCargoPermissaoSync.cs" />
-    <Compile Include="Migrations\20260429204000_FinalCargoPermissaoSync.Designer.cs">
-      <DependentUpon>20260429204000_FinalCargoPermissaoSync.cs</DependentUpon>
+    <Compile Include="Migrations\20260525002000_NormalizarDocumentos.cs" />
+    <Compile Include="Migrations\20260525002000_NormalizarDocumentos.Designer.cs">
+      <DependentUpon>20260525002000_NormalizarDocumentos.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\20260430_AddDefaultPermissoes.cs" />
-    <Compile Include="Migrations\20260430_AddDefaultPermissoes.Designer.cs">
-      <DependentUpon>20260430_AddDefaultPermissoes.cs</DependentUpon>
+    <Compile Include="Migrations\20260525003000_AddSecurityConstraints.cs" />
+    <Compile Include="Migrations\20260525003000_AddSecurityConstraints.Designer.cs">
+      <DependentUpon>20260525003000_AddSecurityConstraints.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\CargoService.cs" />
     <Compile Include="Services\ClienteService.cs" />
@@ -225,45 +226,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap-grid.css" />
-    <Content Include="Content\bootstrap-grid.min.css" />
-    <Content Include="Content\bootstrap-grid.rtl.css" />
-    <Content Include="Content\bootstrap-grid.rtl.min.css" />
-    <Content Include="Content\bootstrap-reboot.css" />
-    <Content Include="Content\bootstrap-reboot.min.css" />
-    <Content Include="Content\bootstrap-reboot.rtl.css" />
-    <Content Include="Content\bootstrap-reboot.rtl.min.css" />
-    <Content Include="Content\bootstrap-utilities.css" />
-    <Content Include="Content\bootstrap-utilities.min.css" />
-    <Content Include="Content\bootstrap-utilities.rtl.css" />
-    <Content Include="Content\bootstrap-utilities.rtl.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\bootstrap.rtl.css" />
-    <Content Include="Content\bootstrap.rtl.min.css" />
-    <Content Include="Content\images\logos\AtlasLogo.png" />
     <Content Include="Content\images\logos\atlas_erp_diamante.svg" />
-    <Content Include="Content\images\logos\Logo_atlas.png" />
-    <Content Include="Content\images\logos\test-logo.png" />
-    <Content Include="Content\images\produtos\WhatsApp Image 2026-04-27 at 20.50.30.jpeg" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\atlas.css" />
     <Content Include="Content\images\produtos\.gitkeep" />
     <Content Include="Content\images\Web.config" />
-    <Content Include="Scripts\bootstrap.bundle.js" />
-    <Content Include="Scripts\bootstrap.bundle.min.js" />
-    <Content Include="Scripts\bootstrap.esm.js" />
-    <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
-    <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
-    <Content Include="Scripts\jquery-3.7.0.slim.js" />
-    <Content Include="Scripts\jquery-3.7.0.slim.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -338,44 +312,21 @@
     <EmbeddedResource Include="Migrations\202604282250250_AddFotoProduto.resx">
       <DependentUpon>202604282250250_AddFotoProduto.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\20260429202512_AddCargoAndPermissoes.resx">
-      <DependentUpon>20260429202512_AddCargoAndPermissoes.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202605272310245_AddCargoPermissaoSystem.resx">
+      <DependentUpon>202605272310245_AddCargoPermissaoSystem.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\20260429203000_UpdateCargoPermissaoKey.resx">
-      <DependentUpon>20260429203000_UpdateCargoPermissaoKey.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\20260525001000_AddPerformanceIndexes.resx">
+      <DependentUpon>20260525001000_AddPerformanceIndexes.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\20260429204000_FinalCargoPermissaoSync.resx">
-      <DependentUpon>20260429204000_FinalCargoPermissaoSync.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\20260525002000_NormalizarDocumentos.resx">
+      <DependentUpon>20260525002000_NormalizarDocumentos.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\20260430_AddDefaultPermissoes.resx">
-      <DependentUpon>20260430_AddDefaultPermissoes.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\20260525003000_AddSecurityConstraints.resx">
+      <DependentUpon>20260525003000_AddSecurityConstraints.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap.rtl.min.css.map" />
-    <Content Include="Content\bootstrap.rtl.css.map" />
-    <Content Include="Content\bootstrap.min.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\bootstrap-utilities.rtl.min.css.map" />
-    <Content Include="Content\bootstrap-utilities.rtl.css.map" />
-    <Content Include="Content\bootstrap-utilities.min.css.map" />
-    <Content Include="Content\bootstrap-utilities.css.map" />
-    <Content Include="Content\bootstrap-reboot.rtl.min.css.map" />
-    <Content Include="Content\bootstrap-reboot.rtl.css.map" />
-    <Content Include="Content\bootstrap-reboot.min.css.map" />
-    <Content Include="Content\bootstrap-reboot.css.map" />
-    <Content Include="Content\bootstrap-grid.rtl.min.css.map" />
-    <Content Include="Content\bootstrap-grid.rtl.css.map" />
-    <Content Include="Content\bootstrap-grid.min.css.map" />
-    <Content Include="Content\bootstrap-grid.css.map" />
     <None Include="packages.config" />
-    <Content Include="Scripts\bootstrap.min.js.map" />
-    <Content Include="Scripts\bootstrap.js.map" />
-    <Content Include="Scripts\bootstrap.esm.min.js.map" />
-    <Content Include="Scripts\bootstrap.esm.js.map" />
-    <Content Include="Scripts\bootstrap.bundle.min.js.map" />
-    <Content Include="Scripts\bootstrap.bundle.js.map" />
-    <Content Include="Scripts\jquery-3.7.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.7.0.min.map" />
   </ItemGroup>
   <PropertyGroup>

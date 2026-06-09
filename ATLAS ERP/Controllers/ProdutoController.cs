@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
@@ -39,7 +38,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("ProdutoController.Index: {0}", ex);
+                AppLogger.Error(ex, "ProdutoController.Index");
                 ViewBag.Erro = "Erro ao carregar produtos.";
                 return View(PagedResult<Produto>.Empty(pageSize));
             }
@@ -67,6 +66,15 @@ namespace ATLAS_ERP.Controllers
         {
             try
             {
+                decimal.TryParse(Request.Form["PrecoVenda"],
+                    System.Globalization.NumberStyles.Any,
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    out decimal preco);
+                produto.PrecoVenda = preco;
+                ModelState.Remove("PrecoVenda");
+                if (preco <= 0)
+                    ModelState.AddModelError("PrecoVenda", "Informe um preço de venda válido.");
+
                 if (ModelState.IsValid)
                 {
                     produto.EmpresaId = EmpresaId;
@@ -82,7 +90,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("ProdutoController.Create: {0}", ex);
+                AppLogger.Error(ex, "ProdutoController.Create");
                 ViewBag.Erro = "Erro ao cadastrar produto. Tente novamente.";
                 return View(produto);
             }
@@ -114,7 +122,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("ProdutoController.Edit: {0}", ex);
+                AppLogger.Error(ex, "ProdutoController.Edit");
                 return RedirectToAction("Index");
             }
         }
@@ -161,7 +169,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("ProdutoController.Delete: {0}", ex);
+                AppLogger.Error(ex, "ProdutoController.Delete");
                 return RedirectToAction("Index");
             }
         }

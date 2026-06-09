@@ -76,7 +76,7 @@ namespace ATLAS_ERP.Filters
 
             if (!PermissaoCache.TemAlguma(cargoId.Value, permissoes))
             {
-                filterContext.Result = new RedirectResult("/");
+                filterContext.Result = new RedirectResult("/Auth/Login");
                 return;
             }
         }

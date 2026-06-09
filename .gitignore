@@ -1,0 +1,25 @@
+# Visual Studio
+.vs/
+*.suo
+*.user
+
+# Build output
+bin/
+obj/
+*.dll
+*.pdb
+*.cache
+
+# Logs
+*.log
+**/App_Data/logs/
+
+# Claude Code
+.claude/
+CLAUDE.md
+CONTEXT.md
+TASKS.md
+PROGRESS.md
+ANALYZE-PROJECT.md
+SECURITY.md
+DATABASE.md

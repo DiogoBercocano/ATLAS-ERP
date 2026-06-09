@@ -1,4 +1,4 @@
-using System.Diagnostics;
+using System;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -49,13 +49,36 @@ namespace ATLAS_ERP.Controllers
                 db.Empresas.Add(empresa);
                 db.SaveChanges();
 
+                // Cria cargo "Admin" padrão para a empresa com todas as permissões
+                var cargoAdmin = new Cargo
+                {
+                    Nome        = "Admin",
+                    Descricao   = "Administrador da empresa",
+                    Ativo       = true,
+                    EmpresaId   = empresa.EmpresaId,
+                    DataCriacao = DateTime.Now
+                };
+                db.Cargos.Add(cargoAdmin);
+                db.SaveChanges();
+
+                foreach (var perm in db.Permissoes.ToList())
+                {
+                    db.CargoPermissoes.Add(new CargoPermissao
+                    {
+                        CargoId     = cargoAdmin.CargoId,
+                        PermissaoId = perm.PermissaoId
+                    });
+                }
+
                 db.Usuarios.Add(new Usuario
                 {
-                    Name       = NomeAdmin,
-                    Email      = EmailAdmin,
-                    SenhaHash  = PasswordHelper.HashSenha(Senha),
-                    Ativo      = false,
-                    EmpresaId  = empresa.EmpresaId
+                    Name              = NomeAdmin,
+                    Email             = EmailAdmin,
+                    SenhaHash         = PasswordHelper.HashSenha(Senha),
+                    Ativo             = false,
+                    EmpresaId         = empresa.EmpresaId,
+                    CargoId           = cargoAdmin.CargoId,
+                    MustChangePassword = true
                 });
                 db.SaveChanges();
 
@@ -64,7 +87,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("EmpresaController.Cadastro: {0}", ex);
+                AppLogger.Error(ex, "EmpresaController.Cadastro");
                 ViewBag.Erro = "Erro ao processar cadastro. Tente novamente.";
                 return View();
             }
@@ -102,20 +125,20 @@ namespace ATLAS_ERP.Controllers
                     }
                     else if (!resultado.Vazio)
                     {
-                        TempData["ConfigErro"] = "Logo rejeitado: formato não suportado ou arquivo inválido.";
+                        TempData["UploadAviso"] = "Logo rejeitado: use JPG, PNG ou WebP com até 2 MB.";
                     }
 
                     db.Entry(empresa).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
 
-                if (TempData["ConfigErro"] == null)
+                if (TempData["UploadAviso"] == null && TempData["ConfigErro"] == null)
                     TempData["ConfigSucesso"] = "Configurações salvas com sucesso!";
                 return RedirectToAction("Dashboard", "Admin");
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("EmpresaController.Configuracoes: {0}", ex);
+                AppLogger.Error(ex, "EmpresaController.Configuracoes");
                 TempData["ConfigErro"] = "Erro ao salvar configurações. Tente novamente.";
                 return RedirectToAction("Dashboard", "Admin");
             }

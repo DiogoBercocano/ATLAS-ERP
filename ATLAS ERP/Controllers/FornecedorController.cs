@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Web.Mvc;
 using ATLAS_ERP.Data;
 using ATLAS_ERP.Filters;
@@ -38,7 +37,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("FornecedorController.Index: {0}", ex);
+                AppLogger.Error(ex, "FornecedorController.Index");
                 ViewBag.Erro = "Erro ao carregar fornecedores.";
                 return View(PagedResult<Fornecedor>.Empty(pageSize));
             }
@@ -81,7 +80,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("FornecedorController.Create: {0}", ex);
+                AppLogger.Error(ex, "FornecedorController.Create");
                 ViewBag.Erro = "Erro ao cadastrar fornecedor. Tente novamente.";
                 return View(fornecedor);
             }
@@ -104,7 +103,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("FornecedorController.Edit: {0}", ex);
+                AppLogger.Error(ex, "FornecedorController.Edit");
                 TempData["Erro"] = "Erro ao editar fornecedor.";
                 return RedirectToAction("Index");
             }
@@ -122,7 +121,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("FornecedorController.Delete: {0}", ex);
+                AppLogger.Error(ex, "FornecedorController.Delete");
                 return RedirectToAction("Index");
             }
         }

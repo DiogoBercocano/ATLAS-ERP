@@ -290,12 +290,12 @@ C:\Users\dgber\Documents\GitHub\ATLAS ERP\ATLAS ERP\obj\Debug\ATLAS_ERP.Migratio
 C:\Users\dgber\Documents\GitHub\ATLAS ERP\ATLAS ERP\obj\Debug\ATLAS_ERP.Migrations.AddEstoqueAtualRemoverFilial.resources
 C:\Users\dgber\Documents\GitHub\ATLAS ERP\ATLAS ERP\obj\Debug\ATLAS_ERP.Migrations.AddPaginaCreateProdutos.resources
 C:\Users\dgber\Documents\GitHub\ATLAS ERP\ATLAS ERP\obj\Debug\ATLAS_ERP.Migrations.AddFotoProduto.resources
-C:\Users\dgber\Documents\GitHub\ATLAS ERP\ATLAS ERP\obj\Debug\ATLAS_ERP.Migrations.AddCargoAndPermissoes.resources
-C:\Users\dgber\Documents\GitHub\ATLAS ERP\ATLAS ERP\obj\Debug\ATLAS_ERP.Migrations.UpdateCargoPermissaoKey.resources
-C:\Users\dgber\Documents\GitHub\ATLAS ERP\ATLAS ERP\obj\Debug\ATLAS_ERP.Migrations.FinalCargoPermissaoSync.resources
-C:\Users\dgber\Documents\GitHub\ATLAS ERP\ATLAS ERP\obj\Debug\ATLAS_ERP.Migrations.AddDefaultPermissoes.resources
 C:\Users\dgber\Documents\GitHub\ATLAS ERP\ATLAS ERP\obj\Debug\ATLAS ERP.csproj.GenerateResource.cache
 C:\Users\dgber\Documents\GitHub\ATLAS ERP\ATLAS ERP\obj\Debug\ATLAS ERP.csproj.CoreCompileInputs.cache
 C:\Users\dgber\Documents\GitHub\ATLAS ERP\ATLAS ERP\obj\Debug\ATLAS ERP.csproj.Up2Date
 C:\Users\dgber\Documents\GitHub\ATLAS ERP\ATLAS ERP\obj\Debug\ATLAS ERP.dll
 C:\Users\dgber\Documents\GitHub\ATLAS ERP\ATLAS ERP\obj\Debug\ATLAS ERP.pdb
+C:\Users\dgber\Documents\GitHub\ATLAS ERP\ATLAS ERP\obj\Debug\ATLAS_ERP.Migrations.AddPerformanceIndexes.resources
+C:\Users\dgber\Documents\GitHub\ATLAS ERP\ATLAS ERP\obj\Debug\ATLAS_ERP.Migrations.NormalizarDocumentos.resources
+C:\Users\dgber\Documents\GitHub\ATLAS ERP\ATLAS ERP\obj\Debug\ATLAS_ERP.Migrations.AddSecurityConstraints.resources
+C:\Users\dgber\Documents\GitHub\ATLAS ERP\ATLAS ERP\obj\Debug\ATLAS_ERP.Migrations.AddCargoPermissaoSystem.resources

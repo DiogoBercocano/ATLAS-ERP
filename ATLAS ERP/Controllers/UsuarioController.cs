@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Web.Mvc;
 using ATLAS_ERP.Data;
 using ATLAS_ERP.Filters;
@@ -37,7 +36,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("UsuarioController.Index: {0}", ex);
+                AppLogger.Error(ex, "UsuarioController.Index");
                 ViewBag.Erro = "Erro ao carregar funcionários.";
                 return View(PagedResult<Usuario>.Empty(pageSize));
             }
@@ -54,7 +53,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("UsuarioController.Create GET: {0}", ex);
+                AppLogger.Error(ex, "UsuarioController.Create GET");
                 ViewBag.Erro = $"Erro ao carregar cargos: {ex.Message}";
                 ViewBag.Cargos = new System.Collections.Generic.List<Models.Cargo>();
                 return View();
@@ -79,7 +78,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("UsuarioController.Create POST: {0}", ex);
+                AppLogger.Error(ex, "UsuarioController.Create POST");
                 ViewBag.Erro = $"Erro ao cadastrar funcionário: {ex.Message}";
                 ViewBag.Cargos = _cargoService.ListarPorEmpresa(EmpresaId);
                 return View(user);
@@ -114,7 +113,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("UsuarioController.Edit: {0}", ex);
+                AppLogger.Error(ex, "UsuarioController.Edit");
                 ViewBag.Erro = $"Erro ao editar: {ex.Message}";
                 return RedirectToAction("Index");
             }
@@ -132,7 +131,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("UsuarioController.Delete: {0}", ex);
+                AppLogger.Error(ex, "UsuarioController.Delete");
                 return RedirectToAction("Index");
             }
         }

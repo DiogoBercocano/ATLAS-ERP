@@ -8,7 +8,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Atlas ERP</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
     <style>
         *, *::before, *::after {
             box-sizing: border-box;
@@ -28,7 +29,7 @@
             --gold: #c9a84c;
             --text-primary: #e8f0fe;
             --text-secondary: #7a9cc8;
-            --text-muted: #3d5270;
+            --text-muted: #5e7ea0;
             --danger: #f87171;
             --danger-bg: rgba(248,113,113,0.08);
         }
@@ -165,7 +166,7 @@
         }
 
         .brand-tagline {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 12px;
             font-weight: 600;
             color: var(--text-muted);
@@ -250,7 +251,7 @@
             border: 1px solid rgba(59,130,246,0.15);
             border-radius: 20px;
             padding: 4px 12px;
-            font-size: 10px;
+            font-size: 11px;
             color: var(--accent-light);
             letter-spacing: 0.06em;
             margin-bottom: 20px;
@@ -265,7 +266,7 @@
         }
 
         .login-title {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 24px;
             font-weight: 800;
             color: var(--text-primary);
@@ -411,7 +412,7 @@
             background: var(--accent);
             border: none;
             border-radius: 10px;
-            font-family: 'Syne', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 15px;
             font-weight: 700;
             color: white;
@@ -441,6 +442,24 @@
             .btn-submit:active {
                 transform: translateY(0);
             }
+
+        :focus-visible {
+            outline: 2px solid var(--accent-light);
+            outline-offset: 3px;
+            border-radius: 6px;
+        }
+
+        .form-control:focus-visible { outline: none; }
+
+        .skip-link {
+            position: absolute; top: -200%; left: 16px;
+            background: var(--accent); color: #fff;
+            padding: 10px 20px; border-radius: 0 0 10px 10px;
+            font-size: 14px; font-weight: 700;
+            text-decoration: none; z-index: 9999;
+            transition: top .15s;
+        }
+        .skip-link:focus-visible { top: 0; }
 
         .divider {
             display: flex;
@@ -506,7 +525,9 @@
 </head>
 <body>
 
-    <div class="bg-canvas">
+    <a href="#login-form" class="skip-link">Ir para o formulário de login</a>
+
+    <div class="bg-canvas" aria-hidden="true">
         <div class="grid-dot"></div>
         <div class="glow-orb" style="width:600px;height:600px;top:-150px;left:-100px;background:rgba(25,55,130,0.20);"></div>
         <div class="glow-orb" style="width:400px;height:400px;bottom:-80px;right:-60px;background:rgba(15,40,100,0.18);"></div>
@@ -514,13 +535,13 @@
         <div class="geo-circle" style="width:400px;height:400px;bottom:-100px;left:-150px;"></div>
     </div>
 
-    <div class="page-wrapper">
+    <div class="page-wrapper" role="main">
 
-        <div class="brand-panel">
+        <div class="brand-panel" aria-hidden="true">
             <div class="brand-accent-line"></div>
 
             <div class="brand-logo-wrap">
-                <img src="~/Content/images/logos/atlas_erp_diamante.svg" alt="Atlas ERP" />
+                <img src="~/Content/images/logos/atlas_erp_diamante.svg" alt="" />
             </div>
 
             <div class="brand-bottom">
@@ -567,9 +588,9 @@
 
         <div class="panel-divider"></div>
 
-        <div class="login-panel">
+        <div class="login-panel" id="login-form">
 
-            <div class="login-badge">
+            <div class="login-badge" aria-hidden="true">
                 <span class="login-badge-dot"></span>
                 SISTEMA ATIVO
             </div>
@@ -579,8 +600,8 @@
 
             @if (ViewBag.Erro != null)
             {
-                <div class="alert-error">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <div class="alert-error" role="alert">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
                         <circle cx="12" cy="12" r="10" />
                         <line x1="12" y1="8" x2="12" y2="12" />
                         <line x1="12" y1="16" x2="12.01" y2="16" />
@@ -593,12 +614,12 @@
             {
                 @Html.AntiForgeryToken()
                 <div class="form-group">
-                    <label class="form-label">E-mail</label>
+                    <label class="form-label" for="emailInput">E-mail</label>
                     <div class="input-wrapper">
-                        <input type="email" name="email" class="form-control"
+                        <input type="email" name="email" id="emailInput" class="form-control"
                                placeholder="seu@email.com" required autocomplete="email" />
-                        <span class="input-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <span class="input-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" focusable="false">
                                 <rect x="2" y="4" width="20" height="16" rx="2" />
                                 <path d="m2 7 10 7L22 7" />
                             </svg>
@@ -607,19 +628,19 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Senha</label>
+                    <label class="form-label" for="senhaInput">Senha</label>
                     <div class="input-wrapper">
                         <input type="password" name="senha" id="senhaInput"
                                class="form-control password-input"
                                placeholder="••••••••" required autocomplete="current-password" />
-                        <span class="input-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <span class="input-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" focusable="false">
                                 <rect x="3" y="11" width="18" height="11" rx="2" />
                                 <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                             </svg>
                         </span>
-                        <button type="button" class="toggle-pass" onclick="toggleSenha()">
-                            <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <button type="button" id="btnToggleSenha" class="toggle-pass" aria-label="Mostrar ou ocultar senha">
+                            <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                                 <circle cx="12" cy="12" r="3" />
                             </svg>
@@ -650,7 +671,17 @@
 
     </div>
 
-    <script>
+    <script nonce="@Html.CspNonce()">
+        (function () {
+            var at = String.fromCharCode(64);
+            var l = document.createElement('link');
+            l.rel = 'stylesheet';
+            l.href = 'https://fonts.googleapis.com/css2?family=Inter:wght' + at + '400;500;600;700;800&family=DM+Sans:wght' + at + '300;400;500&display=swap';
+            document.head.appendChild(l);
+        }());
+
+        document.getElementById('btnToggleSenha').addEventListener('click', toggleSenha);
+
         function toggleSenha() {
             var input = document.getElementById('senhaInput');
             var icon = document.getElementById('eyeIcon');

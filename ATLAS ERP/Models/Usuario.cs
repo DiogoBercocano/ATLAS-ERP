@@ -27,6 +27,8 @@ namespace ATLAS_ERP.Models
 
         public bool Ativo { get; set; }
 
+        public bool MustChangePassword { get; set; }
+
         [ForeignKey("Empresa")]
         public int? EmpresaId { get; set; }
         public Empresa Empresa { get; set; }

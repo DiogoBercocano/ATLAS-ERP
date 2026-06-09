@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Web.Mvc;
 using ATLAS_ERP.Data;
 using ATLAS_ERP.Filters;
@@ -37,7 +36,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("ClienteController.Index: {0}", ex);
+                AppLogger.Error(ex, "ClienteController.Index");
                 ViewBag.Erro = "Erro ao carregar clientes.";
                 return View(PagedResult<Cliente>.Empty(pageSize));
             }
@@ -80,7 +79,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("ClienteController.Create: {0}", ex);
+                AppLogger.Error(ex, "ClienteController.Create");
                 ViewBag.Erro = "Erro ao cadastrar cliente. Tente novamente.";
                 return View(cliente);
             }
@@ -106,7 +105,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("ClienteController.Edit: {0}", ex);
+                AppLogger.Error(ex, "ClienteController.Edit");
                 TempData["Erro"] = "Erro ao editar cliente.";
                 return RedirectToAction("Index");
             }
@@ -124,7 +123,7 @@ namespace ATLAS_ERP.Controllers
             }
             catch (System.Exception ex)
             {
-                Trace.TraceError("ClienteController.Delete: {0}", ex);
+                AppLogger.Error(ex, "ClienteController.Delete");
                 return RedirectToAction("Index");
             }
         }

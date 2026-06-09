@@ -1,4 +1,4 @@
-@model ATLAS_ERP.Models.Produto
+﻿@model ATLAS_ERP.Models.Produto
 @{
     ViewBag.Title = "Editar Produto - Atlas ERP";
     var precoStr = Model.PrecoVenda.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
@@ -91,7 +91,7 @@
                     <div class="form-group">
                         <label class="form-label">Status</label>
                         <div class="checkbox-row" style="margin-top:8px;">
-                            <input type="checkbox" id="AtivoCheck" @(Model.Ativo ? "checked" : "") onchange="document.getElementById('Ativo').value=this.checked?'true':'false'; updateBadge();" />
+                            <input type="checkbox" id="AtivoCheck" @(Model.Ativo ? "checked" : "") />
                             <label for="AtivoCheck">
                                 <span class="badge-status @(Model.Ativo ? "badge-ativo" : "badge-inativo")" id="badgeAtivo">
                                     @(Model.Ativo ? "Ativo" : "Inativo")
@@ -112,13 +112,18 @@
 </main>
 
 @section scripts {
-<script>
+<script nonce="@Html.CspNonce()">
     function updateBadge() {
         var checked = document.getElementById('AtivoCheck').checked;
         var badge = document.getElementById('badgeAtivo');
         badge.textContent = checked ? 'Ativo' : 'Inativo';
         badge.className = 'badge-status ' + (checked ? 'badge-ativo' : 'badge-inativo');
     }
+
+    document.getElementById('AtivoCheck').addEventListener('change', function() {
+        document.getElementById('Ativo').value = this.checked ? 'true' : 'false';
+        updateBadge();
+    });
 
     document.getElementById('formEdit').addEventListener('submit', function(e){
         var p = document.getElementById('PrecoVenda').value.replace(',', '.');

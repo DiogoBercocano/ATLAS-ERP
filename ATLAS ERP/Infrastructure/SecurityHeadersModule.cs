@@ -35,10 +35,24 @@ namespace ATLAS_ERP.Infrastructure
 
         public void Init(HttpApplication context)
         {
-            context.PreSendRequestHeaders += OnPreSendRequestHeaders;
+            context.BeginRequest           += OnBeginRequest;
+            context.PreSendRequestHeaders  += OnPreSendRequestHeaders;
         }
 
         public void Dispose() { }
+
+        private static void OnBeginRequest(object sender, EventArgs e)
+        {
+            var app = sender as HttpApplication;
+            if (app?.Context == null) return;
+
+            // Generate a per-request CSP nonce. Stored in Items so views can inject it into
+            // <script> tags, and the CSP header includes 'nonce-<value>' instead of 'unsafe-inline'.
+            var bytes = new byte[16];
+            using (var rng = new System.Security.Cryptography.RNGCryptoServiceProvider())
+                rng.GetBytes(bytes);
+            app.Context.Items["CspNonce"] = Convert.ToBase64String(bytes);
+        }
 
         private static void OnPreSendRequestHeaders(object sender, EventArgs e)
         {
@@ -51,7 +65,7 @@ namespace ATLAS_ERP.Infrastructure
 
             try
             {
-                ApplyHeaders(request, response);
+                ApplyHeaders(request, response, app.Context);
                 RemoveLeakHeaders(response);
             }
             catch (Exception ex)
@@ -61,9 +75,13 @@ namespace ATLAS_ERP.Infrastructure
             }
         }
 
-        private static void ApplyHeaders(HttpRequest request, HttpResponse response)
+        private static void ApplyHeaders(HttpRequest request, HttpResponse response, HttpContext context)
         {
-            SetIfMissing(response, "Content-Security-Policy",  _options.ContentSecurityPolicy);
+            var nonce = context?.Items["CspNonce"] as string ?? "";
+            var csp   = string.IsNullOrEmpty(nonce)
+                        ? _options.ContentSecurityPolicy
+                        : _options.ContentSecurityPolicy.Replace("{nonce}", nonce);
+            SetIfMissing(response, "Content-Security-Policy", csp);
             SetIfMissing(response, "X-Content-Type-Options",   "nosniff");
             SetIfMissing(response, "X-Frame-Options",          _options.XFrameOptions);
             SetIfMissing(response, "Referrer-Policy",          _options.ReferrerPolicy);
@@ -120,13 +138,14 @@ namespace ATLAS_ERP.Infrastructure
             public bool   RemoveServerHeader        { get; private set; }
 
             // CSP padrão: compatível com Bootstrap 5 + jQuery 3 do projeto (carregados de /Scripts
-            // e /Content). 'unsafe-inline' em script-src/style-src é necessário enquanto views
-            // tiverem <script> / style="" inline — futura melhoria: migrar para nonces (ver SECURITY.md).
+            // e /Content). {nonce} é substituído em runtime pelo nonce gerado em BeginRequest.
+            // style-src mantém 'unsafe-inline' pois atributos style="" são extensos nas views;
+            // script-src usa nonce exclusivamente — não há 'unsafe-inline' para scripts.
             //
             // data: em img-src cobre imagens base64 inline (usadas em alguns previews de upload).
             private const string DefaultCsp =
                 "default-src 'self'; " +
-                "script-src 'self' 'unsafe-inline'; " +
+                "script-src 'self' 'nonce-{nonce}'; " +
                 "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
                 "img-src 'self' data: blob:; " +
                 "font-src 'self' data: https://fonts.gstatic.com; " +
